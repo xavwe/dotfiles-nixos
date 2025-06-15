@@ -1,0 +1,36 @@
+name: format
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  nix-format:
+    name: Auto format Nix files with alejandra
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v25
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.18.1/install
+
+      - name: Install alejandra && Format Nix files
+        run: nix run nixpkgs#alejandra -- .
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            git add .
+            git commit -m "style(nix): format with alejandra"
+            git push
+          fi
