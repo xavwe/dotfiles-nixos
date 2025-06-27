@@ -36,6 +36,7 @@
     ./newsboat.nix
     ./nix-output-monitor.nix
     ./nvd.nix
+    ./links-browser.nix
 
     # shell
     ./zsh.nix
