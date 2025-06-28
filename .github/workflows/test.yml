@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
   workflow_run:
-    workflows: ["format", "lint", "security", "test"]
+    workflows: ["format"]
     types:
       - completed
 
