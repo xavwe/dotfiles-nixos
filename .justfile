@@ -26,4 +26,4 @@ gc:
   nix-store --gc
 
 format:
-  alejandra .
+  nix fmt -- .
