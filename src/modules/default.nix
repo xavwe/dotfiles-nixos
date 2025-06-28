@@ -37,6 +37,7 @@
     ./nix-output-monitor.nix
     ./nvd.nix
     ./links-browser.nix
+    ./gemini-cli.nix
 
     # shell
     ./zsh.nix
