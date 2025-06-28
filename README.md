@@ -30,7 +30,6 @@
 - [ ] rsync
 - [ ] mpd
 - [ ] homelab
-- [ ] nix github access token for rate limit
 
 <!--
 ## Features
