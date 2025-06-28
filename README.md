@@ -31,6 +31,7 @@
 - [ ] mpd
 - [ ] homelab
 - [ ] gpg
+- [ ] pinentry for firefox-pass
 
 <!--
 ## Features
