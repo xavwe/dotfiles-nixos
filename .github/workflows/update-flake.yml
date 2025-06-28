@@ -1,4 +1,4 @@
-name: Update flake.lock
+name: update-flake
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  update-flake-lock:
+  update-flake:
     runs-on: ubuntu-latest
     permissions:
       contents: write
