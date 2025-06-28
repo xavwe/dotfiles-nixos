@@ -9,7 +9,7 @@
   sops-nix,
   ...
 }: {
-  sops.secrets.github = { };
+  sops.secrets.github = {};
   sops.templates.nix-tokens.content = ''
     access-tokens = github.com=${config.sops.placeholder."github"}
   '';
