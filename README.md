@@ -30,6 +30,7 @@
 - [ ] rsync
 - [ ] mpd
 - [ ] homelab
+- [ ] gpg
 
 <!--
 ## Features
