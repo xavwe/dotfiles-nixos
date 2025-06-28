@@ -9,6 +9,15 @@
   sops-nix,
   ...
 }: {
+  sops.secrets.github = { };
+  sops.templates.nix-tokens.content = ''
+    access-tokens = github.com=${config.sops.placeholder."github"}
+  '';
+  system.activationScripts.injectNixConfig.text = ''
+    mkdir -p /home/nu/.config/nix
+    cat ${config.sops.templates.nix-tokens.path} >> /home/nu/.config/nix/nix.conf
+  '';
+
   nix = {
     settings.experimental-features = [
       "nix-command"
