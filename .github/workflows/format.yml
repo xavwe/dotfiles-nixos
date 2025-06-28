@@ -29,6 +29,6 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           if ! git diff --quiet; then
             git add .
-            git commit -m "style(nix): format with alejandra"
+            git commit -m "style(*.nix): format with alejandra"
             git push
           fi
