@@ -22,7 +22,7 @@
 - [ ] mutt
 - [ ] firefox
 - [ ] nixos-hardware
-- [ ] scrscpy
+- [ ] scrcpy
 - [ ] nh
 - [ ] git signing
 - [ ] styling
