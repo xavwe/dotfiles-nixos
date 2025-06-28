@@ -3,17 +3,17 @@ default:
   just --list
 
 update:
-  nix flake update --flake ./src
+  nix flake update
 
 check:
-  nix flake check ./src
+  nix flake check .
 
 upgrade TYPE HOST:
   #!/usr/bin/env bash
   if command -v nom >/dev/null 2>&1; then
-    nixos-rebuild {{TYPE}} --flake path:./src#{{HOST}} 2>&1 | nom
+    nixos-rebuild {{TYPE}} --flake path:.#{{HOST}} 2>&1 | nom
   else
-    nixos-rebuild {{TYPE}} --flake path:./src#{{HOST}}
+    nixos-rebuild {{TYPE}} --flake path:.#{{HOST}}
   fi
 
 secret:
