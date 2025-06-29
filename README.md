@@ -27,7 +27,6 @@
 - [ ] git signing
 - [ ] styling
 - [ ] erase your darlings
-- [ ] rsync
 - [ ] mpd
 - [ ] homelab
 - [ ] gpg
