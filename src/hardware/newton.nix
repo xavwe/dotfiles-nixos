@@ -265,4 +265,9 @@
   boot.extraModprobeConfig = "options kvm_intel nested=1";
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  environment.systemPackages = [
+    config.boot.kernelPackages.cpupower
+    config.boot.kernelPackages.turbostat
+  ];
 }
