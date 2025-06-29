@@ -38,6 +38,7 @@
     ./nvd.nix
     ./links-browser.nix
     ./gemini-cli.nix
+    ./rsync.nix
 
     # shell
     ./zsh.nix
