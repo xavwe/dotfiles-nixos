@@ -269,5 +269,6 @@
   environment.systemPackages = [
     config.boot.kernelPackages.cpupower
     config.boot.kernelPackages.turbostat
+    pkgs.smartmontools
   ];
 }
