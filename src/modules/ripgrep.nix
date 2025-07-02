@@ -1,5 +1,4 @@
 # alias grep to rg
-
 {
   config,
   pkgs,
