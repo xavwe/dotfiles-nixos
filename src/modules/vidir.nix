@@ -1,6 +1,5 @@
 # find . -type f | vidir -
 # vidir
-
 {
   config,
   pkgs,
