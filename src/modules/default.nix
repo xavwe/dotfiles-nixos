@@ -12,6 +12,8 @@
     ./foot.nix
     ./zathura.nix
     ./libreoffice.nix
+    ./pavucontrol.nix
+    ./helvum.nix
 
     # cli
     ./neovim.nix
@@ -40,6 +42,7 @@
     ./gemini-cli.nix
     ./rsync.nix
     ./vidir.nix
+    ./ripgrep.nix
 
     # shell
     ./zsh.nix
