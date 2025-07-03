@@ -3,10 +3,13 @@
   lib,
   pkgs,
   modulesPath,
+  nixos-hardware,
+  inputs,
   ...
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    inputs.nixos-hardware.nixosModules.common-cpu-intel
   ];
 
   #security.tpm2.enable = true;
@@ -274,7 +277,6 @@
   };
   boot.extraModprobeConfig = "options kvm_intel nested=1";
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   environment.systemPackages = [
     config.boot.kernelPackages.cpupower
