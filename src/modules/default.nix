@@ -69,5 +69,6 @@
     ./font.nix
     ./locale.nix
     ./misc.nix
+    ./mpd.nix
   ];
 }
