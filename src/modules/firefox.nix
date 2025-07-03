@@ -220,7 +220,7 @@
                 icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
                 definedAliases = ["@ho"];
               };
-              "YouTube" = {
+              "youtube" = {
                 name = "YouTube";
                 icon = "https://youtube.com/favicon.ico";
                 updateInterval = 24 * 60 * 60 * 1000;
@@ -237,7 +237,7 @@
                   }
                 ];
               };
-              "Reddit" = {
+              "reddit" = {
                 name = "Reddit";
                 urls = [
                   {
