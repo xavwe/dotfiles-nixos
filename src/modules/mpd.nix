@@ -28,21 +28,4 @@
   systemd.services.mpd.environment = {
     XDG_RUNTIME_DIR = "/run/user/${toString config.users.users.nu.uid}";
   };
-  environment.sessionVariables = lib.mkMerge [
-    {
-      MPD_PORT = "6600";
-    }
-  ];
-  home-manager.users.nu = {pkgs, ...}: {
-    home.packages = [pkgs.mpc-cli];
-    programs.ncmpcpp = {
-      enable = true;
-      package = pkgs.ncmpcpp.override {visualizerSupport = true;};
-      mpdMusicDir = "/home/nu/music/";
-      settings = {
-        mpd_host = "localhost";
-        mpd_port = "6600";
-      };
-    };
-  };
 }

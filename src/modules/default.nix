@@ -43,6 +43,8 @@
     ./rsync.nix
     ./vidir.nix
     ./ripgrep.nix
+    ./ncmpcpp.nix
+    ./mpc.nix
 
     # shell
     ./zsh.nix
