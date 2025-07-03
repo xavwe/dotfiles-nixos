@@ -102,7 +102,7 @@
             search.engines = {
               bing.metaData.hidden = true;
               ecosia.metaData.hidden = true;
-              google.metaData.alias = "@g";
+              google.metaData.hidden = true;
               "Nix Packages" = {
                 urls = [
                   {
@@ -127,7 +127,24 @@
                 icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
                 definedAliases = ["@np"];
               };
-              "Nix Options" = {
+              "NixOS Wiki" = {
+                urls = [
+                  {
+                    template = "https://wiki.nixos.org/w/index.php";
+                    params = [
+                      {
+                        name = "search";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+
+                icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+                definedAliases = ["@nw"];
+              };
+
+              "NixOS Options" = {
                 urls = [
                   {
                     template = "https://search.nixos.org/options";
@@ -151,6 +168,38 @@
                 icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
                 definedAliases = ["@no"];
               };
+              "Arch Wiki" = {
+                urls = [
+                  {
+                    template = "https://wiki.archlinux.org/index.php";
+                    params = [
+                      {
+                        name = "search";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+
+                icon = "https://archlinux.org/static/favicon.png";
+                definedAliases = ["@aw"];
+              };
+              "Gentoo Wiki" = {
+                urls = [
+                  {
+                    template = "https://wiki.gentoo.org/index.php";
+                    params = [
+                      {
+                        name = "search";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+
+                icon = "https://www.gentoo.org/favicon.ico";
+                definedAliases = ["@gw"];
+              };
               "Home Manager Options" = {
                 urls = [
                   {
@@ -172,6 +221,7 @@
                 definedAliases = ["@ho"];
               };
               "YouTube" = {
+                name = "YouTube";
                 icon = "https://youtube.com/favicon.ico";
                 updateInterval = 24 * 60 * 60 * 1000;
                 definedAliases = ["@yt"];
@@ -187,7 +237,23 @@
                   }
                 ];
               };
+              "Reddit" = {
+                name = "Reddit";
+                urls = [
+                  {
+                    template = "https://www.reddit.com/search/";
+                    params = [
+                      {
+                        name = "q";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
 
+                icon = "https://www.redditstatic.com/shreddit/assets/favicon/64x64.png";
+                definedAliases = ["@rd"];
+              };
               "GitHub" = {
                 icon = "https://github.com/favicon.ico";
                 updateInterval = 24 * 60 * 60 * 1000;
@@ -199,6 +265,23 @@
                     params = [
                       {
                         name = "q";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+              };
+              "GitLab" = {
+                icon = "https://gitlab.com/favicon.ico";
+                updateInterval = 24 * 60 * 60 * 1000;
+                definedAliases = ["@gl"];
+
+                urls = [
+                  {
+                    template = "https://gitlab.com/search";
+                    params = [
+                      {
+                        name = "search";
                         value = "{searchTerms}";
                       }
                     ];
@@ -220,6 +303,7 @@
                 dearrow
                 return-youtube-dislikes
                 skip-redirect
+                wayback-machine
               ];
             };
           };
