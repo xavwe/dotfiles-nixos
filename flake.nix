@@ -78,6 +78,7 @@
       newton-desktop = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs;
+          lib = nixpkgs.lib // self.lib; # Merge nixpkgs.lib with custom lib
           overlays = import ./src/overlays {inherit inputs;};
         };
         modules = [
@@ -93,6 +94,7 @@
       newton-minimal = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs;
+          lib = nixpkgs.lib // self.lib; # Merge nixpkgs.lib with custom lib
           overlays = import ./src/overlays {inherit inputs;};
         };
         modules = [
@@ -110,6 +112,7 @@
       iso-desktop = nixos-generators.nixosGenerate {
         specialArgs = {
           inherit inputs;
+          lib = nixpkgs.lib // self.lib; # Merge nixpkgs.lib with custom lib
           overlays = import ./src/overlays {inherit inputs;};
         };
         system = "x86_64-linux";
@@ -127,6 +130,7 @@
       iso-minimal = nixos-generators.nixosGenerate {
         specialArgs = {
           inherit inputs;
+          lib = nixpkgs.lib // self.lib; # Merge nixpkgs.lib with custom lib
           overlays = import ./src/overlays {inherit inputs;};
         };
         system = "x86_64-linux";
@@ -142,5 +146,7 @@
         format = "iso";
       };
     };
+
+    lib = import ./src/lib { inherit (nixpkgs) lib; };
   };
 }
