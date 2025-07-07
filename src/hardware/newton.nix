@@ -207,11 +207,15 @@
   ];
 
   #networking.useDHCP = lib.mkDefault true;
-  networking.interfaces.enp6s0.wakeOnLan.enable = true;
+  # networking.interfaces.enp6s0.wakeOnLan.enable = true;
 
   # Use systemd-networkd and systemd-resolved
   networking.useNetworkd = true;
   systemd.network.enable = true;
+  systemd.network.links."10-enp6s0" = {
+    matchConfig.Name = "enp6s0";
+    linkConfig.WakeOnLan = "magic";
+  };
   services.resolved = {
     enable = true;
     dnssec = "true";
@@ -236,7 +240,6 @@
     };
     linkConfig = {
       RequiredForOnline = "routable"; # Wait for network-online.target until interface is routable
-      # WakeOnLan = "magic";
     };
   };
   networking.nameservers = [
