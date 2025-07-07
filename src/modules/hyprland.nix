@@ -99,7 +99,7 @@ in {
             };
 
             animations = {
-              enabled = true;
+              enabled = false;
               bezier = ["myBezier, 0.05, 0.9, 0.1, 1.05"];
               animation = [
                 "windows, 1, 7, myBezier"
@@ -125,7 +125,7 @@ in {
             misc = {
               force_default_wallpaper = 0;
               disable_hyprland_logo = true;
-              background_color = "rgb(0, 0, 0)";
+              background_color = lib.hexToRgb config.colors.base00;
             };
 
             input = {

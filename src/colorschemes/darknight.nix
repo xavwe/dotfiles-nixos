@@ -7,7 +7,8 @@ credits:
   author = "Xaver Wenhart (https://xavwe.dev)";
   colors = {
     base00 = "000000"; # Black (Background) | Default Background
-    base01 = "414868"; # (Darkest Gray) | Lighter Background (Used for status bars)
+    #base01 = "414868"; # (Darkest Gray) | Lighter Background (Used for status bars)
+    base01 = "595959";
     base02 = ""; # (Dark Gray) | Selection Background
     base03 = ""; # Bright Black (Gray) | Comments, Invisibles, Line Highlighting
     base04 = "c0caf5"; # (Light Gray) | Dark Foreground (Used for status bars)
