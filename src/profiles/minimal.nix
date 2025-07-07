@@ -53,6 +53,7 @@
       starship.enable = false;
       virt-manager.enable = false;
       wakatime.enable = true;
+      colors.theme = "darknight";
     };
   };
 }

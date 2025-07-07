@@ -38,11 +38,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    stylix = {
-      url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     extract = {
       url = "github:xavwe/extract";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -65,7 +60,6 @@
     home-manager,
     nixpkgs-stable,
     sops-nix,
-    stylix,
     nixway,
     disko,
     nixos-hardware,
@@ -93,7 +87,6 @@
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
-          stylix.nixosModules.stylix
         ];
       };
       newton-minimal = nixpkgs.lib.nixosSystem {
@@ -108,7 +101,6 @@
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
-          stylix.nixosModules.stylix
         ];
       };
     };
@@ -126,7 +118,6 @@
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
-          stylix.nixosModules.stylix
         ];
         format = "iso";
       };
@@ -143,7 +134,6 @@
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
-          stylix.nixosModules.stylix
         ];
         format = "iso";
       };

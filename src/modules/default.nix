@@ -56,7 +56,7 @@
     ./kanata.nix
     ./wl-clipboard.nix
     ./dark-mode.nix
-    ./stylix.nix
+    ./colors.nix
     ./ssh.nix
     ./starship.nix
     ./podman.nix
