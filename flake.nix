@@ -147,6 +147,6 @@
       };
     };
 
-    lib = import ./src/lib { inherit (nixpkgs) lib; };
+    lib = import ./src/lib {inherit (nixpkgs) lib;};
   };
 }

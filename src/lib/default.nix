@@ -1,3 +1,2 @@
-{ lib }:
-
-  import ./hexToRgb.nix { inherit lib; }
+{lib}:
+import ./hexToRgb.nix {inherit lib;}
