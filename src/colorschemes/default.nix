@@ -12,7 +12,8 @@
 
   config = {
     colorSchemes = {
-      darknight = (import ./darknight.nix).darknight;
+      darknight = (import ./darknight.nix).colors;
+      tokyonight = (import ./tokyonight.nix).colors;
     };
   };
 }
