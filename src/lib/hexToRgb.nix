@@ -57,5 +57,5 @@
 in {
   hexToRgb = hex: let
     components = parseHex hex;
-  in "rgb(${toString (hexToDecimal components.r)}, ${toString (hexToDecimal components.g)}, ${toString (hexToDecimal components.b)})";
+  in "rgb(${toString (hexToDecimal components.r)},${toString (hexToDecimal components.g)},${toString (hexToDecimal components.b)})";
 }
