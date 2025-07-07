@@ -52,6 +52,11 @@
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -64,6 +69,7 @@
     nixway,
     disko,
     nixos-hardware,
+    nixos-generators,
     ...
   } @ inputs: {
     formatter."x86_64-linux" = nixpkgs.legacyPackages."x86_64-linux".alejandra;
@@ -75,7 +81,7 @@
     };
 
     nixosConfigurations = {
-      desktop = nixpkgs.lib.nixosSystem {
+      newton-desktop = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs;
           overlays = import ./src/overlays {inherit inputs;};
@@ -83,13 +89,14 @@
         modules = [
           ./src/modules
           ./src/profiles/desktop.nix
+          ./src/hardware/newton.nix
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
           stylix.nixosModules.stylix
         ];
       };
-      minimal = nixpkgs.lib.nixosSystem {
+      newton-minimal = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs;
           overlays = import ./src/overlays {inherit inputs;};
@@ -97,11 +104,48 @@
         modules = [
           ./src/modules
           ./src/profiles/minimal.nix
+          ./src/hardware/newton.nix
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
           stylix.nixosModules.stylix
         ];
+      };
+    };
+    packages.x86_64-linux = {
+      iso-desktop = nixos-generators.nixosGenerate {
+        specialArgs = {
+          inherit inputs;
+          overlays = import ./src/overlays {inherit inputs;};
+        };
+        system = "x86_64-linux";
+        modules = [
+          ./src/modules
+          ./src/profiles/desktop.nix
+          ./src/hardware/iso.nix
+          disko.nixosModules.disko
+          sops-nix.nixosModules.sops
+          inputs.home-manager.nixosModules.home-manager
+          stylix.nixosModules.stylix
+        ];
+        format = "iso";
+      };
+      iso-minimal = nixos-generators.nixosGenerate {
+        specialArgs = {
+          inherit inputs;
+          overlays = import ./src/overlays {inherit inputs;};
+        };
+        system = "x86_64-linux";
+        modules = [
+          ./src/modules
+          ./src/profiles/minimal.nix
+          ./src/hardware/iso.nix
+          disko.nixosModules.disko
+          sops-nix.nixosModules.sops
+          inputs.home-manager.nixosModules.home-manager
+          stylix.nixosModules.stylix
+        ];
+        format = "iso";
       };
     };
   };

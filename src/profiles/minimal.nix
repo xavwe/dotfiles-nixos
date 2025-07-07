@@ -7,10 +7,6 @@
   sops-nix,
   ...
 }: {
-  imports = [
-    ./../hardware/newton.nix
-  ];
-
   config = {
     # hostname
     networking.hostName = "newton";
