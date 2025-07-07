@@ -84,6 +84,7 @@
           ./src/modules
           ./src/profiles/desktop.nix
           ./src/hardware/newton.nix
+          ./src/colorschemes
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
@@ -98,6 +99,7 @@
           ./src/modules
           ./src/profiles/minimal.nix
           ./src/hardware/newton.nix
+          ./src/colorschemes
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
@@ -115,6 +117,7 @@
           ./src/modules
           ./src/profiles/desktop.nix
           ./src/hardware/iso.nix
+          ./src/colorschemes
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
@@ -131,6 +134,7 @@
           ./src/modules
           ./src/profiles/minimal.nix
           ./src/hardware/iso.nix
+          ./src/colorschemes
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
