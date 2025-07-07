@@ -78,8 +78,8 @@ in {
               gaps_in = 5;
               gaps_out = 20;
               border_size = 2;
-              "col.active_border" = "rgba(595959aa)";
-              "col.inactive_border" = "rgba(595959aa)";
+              "col.active_border" = "${lib.hexToRgb config.colors.base01} ${lib.hexToRgb config.colors.base01}";
+              "col.inactive_border" = "${lib.hexToRgb config.colors.base01} ${lib.hexToRgb config.colors.base01}";
               resize_on_border = true;
               allow_tearing = false;
               layout = "master";
