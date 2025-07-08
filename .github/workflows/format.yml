@@ -33,7 +33,7 @@ jobs:
             git push
           fi
   lua-format:
-    name: Auro format Lua files with StyLua
+    name: Auto format Lua files with StyLua
     runs-on: ubuntu-latest
 
     steps:
