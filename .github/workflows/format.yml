@@ -32,3 +32,25 @@ jobs:
             git commit -m "style(*.nix): format with alejandra"
             git push
           fi
+  lua-format:
+    name: Auro format Lua files with StyLua
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install StyLua && Format Lua files
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --check .
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            git add .
+            git commit -m "style(*.lua): format with stylua"
+            git push
+          fi
