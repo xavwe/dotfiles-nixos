@@ -26,4 +26,5 @@ gc:
   nix-store --gc
 
 format:
-  nix fmt -- .
+  nix fmt -- -q .
+  stylua .
