@@ -6,8 +6,6 @@ vim.g.maplocalleader = " "
 --- vim.cmd("set clipboard=wl-clipboard"); --- not needed https://www.reddit.com/r/Fedora/comments/ax9p9t/vim_and_system_clipboard_under_wayland/?rdt=44798
 vim.opt.hlsearch = true
 
-
-
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -23,7 +21,7 @@ vim.opt.backup = false
 vim.opt.undofile = true
 
 -- source: https://vi.stackexchange.com/questions/31811/neovim-lua-config-how-to-append-to-listchars
-vim.opt.listchars = { space = '•', tab = '>~', eol = '↵' }
+vim.opt.listchars = { space = "•", tab = ">~", eol = "↵" }
 vim.opt.list = true
 -- vim.cmd("set showbreak=↳")
 
@@ -37,9 +35,9 @@ vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 
 -- Enable folding ( setup in nvim-ufo )
-vim.o.foldenable = true     -- Enable folding by default
+vim.o.foldenable = true -- Enable folding by default
 vim.o.foldmethod = "manual" -- Default fold method (change as needed)
-vim.o.foldlevel = 99        -- Open most folds by default
+vim.o.foldlevel = 99 -- Open most folds by default
 vim.o.foldcolumn = "0"
 
 -- backspace
@@ -62,4 +60,3 @@ vim.opt.mouse = "a"
 -- Disable netrw
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-
