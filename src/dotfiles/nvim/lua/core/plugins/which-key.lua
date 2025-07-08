@@ -12,6 +12,15 @@ return {
     })
     wk.add({
       { "<leader>f", group = "file", icon = "" },
+      {
+        "<leader>s",
+        group = "split",
+        icon = "",
+        { "<leader>sv", "<C-w>v", desc = "Split window vertically" },
+        { "<leader>sh", "<C-w>s", desc = "Split window horizontally" },
+        { "<leader>se", "<C-w>=", desc = "Make splits equal size" },
+        { "<leader>sx", "<cmd>close<CR>", desc = "Close current split" },
+      },
     })
 
     -- Add buffer-local keymaps for file operations
