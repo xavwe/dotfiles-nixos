@@ -11,7 +11,8 @@ credits:
     base01 = "595959";
     base02 = ""; # (Dark Gray) | Selection Background
     base03 = ""; # Bright Black (Gray) | Comments, Invisibles, Line Highlighting
-    base04 = "c0caf5"; # (Light Gray) | Dark Foreground (Used for status bars)
+    # base04 = "c0caf5"; # (Light Gray) | Dark Foreground (Used for status bars)
+    base04 = "adadad";
     base05 = ""; # Foreground | Default Foreground, Caret, Delimiters, Operators
     base06 = "ffffff"; # White | Light Foreground
     base07 = ""; # Bright White | The Lightest Foreground
