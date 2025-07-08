@@ -6,7 +6,7 @@ vim.g.maplocalleader = " "
 --- vim.cmd("set clipboard=wl-clipboard"); --- not needed https://www.reddit.com/r/Fedora/comments/ax9p9t/vim_and_system_clipboard_under_wayland/?rdt=44798
 vim.opt.hlsearch = true
 
-vim.cmd("let g:netrw_banner = 0")
+
 
 vim.opt.number = true
 vim.opt.relativenumber = true
@@ -58,4 +58,8 @@ vim.g.editorconfig = true
 
 -- for easy mouse resizing, just incase
 vim.opt.mouse = "a"
+
+-- Disable netrw
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
