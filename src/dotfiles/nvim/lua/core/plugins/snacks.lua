@@ -1,10 +1,17 @@
 return {
   {
     "folke/snacks.nvim",
-    ---@type snacks.Config
     opts = {
       picker = {
         enabled = true,
+        sources = {
+          grep = {
+            hidden = true,
+          },
+          files = {
+            hidden = true,
+          },
+        },
       },
       explorer = {
         enabled = true,
@@ -18,7 +25,7 @@ return {
     keys = {
       { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
       { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
-      { "<leader>f", function() Snacks.picker.files() end, desc = "Find Files" },
+      { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
     },
   },
 }
