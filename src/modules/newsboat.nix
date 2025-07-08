@@ -110,16 +110,11 @@
             }
           ];
           extraConfig = ''
-            # Newsboat colour scheme to work with the Gruvbox palette
-            # Inspired by the vim theme https://github.com/morhetz/gruvbox
-            # Tested with the Kitty gruvbox terminal colour scheme
-            # https://github.com/wdomitrz/kitty-gruvbox-theme
-
-            color background          color223   color0
-            color listnormal          color223   color0
-            color listnormal_unread   color2     color0
-            color listfocus           color223   color237
-            color listfocus_unread    color223   color237
+            color background          color7     color0
+            color listnormal          color240      color0
+            color listnormal_unread   color7      color0
+            color listfocus           color240   color8
+            color listfocus_unread    color7   color8
             color info                color8     color0
             color article             color223   color0
 
