@@ -46,6 +46,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: latest
+          args: .
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions[bot]"
