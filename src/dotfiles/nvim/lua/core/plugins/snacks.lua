@@ -15,7 +15,7 @@ return {
       },
       explorer = {
         enabled = true,
-        replace_netrw = false, --no difference
+        replace_netrw = true,
       },
       bigfile = {
         enabled = true,
