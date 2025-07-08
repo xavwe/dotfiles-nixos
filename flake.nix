@@ -71,6 +71,7 @@
       packages = with nixpkgs.legacyPackages."x86_64-linux"; [
         just
         sops
+        stylua
       ];
     };
 
