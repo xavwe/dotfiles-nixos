@@ -23,9 +23,27 @@ return {
       },
     },
     keys = {
-      { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
-      { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
-      { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+      {
+        "<leader>/",
+        function()
+          Snacks.picker.grep()
+        end,
+        desc = "Grep",
+      },
+      {
+        "<leader>e",
+        function()
+          Snacks.explorer()
+        end,
+        desc = "File Explorer",
+      },
+      {
+        "<leader>ff",
+        function()
+          Snacks.picker.files()
+        end,
+        desc = "Find Files",
+      },
     },
   },
 }
