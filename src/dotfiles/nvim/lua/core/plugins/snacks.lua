@@ -32,7 +32,7 @@ return {
         function()
           Snacks.terminal.toggle()
         end,
-        desc = "Toggle Terminal",
+        desc = "Terminal",
       },
       {
         "<leader>/",
