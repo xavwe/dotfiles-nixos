@@ -1,15 +1,16 @@
 return {
   "folke/which-key.nvim",
   event = "VeryLazy",
+  dependencies = { { "echasnovski/mini.icons", opts = {} } },
   config = function()
     local wk = require("which-key")
-    wk.setup({
-      icons = {
-        breadcrumb = "»", -- symbol used in the command line area
-        separator = "➜", -- symbol used between a key and its label
-        -- group = "", -- symbol prepended to a group
-      },
-    })
+    -- wk.setup({
+    --   icons = {
+    --     breadcrumb = "»", -- symbol used in the command line area
+    --     separator = "➜", -- symbol used between a key and its label
+    --     -- group = "", -- symbol prepended to a group
+    --   },
+    -- })
     wk.add({
       { "<leader>f", group = "file", icon = "" },
       {
@@ -20,6 +21,15 @@ return {
         { "<leader>sh", "<C-w>s", desc = "Split window horizontally" },
         { "<leader>se", "<C-w>=", desc = "Make splits equal size" },
         { "<leader>sx", "<cmd>close<CR>", desc = "Close current split" },
+      },
+      {
+        "<leader>w",
+        group = "window",
+        icon = "",
+        { "<leader>wj", "<C-w>j", desc = "Move to Window: j" },
+        { "<leader>wk", "<C-w>k", desc = "Split window horizontally" },
+        { "<leader>wh", "<C-w>h", desc = "Make splits equal size" },
+        { "<leader>wl", "<C-w>l", desc = "Close current split" },
       },
     })
 
