@@ -2,6 +2,7 @@ return {
   {
     "folke/snacks.nvim",
     opts = {
+      indent = { enabled = true },
       picker = {
         enabled = true,
         sources = {
@@ -13,15 +14,8 @@ return {
           },
         },
       },
-      explorer = {
-        enabled = true,
-        replace_netrw = true,
-      },
-      bigfile = {
-        enabled = true,
-        notify = true,
-      },
     },
+    dependencies = { { "echasnovski/mini.icons", opts = {} } },
     keys = {
       {
         "<leader>/",
@@ -31,14 +25,7 @@ return {
         desc = "Grep",
       },
       {
-        "<leader>e",
-        function()
-          Snacks.explorer()
-        end,
-        desc = "File Explorer",
-      },
-      {
-        "<leader>ff",
+        "<leader><leader>",
         function()
           Snacks.picker.files()
         end,

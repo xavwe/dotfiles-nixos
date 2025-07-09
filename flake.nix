@@ -72,6 +72,9 @@
         just
         sops
         stylua
+        lua-language-server
+        nixd
+        alejandra
       ];
     };
 
