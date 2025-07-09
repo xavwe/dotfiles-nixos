@@ -1,4 +1,5 @@
 return {
+
   {
     "stevearc/conform.nvim",
     opts = {
@@ -22,6 +23,9 @@ return {
             { path = "${3rd}/luv/library", words = { "vim%.uv" } },
           },
         },
+      },
+      {
+        "artemave/workspace-diagnostics.nvim",
       },
     },
     config = function()
@@ -65,8 +69,11 @@ return {
 
       if vim.fn.executable("lua-language-server") == 1 then
         require("lspconfig").lua_ls.setup({
+          capabilites = capabilities,
+          on_attach = function(client, bufnr)
+            require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+          end,
           settings = {
-            capabilites = capabilities,
             Lua = {
               workspace = {
                 checkThirdParty = false,
@@ -96,7 +103,12 @@ return {
       end
 
       if vim.fn.executable("nixd") == 1 then
-        require("lspconfig").nixd.setup({ capabilites = capabilities })
+        require("lspconfig").nixd.setup({
+          capabilites = capabilities,
+          on_attach = function(client, bufnr)
+            require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+          end,
+        })
         -- else
         -- vim.notify("nixd not found: Nix LSP will not be configured.", vim.log.levels.INFO)
       end
