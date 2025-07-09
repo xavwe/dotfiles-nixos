@@ -3,6 +3,16 @@ return {
     "folke/snacks.nvim",
     opts = {
       indent = { enabled = true },
+      quickfile = { enabled = true },
+      terminal = {
+        win = {},
+        keys = {
+          t = {
+            ["<esc>"] = "normal",
+          },
+        },
+      },
+      dashboard = { enabled = false },
       picker = {
         enabled = true,
         sources = {
@@ -17,6 +27,13 @@ return {
     },
     dependencies = { { "echasnovski/mini.icons", opts = {} } },
     keys = {
+      {
+        "<leader>q",
+        function()
+          Snacks.terminal.toggle()
+        end,
+        desc = "Toggle Terminal",
+      },
       {
         "<leader>/",
         function()
