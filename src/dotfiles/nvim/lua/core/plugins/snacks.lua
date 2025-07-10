@@ -1,5 +1,16 @@
 return {
   {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    ---@type Flash.Config
+    opts = {},
+  -- stylua: ignore
+  keys = {
+    { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+    { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+  },
+  },
+  {
     "folke/snacks.nvim",
     opts = {
       indent = { enabled = true },
@@ -48,6 +59,13 @@ return {
         end,
         desc = "Find Files",
       },
+      -- {
+      --   "<leader>b",
+      --   function()
+      --     Snacks.picker.buffers()
+      --   end,
+      --   desc = "Buffers",
+      -- },
     },
   },
 }

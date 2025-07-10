@@ -61,6 +61,7 @@ return {
               didRename = true,
               willRename = true,
             },
+            didChangeWatchedFiles = true,
           },
         },
       })
@@ -69,7 +70,7 @@ return {
 
       if vim.fn.executable("lua-language-server") == 1 then
         require("lspconfig").lua_ls.setup({
-          capabilites = capabilities,
+          capabilities = capabilities,
           on_attach = function(client, bufnr)
             require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
           end,
@@ -77,6 +78,12 @@ return {
             Lua = {
               workspace = {
                 checkThirdParty = false,
+                library = vim.api.nvim_get_runtime_file("", true),
+                fileOperations = {
+                  didRename = true,
+                  willRename = true,
+                },
+                didChangeWatchedFiles = true,
               },
               codeLens = {
                 enable = true,
@@ -95,6 +102,9 @@ return {
                 semicolon = "Disable",
                 arrayIndex = "Disable",
               },
+              telemetry = {
+                enable = false,
+              },
             },
           },
         })
@@ -104,7 +114,7 @@ return {
 
       if vim.fn.executable("nixd") == 1 then
         require("lspconfig").nixd.setup({
-          capabilites = capabilities,
+          capabilities = capabilities,
           on_attach = function(client, bufnr)
             require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
           end,
