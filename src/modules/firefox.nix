@@ -295,6 +295,7 @@
             extensions = {
               packages = with inputs.firefox-addons.packages."x86_64-linux"; [
                 private-grammar-checker-harper
+                vimium
                 ublock-origin
                 sponsorblock
                 youtube-shorts-block
