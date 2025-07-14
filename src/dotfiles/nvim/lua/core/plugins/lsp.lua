@@ -1,11 +1,18 @@
 return {
-
   {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
         lua = { "stylua" },
         nix = { "alejandra" },
+        haskell = { "ormolu" },
+        tex = { "latexindent" },
+        latex = { "latexindent" },
+      },
+      formatters = {
+        latexindent = {
+          prepend_args = { "-l", "-m" }, -- -l for local config, -m for modify line breaks
+        },
       },
       format_on_save = {
         timeout_ms = 500,
@@ -108,8 +115,6 @@ return {
             },
           },
         })
-        -- else
-        -- vim.notify("lua-language-server not found: Lua LSP will not be configured.", vim.log.levels.INFO)
       end
 
       if vim.fn.executable("nixd") == 1 then
@@ -119,8 +124,24 @@ return {
             require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
           end,
         })
-        -- else
-        -- vim.notify("nixd not found: Nix LSP will not be configured.", vim.log.levels.INFO)
+      end
+
+      if vim.fn.executable("haskell-language-server-wrapper") == 1 then
+        require("lspconfig").hls.setup({
+          capabilities = capabilities,
+          on_attach = function(client, bufnr)
+            require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+          end,
+        })
+      end
+
+      if vim.fn.executable("texlab") == 1 then
+        require("lspconfig").texlab.setup({
+          capabilities = capabilities,
+          on_attach = function(client, bufnr)
+            require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+          end,
+        })
       end
     end,
   },
