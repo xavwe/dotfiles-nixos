@@ -143,6 +143,58 @@
                 definedAliases = ["@nw"];
               };
 
+              "ChatGPT" = {
+                urls = [
+                  {
+                    template = "https://chatgpt.com/";
+                    params = [
+                      {
+                        name = "q";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+                icon = "https://chatgpt.com/favicon.ico";
+                definedAliases = ["@gpt"];
+              };
+
+              "DeepL de-en" = {
+                urls = [
+                  {
+                    template = "https://www.deepl.com/translator#de/en-gb/{searchTerms}";
+                  }
+                ];
+                icon = "https://www.deepl.com/favicon.ico";
+                definedAliases = ["@de-en"];
+              };
+
+              "DeepL en-de" = {
+                urls = [
+                  {
+                    template = "https://www.deepl.com/translator#en/de/{searchTerms}";
+                  }
+                ];
+                icon = "https://www.deepl.com/favicon.ico";
+                definedAliases = ["@en-de"];
+              };
+
+              "Claude" = {
+                urls = [
+                  {
+                    template = "https://claude.ai/new?";
+                    params = [
+                      {
+                        name = "q";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+                icon = "https://claude.ai/favicon.ico";
+                definedAliases = ["@c"];
+              };
+
               "NixOS Options" = {
                 urls = [
                   {
