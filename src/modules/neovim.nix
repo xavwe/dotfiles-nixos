@@ -32,6 +32,8 @@
       environment.systemPackages = with pkgs; [
         ripgrep
         fd
+        tree-sitter
+        nodejs
       ];
     })
 
