@@ -48,7 +48,10 @@
             ''
           ];
           profileExtra = lib.mkIf config.modules.hyprland.enable ''
-            Hyprland
+            # Auto-start Hyprland if not already running
+            if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
+              exec Hyprland
+            fi
           '';
           history = {
             path = "$ZDOTDIR/.zsh_history";
