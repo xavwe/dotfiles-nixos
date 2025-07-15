@@ -23,7 +23,7 @@
     home.file.".gemini/settings.json".text = ''
       {
         "theme": "GitHub",
-        "selectedAuthType": "gemini-api-key"",
+        "selectedAuthType": "gemini-api-key",
         "usageStatisticsEnabled": false
       }
     '';
