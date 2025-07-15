@@ -115,7 +115,10 @@
               "security.remote_settings.crlite_filters.enabled" = true;
               "security.pki.crlite_mode" = 2;
 
+              "signon.rememberSignons" = false;
+              "browser.bookmarks.showMobileBookmarks" = false;
               "dom.security.https_only_mode_send_http_background_request" = false;
+              "identity.fxaccounts.enabled" = false;
               "security.ssl.treat_unsafe_negotiation_as_broken" = true;
               "browser.xul.error_pages.expert_bad_cert" = true;
               "network.http.referer.XOriginTrimmingPolicy" = 2;
@@ -191,6 +194,12 @@
               "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
               "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
               "browser.urlbar.showSearchTerms.enabled" = false;
+              "browser.shell.checkDefaultBrowser" = false;
+              "browser.search.widget.inNavBar" = false;
+              "layers.acceleration.force-enabled" = true;
+              "browser.translate.enable" = false;
+              "browser.urlbar.interventions" = false;
+              "browser.urlbar.suggest.topsites" = false;
             };
             search.engines = {
               bing.metaData.hidden = true;
@@ -453,8 +462,6 @@
             };
           };
           policies = {
-            PasswordManagerEnabled = false;
-            OfferToSaveLogins = false;
             DisableFirefoxStudies = true;
             EnableTrackingProtection = {
               Value = true;
@@ -462,22 +469,14 @@
               Cryptomining = true;
               Fingerprinting = true;
             };
-            DisableFirefoxAccounts = true;
             DisableAccounts = true;
             OverrideFirstRunPage = "";
             OverridePostUpdatePage = "";
-            DisplayBookmarksToolbar = "never"; # alternatives: "always" or "newtab"
             DisplayMenuBar = "default-off"; # alternatives: "always", "never" or "default-on"
-            DontCheckDefaultBrowser = true;
-            SearchBar = "unified";
-            HardwareAcceleration = true;
-            TranslateEnabled = false;
             UserMessaging = {
-              UrlbarInterventions = false;
               SkipOnboarding = true;
             };
             FirefoxSuggest = {
-              WebSuggestions = false;
               SponsoredSuggestions = false;
               ImproveSuggest = false;
             };
