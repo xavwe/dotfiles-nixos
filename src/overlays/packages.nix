@@ -63,7 +63,7 @@ EOF
       mkdir -p $out/bin $out/lib/node_modules/ccusage
       cp -r * $out/lib/node_modules/ccusage/
       makeWrapper ${final.nodejs}/bin/node $out/bin/ccusage \
-        --add-flags "$out/lib/node_modules/ccusage/bin/ccusage.js"
+        --add-flags "$out/lib/node_modules/ccusage/dist/index.js"
       runHook postInstall
     '';
 
