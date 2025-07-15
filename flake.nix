@@ -62,16 +62,15 @@
   outputs = {
     self,
     nixpkgs,
-    home-manager,
-    nixpkgs-stable,
-    sops-nix,
-    nixway,
-    disko,
-    nixos-hardware,
-    nixos-generators,
-    nvf,
     ...
-  } @ inputs: {
+  } @ inputs:
+  let
+    # The `mkSystem` function is imported from `./src/lib/mkSystem.nix`.
+    # It takes `nixpkgs`, `self`, and `inputs` as arguments and returns a function
+    # that can be used to build NixOS system configurations or generator packages.
+    mkSystem = import ./src/lib/mkSystem.nix { inherit nixpkgs self inputs; };
+  in
+  {
     formatter."x86_64-linux" = nixpkgs.legacyPackages."x86_64-linux".alejandra;
 
     devShells."x86_64-linux".default = nixpkgs.legacyPackages."x86_64-linux".mkShell {
@@ -86,94 +85,25 @@
     };
 
     nixosConfigurations = {
-      newton-desktop = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs;
-          lib = nixpkgs.lib // self.lib; # Merge nixpkgs.lib with custom lib
-          overlays = import ./src/overlays {inherit inputs;};
-        };
-        modules = [
-          ./src/modules
-          ./src/profiles/desktop.nix
-          ./src/hardware/newton.nix
-          ./src/colorschemes
-          disko.nixosModules.disko
-          sops-nix.nixosModules.sops
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.users.nu = {
-              imports = [nvf.homeManagerModules.default];
-            };
-          }
-        ];
+      newton-desktop = mkSystem {
+        profile = "desktop";
+        hardware = "newton";
       };
-      newton-minimal = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit inputs;
-          lib = nixpkgs.lib // self.lib; # Merge nixpkgs.lib with custom lib
-          overlays = import ./src/overlays {inherit inputs;};
-        };
-        modules = [
-          ./src/modules
-          ./src/profiles/minimal.nix
-          ./src/hardware/newton.nix
-          ./src/colorschemes
-          disko.nixosModules.disko
-          sops-nix.nixosModules.sops
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.users.nu = {
-              imports = [nvf.homeManagerModules.default];
-            };
-          }
-        ];
+      newton-minimal = mkSystem {
+        profile = "minimal";
+        hardware = "newton";
       };
     };
+
     packages.x86_64-linux = {
-      iso-desktop = nixos-generators.nixosGenerate {
-        specialArgs = {
-          inherit inputs;
-          lib = nixpkgs.lib // self.lib; # Merge nixpkgs.lib with custom lib
-          overlays = import ./src/overlays {inherit inputs;};
-        };
-        system = "x86_64-linux";
-        modules = [
-          ./src/modules
-          ./src/profiles/desktop.nix
-          ./src/hardware/iso.nix
-          ./src/colorschemes
-          disko.nixosModules.disko
-          sops-nix.nixosModules.sops
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.users.nu = {
-              imports = [nvf.homeManagerModules.default];
-            };
-          }
-        ];
+      iso-desktop = mkSystem {
+        profile = "desktop";
+        hardware = "iso";
         format = "iso";
       };
-      iso-minimal = nixos-generators.nixosGenerate {
-        specialArgs = {
-          inherit inputs;
-          lib = nixpkgs.lib // self.lib; # Merge nixpkgs.lib with custom lib
-          overlays = import ./src/overlays {inherit inputs;};
-        };
-        system = "x86_64-linux";
-        modules = [
-          ./src/modules
-          ./src/profiles/minimal.nix
-          ./src/hardware/iso.nix
-          ./src/colorschemes
-          disko.nixosModules.disko
-          sops-nix.nixosModules.sops
-          inputs.home-manager.nixosModules.home-manager
-          {
-            home-manager.users.nu = {
-              imports = [nvf.homeManagerModules.default];
-            };
-          }
-        ];
+      iso-minimal = mkSystem {
+        profile = "minimal";
+        hardware = "iso";
         format = "iso";
       };
     };
