@@ -1,13 +1,13 @@
 {inputs}: final: prev: {
   btop-gpu = prev.stdenv.mkDerivation rec {
     pname = "btop";
-    version = "1.4.3";
+    version = "1.4.4";
 
     src = final.fetchFromGitHub {
       owner = "aristocratos";
       repo = "btop";
       rev = "v${version}";
-      sha256 = "10g4m14cniw4blnazw0rs92fkgxhhri8zcvg3kcz2xgnc4day7g3";
+      sha256 = "sha256-4H9UjewJ7UFQtTQYwvHZL3ecPiChpfT6LEZwbdBCIa0=";
     };
 
     nativeBuildInputs = [prev.makeWrapper];
