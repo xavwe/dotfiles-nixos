@@ -10,6 +10,7 @@
     ./firefox.nix
     ./hyprland.nix
     ./foot.nix
+    ./kitty.nix
     ./zathura.nix
     ./libreoffice.nix
     ./pavucontrol.nix
