@@ -45,6 +45,7 @@
     ./ripgrep.nix
     ./ncmpcpp.nix
     ./mpc.nix
+    ./claude-code.nix
 
     # shell
     ./zsh.nix
