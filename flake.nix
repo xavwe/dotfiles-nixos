@@ -52,6 +52,11 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nvf = {
+      url = "github:notashelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -64,9 +69,11 @@
     disko,
     nixos-hardware,
     nixos-generators,
+    nvf,
     ...
   } @ inputs: {
     formatter."x86_64-linux" = nixpkgs.legacyPackages."x86_64-linux".alejandra;
+
     devShells."x86_64-linux".default = nixpkgs.legacyPackages."x86_64-linux".mkShell {
       packages = with nixpkgs.legacyPackages."x86_64-linux"; [
         just
@@ -93,6 +100,11 @@
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.users.nu = {
+              imports = [nvf.homeManagerModules.default];
+            };
+          }
         ];
       };
       newton-minimal = nixpkgs.lib.nixosSystem {
@@ -109,6 +121,11 @@
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.users.nu = {
+              imports = [nvf.homeManagerModules.default];
+            };
+          }
         ];
       };
     };
@@ -128,6 +145,11 @@
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.users.nu = {
+              imports = [nvf.homeManagerModules.default];
+            };
+          }
         ];
         format = "iso";
       };
@@ -146,6 +168,11 @@
           disko.nixosModules.disko
           sops-nix.nixosModules.sops
           inputs.home-manager.nixosModules.home-manager
+          {
+            home-manager.users.nu = {
+              imports = [nvf.homeManagerModules.default];
+            };
+          }
         ];
         format = "iso";
       };
