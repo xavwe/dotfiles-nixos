@@ -24,7 +24,6 @@
 - [ ] nixos-hardware
 - [ ] scrcpy
 - [ ] nh
-- [ ] git signing
 - [ ] styling
 - [ ] erase your darlings
 - [ ] mpd
