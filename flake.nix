@@ -63,14 +63,12 @@
     self,
     nixpkgs,
     ...
-  } @ inputs:
-  let
+  } @ inputs: let
     # The `mkSystem` function is imported from `./src/lib/mkSystem.nix`.
     # It takes `nixpkgs`, `self`, and `inputs` as arguments and returns a function
     # that can be used to build NixOS system configurations or generator packages.
-    mkSystem = import ./src/lib/mkSystem.nix { inherit nixpkgs self inputs; };
-  in
-  {
+    mkSystem = import ./src/lib/mkSystem.nix {inherit nixpkgs self inputs;};
+  in {
     formatter."x86_64-linux" = nixpkgs.legacyPackages."x86_64-linux".alejandra;
 
     devShells."x86_64-linux".default = nixpkgs.legacyPackages."x86_64-linux".mkShell {
