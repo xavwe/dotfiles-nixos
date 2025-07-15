@@ -24,5 +24,57 @@
     '';
   };
 
+  ccusage = final.buildNpmPackage rec {
+    pname = "ccusage";
+    version = "15.3.1";
+
+    src = final.fetchzip {
+      url = "https://registry.npmjs.org/ccusage/-/ccusage-${version}.tgz";
+      hash = "sha256-y3Vg8BIeBYUrGCijs9MZe5mDrhuTzmlUOju8HZct/FU=";
+    };
+
+    npmDepsHash = "sha256-3n0JlwuPlp7NKRbTvvxdzbS5u/R/07XatIEKr7S9Y64=";
+    forceEmptyCache = true;
+
+    postPatch = ''
+      cat > package-lock.json << 'EOF'
+{
+  "name": "ccusage",
+  "version": "15.3.1",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "ccusage",
+      "version": "15.3.1"
+    }
+  }
+}
+EOF
+    '';
+
+    nativeBuildInputs = with final; [ makeWrapper ];
+
+    dontNpmBuild = true;
+    dontNpmInstall = true;
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/bin $out/lib/node_modules/ccusage
+      cp -r * $out/lib/node_modules/ccusage/
+      makeWrapper ${final.nodejs}/bin/node $out/bin/ccusage \
+        --add-flags "$out/lib/node_modules/ccusage/bin/ccusage.js"
+      runHook postInstall
+    '';
+
+    meta = with final.lib; {
+      description = "A CLI tool for analyzing Claude Code usage from local JSONL files";
+      homepage = "https://github.com/ryoppippi/ccusage";
+      license = licenses.mit;
+      platforms = platforms.all;
+      mainProgram = "ccusage";
+    };
+  };
+
   extract = inputs.extract.packages.x86_64-linux.default;
 }
