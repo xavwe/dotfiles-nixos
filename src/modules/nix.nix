@@ -40,9 +40,10 @@
     overlays = [
       overlays.stable-packages
       overlays.packages
+      overlays.unfree-packages
     ];
     config = {
-      allowUnfree = true;
+      allowUnfree = false;
       system = "x86_64-linux";
     };
   };
