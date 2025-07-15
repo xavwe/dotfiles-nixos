@@ -37,23 +37,23 @@
     forceEmptyCache = true;
 
     postPatch = ''
-      cat > package-lock.json << 'EOF'
-{
-  "name": "ccusage",
-  "version": "15.3.1",
-  "lockfileVersion": 3,
-  "requires": true,
-  "packages": {
-    "": {
-      "name": "ccusage",
-      "version": "15.3.1"
-    }
-  }
-}
-EOF
+            cat > package-lock.json << 'EOF'
+      {
+        "name": "ccusage",
+        "version": "15.3.1",
+        "lockfileVersion": 3,
+        "requires": true,
+        "packages": {
+          "": {
+            "name": "ccusage",
+            "version": "15.3.1"
+          }
+        }
+      }
+      EOF
     '';
 
-    nativeBuildInputs = with final; [ makeWrapper ];
+    nativeBuildInputs = with final; [makeWrapper];
 
     dontNpmBuild = true;
     dontNpmInstall = true;
