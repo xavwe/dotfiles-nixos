@@ -18,6 +18,7 @@
       hyprland.enable = true;
       hyprland.xwayland.enable = true;
       foot.enable = true;
+      kitty.enable = false;
       zathura.enable = true;
       zathura.default = true;
       libreoffice.enable = true;
@@ -43,7 +44,7 @@
       yazi.default = true;
       extract.enable = true;
       podman.enable = true;
-      distrobox.enable = false;
+      distrobox.enable = true;
       tldr.enable = true;
       pass.enable = true;
       gpg.enable = true;
