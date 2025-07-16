@@ -29,24 +29,24 @@
               # =========================
               # SECURITY & PRIVACY CORE
               # =========================
-              
+
               # Force HTTPS-only mode
               "dom.security.https_only_mode" = true;
               "dom.security.https_only_mode_send_http_background_request" = false;
-              
+
               # Disable PDF.js scripting
               "pdfjs.disabled" = true;
               "pdfjs.enableScripting" = false;
-              
+
               # Development settings
               "browser.aboutConfig.showWarning" = false;
               "devtools.chrome.enabled" = true;
               "devtools.debugger.remote-enabled" = true;
-              
+
               # =========================
               # STARTUP & NEW TAB PAGE
               # =========================
-              
+
               # Disable sponsored content and homepage
               "browser.newtabpage.activity-stream.showSponsored" = false;
               "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
@@ -54,30 +54,30 @@
               "browser.startup.homepage" = "about:blank";
               "browser.newtabpage.enabled" = false;
               "browser.newtabpage.activity-stream.default.sites" = "";
-              
+
               # Override first run and update pages (replaces OverrideFirstRunPage/OverridePostUpdatePage policies)
               "startup.homepage_override_url" = "";
               "startup.homepage_welcome_url" = "";
               "startup.homepage_welcome_url.additional" = "";
               "browser.startup.homepage_override.mstone" = "ignore";
-              
+
               # =========================
               # GEOLOCATION & LANGUAGE
               # =========================
-              
+
               # Disable geolocation services (arkenfox 0200)
               "geo.provider.use_geoclue" = false;
               "geo.provider.ms-windows-location" = false;
               "geo.provider.use_corelocation" = false;
-              
+
               # Language/locale privacy (arkenfox 0200)
               "intl.accept_languages" = "en-US, en";
               "javascript.use_us_english_locale" = true;
-              
+
               # =========================
               # EXTENSIONS & RECOMMENDATIONS
               # =========================
-              
+
               # Disable extension recommendations
               "extensions.autoDisableScopes" = 0;
               "extensions.getAddons.showPane" = false;
@@ -90,11 +90,11 @@
               "extensions.webcompat.enable_shims" = true;
               "extensions.webcompat-reporter.enabled" = false;
               "extensions.quarantinedDomains.enabled" = true;
-              
+
               # =========================
               # TELEMETRY & DATA COLLECTION
               # =========================
-              
+
               # Disable telemetry
               "browser.newtabpage.activity-stream.feeds.telemetry" = false;
               "browser.newtabpage.activity-stream.telemetry" = false;
@@ -113,50 +113,50 @@
               "toolkit.coverage.opt-out" = true;
               "toolkit.coverage.endpoint.base" = "";
               "browser.ping-centre.telemetry" = false;
-              
+
               # =========================
               # STUDIES & EXPERIMENTS
               # =========================
-              
+
               # Disable studies and experiments (replaces DisableFirefoxStudies policy)
               "app.shield.optoutstudies.enabled" = false;
               "app.normandy.enabled" = false;
               "app.normandy.api_url" = "";
               "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons" = false;
               "browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features" = false;
-              
+
               # =========================
               # CRASH REPORTING
               # =========================
-              
+
               # Disable crash reports
               "breakpad.reportURL" = "";
               "browser.tabs.crashReporting.sendReport" = false;
               "browser.crashReports.unsubmittedCheck.autoSubmit2" = false;
-              
+
               # =========================
               # CAPTIVE PORTAL & CONNECTIVITY
               # =========================
-              
+
               # Disable captive portal detection
               "captivedetect.canonicalURL" = "";
               "network.captive-portal-service.enabled" = false;
               "network.connectivity-service.enabled" = false;
-              
+
               # =========================
               # SAFE BROWSING
               # =========================
-              
+
               # Disable safe browsing (arkenfox 0400)
               "browser.safebrowsing.malware.enabled" = false;
               "browser.safebrowsing.phishing.enabled" = false;
               "browser.safebrowsing.downloads.enabled" = false;
               "browser.safebrowsing.downloads.remote.enabled" = false;
-              
+
               # =========================
               # NETWORK PREFETCHING
               # =========================
-              
+
               # Disable network prefetching
               "network.prefetch-next" = false;
               "network.dns.disablePrefetch" = true;
@@ -166,20 +166,20 @@
               "network.http.speculative-parallel-limit" = 0;
               "browser.places.speculativeConnect.enabled" = false;
               "browser.send_pings" = false;
-              
+
               # =========================
               # PROXY & DNS
               # =========================
-              
+
               # Force DNS over SOCKS proxy
               "network.proxy.socks_remote_dns" = true;
               "network.file.disable_unc_paths" = true;
               "network.gio.supported-protocols" = "";
-              
+
               # =========================
               # LOCATION BAR & SEARCH
               # =========================
-              
+
               # Disable location bar suggestions and quick suggest
               "browser.urlbar.speculativeConnect.enabled" = false;
               "browser.urlbar.quicksuggest.enabled" = false;
@@ -200,21 +200,21 @@
               "browser.urlbar.showSearchTerms.enabled" = false;
               "browser.urlbar.interventions" = false;
               "browser.urlbar.suggest.topsites" = false;
-              
+
               # =========================
               # PASSWORDS & FORMS
               # =========================
-              
+
               # Disable password autofill but allow cookie-based login persistence
               "signon.autofillForms" = false;
               "signon.formlessCapture.enabled" = false;
               "signon.rememberSignons" = false;
               "network.auth.subresource-http-auth-allow" = 1;
-              
+
               # =========================
               # DISK CACHE & STORAGE
               # =========================
-              
+
               # Disable disk cache but preserve login sessions
               "browser.cache.disk.enable" = false;
               "browser.privatebrowsing.forceMediaMemoryCache" = true;
@@ -222,11 +222,11 @@
               "browser.sessionstore.privacy_level" = 0; # Save cookies and storage for persistent logins
               "toolkit.winRegisterApplicationRestart" = false;
               "browser.shell.shortcutFavicons" = false;
-              
+
               # =========================
               # SSL/TLS SECURITY
               # =========================
-              
+
               # Enforce secure SSL/TLS
               "security.ssl.require_safe_negotiation" = true;
               "security.tls.enable_0rtt_data" = false;
@@ -239,58 +239,58 @@
               "browser.xul.error_pages.expert_bad_cert" = true;
               "security.dialog_enable_delay" = 1000;
               "security.tls.version.enable-deprecated" = false;
-              
+
               # =========================
               # ACCOUNTS & SYNC
               # =========================
-              
+
               # Disable Firefox accounts
               "identity.fxaccounts.enabled" = false;
-              
+
               # =========================
               # REFERRER POLICY
               # =========================
-              
+
               # Configure referrer policy
               "network.http.referer.XOriginTrimmingPolicy" = 2;
               "network.http.referer.spoofSource" = false;
-              
+
               # =========================
               # CONTAINERS
               # =========================
-              
+
               # Enable container tabs
               "privacy.userContext.enabled" = true;
               "privacy.userContext.ui.enabled" = true;
-              
+
               # =========================
               # WEBRTC
               # =========================
-              
+
               # Restrict WebRTC (arkenfox 2000)
               "media.peerconnection.ice.proxy_only_if_behind_proxy" = true;
               "media.peerconnection.ice.default_address_only" = true;
-              
+
               # =========================
               # SERVICE WORKERS & WEB APIS
               # =========================
-              
+
               # Disable service workers and web notifications (arkenfox 2300)
               "dom.serviceWorkers.enabled" = false;
               "dom.webnotifications.enabled" = false;
-              
+
               # Disable beacon API (arkenfox 2600)
               "beacon.enabled" = false;
-              
+
               # =========================
               # DOM & WINDOW BEHAVIOR
               # =========================
-              
+
               # Prevent window manipulation (arkenfox 2400)
               "dom.disable_window_move_resize" = true;
               "browser.link.open_newwindow" = 3;
               "browser.link.open_newwindow.restriction" = 0;
-              
+
               # Additional DOM hardening
               "dom.disable_window_open_feature.close" = true;
               "dom.disable_window_open_feature.location" = true;
@@ -302,11 +302,11 @@
               "dom.disable_window_open_feature.titlebar" = true;
               "dom.disable_window_open_feature.toolbar" = true;
               "dom.popup_allowed_events" = "click dblclick mousedown pointerdown";
-              
+
               # =========================
               # DOWNLOADS & FILES
               # =========================
-              
+
               # Download settings
               "browser.download.useDownloadDir" = false;
               "browser.download.start_downloads_in_tmp_dir" = true;
@@ -314,11 +314,11 @@
               "browser.download.alwaysOpenPanel" = false;
               "browser.download.manager.addToRecentDocs" = false;
               "browser.download.always_ask_before_handling_new_types" = true;
-              
+
               # =========================
               # MISCELLANEOUS
               # =========================
-              
+
               # Disable various features
               "browser.uitour.enabled" = false;
               "permissions.manager.defaultsUrl" = "";
@@ -331,20 +331,20 @@
               "browser.shell.checkDefaultBrowser" = false;
               "browser.search.widget.inNavBar" = false;
               "browser.translate.enable" = false;
-              
+
               # Additional arkenfox settings
               "accessibility.force_disabled" = 1; # Disable accessibility services (fingerprinting)
-              
+
               # UI configuration (replaces DisplayMenuBar policy)
               "browser.toolbars.bookmarks.visibility" = "never";
-              
+
               # Skip onboarding (replaces UserMessaging.SkipOnboarding policy)
               "browser.aboutwelcome.enabled" = false;
-              
+
               # =========================
               # PRIVACY SANITIZATION
               # =========================
-              
+
               # Data clearing settings (preserve persistent logins across browser restarts)
               "privacy.sanitize.sanitizeOnShutdown" = false;
               "privacy.clearOnShutdown_v2.cache" = true;
@@ -354,12 +354,12 @@
               "privacy.clearOnShutdown_v2.formdata" = true;
               "privacy.clearOnShutdown_v2.cookiesAndStorage" = false; # Preserve cookies for persistent logins
               "privacy.clearOnShutdown_v2.sessions" = false; # Preserve sessions across browser restarts
-              
+
               # Enable session restore for persistent logins
               "browser.sessionstore.resume_from_crash" = true; # Allow session restoration
               "browser.sessionstore.max_tabs_undo" = 10; # Allow tab restoration
               "browser.sessionstore.max_windows_undo" = 3; # Allow window restoration
-              
+
               # Manual clearing preserves cookies
               "privacy.clearSiteData.cache" = true;
               "privacy.clearSiteData.cookiesAndStorage" = false;
@@ -372,23 +372,23 @@
               "privacy.clearHistory.browsingHistoryAndDownloads" = true;
               "privacy.clearHistory.formdata" = true;
               "privacy.sanitize.timeSpan" = 0;
-              
+
               # =========================
               # FINGERPRINTING RESISTANCE
               # =========================
-              
+
               # Modern fingerprinting protection (allows dark mode and persistent logins)
               "privacy.resistFingerprinting" = false; # Disable old RFP for dark mode compatibility
               "privacy.resistFingerprinting.pbmode" = false;
               "privacy.fingerprintingProtection" = true; # Enable new FPP (FF114+)
               "privacy.fingerprintingProtection.pbmode" = true;
               "privacy.fingerprintingProtection.overrides" = "+AllTargets,-CSSPrefersColorScheme"; # Allow dark mode preference
-              
+
               # Configure cookies for login persistence
               "network.cookie.cookieBehavior" = 1; # Block third-party cookies but allow first-party for logins
               "privacy.partition.network_state" = false; # Don't partition network state for login persistence
               "network.cookie.lifetimePolicy" = 0; # Accept cookies normally
-              
+
               # Keep important fingerprinting protections
               "privacy.window.maxInnerWidth" = 1600;
               "privacy.window.maxInnerHeight" = 900;
@@ -397,24 +397,24 @@
               "browser.display.use_system_colors" = false;
               "widget.non-native-theme.use-theme-accent" = false;
               "privacy.firstparty.isolate" = false;
-              
+
               # Disable WebGL (potential fingerprinting vector)
               "webgl.disabled" = true;
-              
+
               # Font privacy (arkenfox 1400)
               "browser.display.use_document_fonts" = 0;
-              
+
               # =========================
               # PERFORMANCE
               # =========================
-              
+
               # Hardware acceleration
               "layers.acceleration.force-enabled" = true;
-              
+
               # =========================
               # UI & THEME
               # =========================
-              
+
               # Enable dark mode (works with FPP)
               "ui.systemUsesDarkTheme" = 1; # Force Firefox UI to use dark theme
               "browser.in-content.dark-mode" = true; # Dark mode for Firefox pages (about:*, settings)
