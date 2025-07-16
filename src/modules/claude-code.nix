@@ -63,7 +63,8 @@ in {
         4. Generate descriptive commit message
         5. Include scope if applicable: `type(scope): description`
         6. Add body for complex changes explaining why
-        7. Execute commit
+        7. Check if it is conventional commit conform; if not resolve the issue
+        8. Execute commit
 
         ## Best Practices:
         - Keep commits atomic and focused
