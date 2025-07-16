@@ -28,7 +28,6 @@
 - [ ] erase your darlings
 - [ ] homelab
 - [ ] gpg
-- [ ] pinentry for firefox-pass
 
 <!--
 ## Features
