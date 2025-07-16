@@ -22,6 +22,7 @@
       zathura.default = true;
       libreoffice.enable = true;
       libreoffice.default = true;
+      scrcpy.enable = true;
 
       # cli
       neovim.enable = true;
