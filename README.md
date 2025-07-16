@@ -26,7 +26,6 @@
 - [ ] nh
 - [ ] styling
 - [ ] erase your darlings
-- [ ] mpd
 - [ ] homelab
 - [ ] gpg
 - [ ] pinentry for firefox-pass
