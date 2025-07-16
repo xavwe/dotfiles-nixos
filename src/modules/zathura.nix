@@ -21,7 +21,12 @@
   config = lib.mkMerge [
     (lib.mkIf config.modules.zathura.enable {
       home-manager.users.nu = {...}: {
-        programs.zathura.enable = true;
+        programs.zathura = {
+          enable = true;
+          options = {
+            selection-clipboard = "clipboard";
+          };
+        };
       };
     })
 
