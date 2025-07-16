@@ -52,7 +52,6 @@ in {
         - test: Adding or correcting tests
         - ci: Adding or correcting ci
         - chore: Tooling, configuration, maintenance
-        - remove: Removing code or files
 
         ## Process:
         1. Check for staged changes (`git status`)
