@@ -26,10 +26,10 @@
         home.packages = with pkgs; [
           passff-host
           gnupg
-          pinentry-curses
+          pinentry-gtk2
         ];
         home.file.".gnupg/gpg-agent.conf".text = ''
-          pinentry-program ${pkgs.pinentry-curses}/bin/pinentry-curses
+          pinentry-program ${pkgs.pinentry-gtk2}/bin/pinentry-gtk-2
         '';
         home.file.".mozilla/native-messaging-hosts/passff.json".source = "${pkgs.passff-host}/lib/mozilla/native-messaging-hosts/passff.json";
       };
