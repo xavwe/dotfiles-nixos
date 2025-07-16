@@ -22,7 +22,6 @@
 - [ ] mutt
 - [ ] firefox
 - [ ] nixos-hardware
-- [ ] scrcpy
 - [ ] nh
 - [ ] styling
 - [ ] erase your darlings
