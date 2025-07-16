@@ -19,6 +19,10 @@ in {
     ];
 
     home-manager.users.nu = {...}: {
+      programs.bash.shellAliases.commit = "claude --dangerously-skip-permissions -p \"/commit\"";
+      programs.zsh.shellAliases.commit = "claude --dangerously-skip-permissions -p \"/commit\"";
+      programs.fish.shellAliases.commit = "claude --dangerously-skip-permissions -p \"/commit\"";
+
       home.file.".claude/settings.json".text = builtins.toJSON {
         env = {
           DISABLE_TELEMETRY = "1";
