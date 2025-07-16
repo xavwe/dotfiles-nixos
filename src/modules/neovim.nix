@@ -144,7 +144,7 @@
                     setupModule = "mini.icons";
                     setupOpts = {};
                   };
-                  
+
                   # Oil.nvim - File explorer
                   "oil.nvim" = {
                     package = pkgs.vimPlugins.oil-nvim;
