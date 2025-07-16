@@ -18,7 +18,6 @@
       hyprland.enable = true;
       hyprland.xwayland.enable = true;
       foot.enable = true;
-      kitty.enable = false;
       zathura.enable = true;
       zathura.default = true;
       libreoffice.enable = true;
