@@ -169,6 +169,11 @@
                 };
               };
 
+              # Remaining plugins that need to be loaded at startup
+              startPlugins = with pkgs.vimPlugins; [
+                vim-wakatime # Time tracking - needs to be loaded at startup
+              ];
+
               # Lua configuration for remaining plugins
               luaConfigRC.extra-plugins = ''
               '';
