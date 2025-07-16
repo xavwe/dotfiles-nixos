@@ -104,6 +104,35 @@
         hardware = "iso";
         format = "iso";
       };
+      nvim = let
+        system = "x86_64-linux";
+        pkgs = nixpkgs.legacyPackages.${system};
+
+        # Create a minimal system with just neovim enabled
+        neovimSystem = nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            lib = nixpkgs.lib // self.lib;
+          };
+          modules = [
+            inputs.home-manager.nixosModules.home-manager
+            ./src/modules/neovim.nix
+            {
+              modules.neovim.enable = true;
+              users.users.nu.isNormalUser = true;
+              home-manager.users.nu = {
+                imports = [inputs.nvf.homeManagerModules.default];
+                home = {
+                  stateVersion = "23.11";
+                  homeDirectory = "/home/nu";
+                };
+              };
+            }
+          ];
+        };
+      in
+        neovimSystem.config.home-manager.users.nu.programs.nvf.finalPackage;
     };
 
     lib = import ./src/lib {inherit (nixpkgs) lib;};
