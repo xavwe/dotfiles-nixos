@@ -14,6 +14,7 @@
     ./libreoffice.nix
     ./pavucontrol.nix
     ./helvum.nix
+    ./scrcpy.nix
 
     # cli
     ./neovim.nix
