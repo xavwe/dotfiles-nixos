@@ -26,6 +26,7 @@ in {
       home.file.".claude/settings.json".text = builtins.toJSON {
         env = {
           DISABLE_TELEMETRY = "1";
+          DISABLE_AUTOUPDATER = "1";
         };
         includeCoAuthoredBy = false;
       };
