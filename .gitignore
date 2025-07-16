@@ -3,3 +3,6 @@
 
 # nix
 result
+
+# claude
+.claude-trace

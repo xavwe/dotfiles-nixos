@@ -94,31 +94,75 @@
       mkdir -p $out/bin $out/lib/node_modules/@mariozechner/claude-trace
       cp -r * $out/lib/node_modules/@mariozechner/claude-trace/
       
-      # Create a Node.js wrapper that can be executed by the interceptor
+      # Create a Node.js wrapper that directly executes the Claude binary
       cat > $out/lib/node_modules/@mariozechner/claude-trace/dist/claude-node-wrapper.js << 'EOF'
 #!/usr/bin/env node
-const { spawn } = require("child_process");
+const fs = require("fs");
 
-// This wrapper allows the interceptor to work with the bash-wrapped Claude CLI
-// by spawning the actual bash script with the proper environment
+// This wrapper directly executes the Claude Node.js binary to allow network interception
+// The interceptor must run in the same process as Claude for fetch/HTTP patching to work
 
 const claudePath = "${final.unfree.claude-code}/bin/claude";
 const args = process.argv.slice(2);
 
-const child = spawn("bash", [claudePath, ...args], {
-  env: {
-    ...process.env,
-    DISABLE_AUTOUPDATER: '1'
-  },
-  stdio: "inherit",
-  cwd: process.cwd(),
-});
+// Set environment variables for Claude
+process.env.DISABLE_AUTOUPDATER = '1';
 
-child.on("exit", (code) => process.exit(code || 0));
-child.on("error", (error) => {
-  console.error("Error launching Claude:", error);
+function findClaudeJSPath(scriptPath) {
+  if (!fs.existsSync(scriptPath)) {
+    return null;
+  }
+  
+  const scriptContent = fs.readFileSync(scriptPath, 'utf8');
+  
+  // Look for exec lines that point to either Node.js or another script
+  const execMatches = scriptContent.match(/exec\s+(?:-a\s+[^\s]+\s+)?"([^"]+)"/g) || [];
+  
+  for (const match of execMatches) {
+    const pathMatch = match.match(/exec\s+(?:-a\s+[^\s]+\s+)?"([^"]+)"/);
+    if (pathMatch) {
+      const execPath = pathMatch[1];
+      if (execPath.endsWith('.js')) {
+        return execPath;
+      } else if (execPath.includes('node')) {
+        // This is a node execution, look for the JS file in the arguments
+        const argsMatch = scriptContent.match(/exec\s+(?:-a\s+[^\s]+\s+)?"[^"]+"\s+(.+)/);
+        if (argsMatch) {
+          const nodeArgs = argsMatch[1];
+          const jsFileMatch = nodeArgs.match(/(\S+\.js)/);
+          if (jsFileMatch) {
+            return jsFileMatch[1];
+          }
+        }
+      } else {
+        // This might be another wrapper script, recurse
+        const nestedPath = findClaudeJSPath(execPath);
+        if (nestedPath) {
+          return nestedPath;
+        }
+      }
+    }
+  }
+  
+  return null;
+}
+
+// Find the actual Claude JS file
+const claudeJSPath = findClaudeJSPath(claudePath);
+
+if (claudeJSPath) {
+  // Set up process.argv to match what Claude expects
+  process.argv = [process.argv[0], claudeJSPath, ...args];
+  
+  // Directly import and execute the Claude module (ESM)
+  import(claudeJSPath).catch(error => {
+    console.error("Error loading Claude module:", error);
+    process.exit(1);
+  });
+} else {
+  console.error("Could not determine Claude Node.js module path");
   process.exit(1);
-});
+}
 EOF
       
       chmod +x $out/lib/node_modules/@mariozechner/claude-trace/dist/claude-node-wrapper.js
