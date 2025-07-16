@@ -90,93 +90,93 @@
     dontBuild = true;
 
     installPhase = ''
-      runHook preInstall
-      mkdir -p $out/bin $out/lib/node_modules/@mariozechner/claude-trace
-      cp -r * $out/lib/node_modules/@mariozechner/claude-trace/
-      
-      # Create a Node.js wrapper that directly executes the Claude binary
-      cat > $out/lib/node_modules/@mariozechner/claude-trace/dist/claude-node-wrapper.js << 'EOF'
-#!/usr/bin/env node
-const fs = require("fs");
+            runHook preInstall
+            mkdir -p $out/bin $out/lib/node_modules/@mariozechner/claude-trace
+            cp -r * $out/lib/node_modules/@mariozechner/claude-trace/
 
-// This wrapper directly executes the Claude Node.js binary to allow network interception
-// The interceptor must run in the same process as Claude for fetch/HTTP patching to work
+            # Create a Node.js wrapper that directly executes the Claude binary
+            cat > $out/lib/node_modules/@mariozechner/claude-trace/dist/claude-node-wrapper.js << 'EOF'
+      #!/usr/bin/env node
+      const fs = require("fs");
 
-const claudePath = "${final.unfree.claude-code}/bin/claude";
-const args = process.argv.slice(2);
+      // This wrapper directly executes the Claude Node.js binary to allow network interception
+      // The interceptor must run in the same process as Claude for fetch/HTTP patching to work
 
-// Set environment variables for Claude
-process.env.DISABLE_AUTOUPDATER = '1';
+      const claudePath = "${final.unfree.claude-code}/bin/claude";
+      const args = process.argv.slice(2);
 
-function findClaudeJSPath(scriptPath) {
-  if (!fs.existsSync(scriptPath)) {
-    return null;
-  }
-  
-  const scriptContent = fs.readFileSync(scriptPath, 'utf8');
-  
-  // Look for exec lines that point to either Node.js or another script
-  const execMatches = scriptContent.match(/exec\s+(?:-a\s+[^\s]+\s+)?"([^"]+)"/g) || [];
-  
-  for (const match of execMatches) {
-    const pathMatch = match.match(/exec\s+(?:-a\s+[^\s]+\s+)?"([^"]+)"/);
-    if (pathMatch) {
-      const execPath = pathMatch[1];
-      if (execPath.endsWith('.js')) {
-        return execPath;
-      } else if (execPath.includes('node')) {
-        // This is a node execution, look for the JS file in the arguments
-        const argsMatch = scriptContent.match(/exec\s+(?:-a\s+[^\s]+\s+)?"[^"]+"\s+(.+)/);
-        if (argsMatch) {
-          const nodeArgs = argsMatch[1];
-          const jsFileMatch = nodeArgs.match(/(\S+\.js)/);
-          if (jsFileMatch) {
-            return jsFileMatch[1];
+      // Set environment variables for Claude
+      process.env.DISABLE_AUTOUPDATER = '1';
+
+      function findClaudeJSPath(scriptPath) {
+        if (!fs.existsSync(scriptPath)) {
+          return null;
+        }
+
+        const scriptContent = fs.readFileSync(scriptPath, 'utf8');
+
+        // Look for exec lines that point to either Node.js or another script
+        const execMatches = scriptContent.match(/exec\s+(?:-a\s+[^\s]+\s+)?"([^"]+)"/g) || [];
+
+        for (const match of execMatches) {
+          const pathMatch = match.match(/exec\s+(?:-a\s+[^\s]+\s+)?"([^"]+)"/);
+          if (pathMatch) {
+            const execPath = pathMatch[1];
+            if (execPath.endsWith('.js')) {
+              return execPath;
+            } else if (execPath.includes('node')) {
+              // This is a node execution, look for the JS file in the arguments
+              const argsMatch = scriptContent.match(/exec\s+(?:-a\s+[^\s]+\s+)?"[^"]+"\s+(.+)/);
+              if (argsMatch) {
+                const nodeArgs = argsMatch[1];
+                const jsFileMatch = nodeArgs.match(/(\S+\.js)/);
+                if (jsFileMatch) {
+                  return jsFileMatch[1];
+                }
+              }
+            } else {
+              // This might be another wrapper script, recurse
+              const nestedPath = findClaudeJSPath(execPath);
+              if (nestedPath) {
+                return nestedPath;
+              }
+            }
           }
         }
-      } else {
-        // This might be another wrapper script, recurse
-        const nestedPath = findClaudeJSPath(execPath);
-        if (nestedPath) {
-          return nestedPath;
-        }
+
+        return null;
       }
-    }
-  }
-  
-  return null;
-}
 
-// Find the actual Claude JS file
-const claudeJSPath = findClaudeJSPath(claudePath);
+      // Find the actual Claude JS file
+      const claudeJSPath = findClaudeJSPath(claudePath);
 
-if (claudeJSPath) {
-  // Set up process.argv to match what Claude expects
-  process.argv = [process.argv[0], claudeJSPath, ...args];
-  
-  // Directly import and execute the Claude module (ESM)
-  import(claudeJSPath).catch(error => {
-    console.error("Error loading Claude module:", error);
-    process.exit(1);
-  });
-} else {
-  console.error("Could not determine Claude Node.js module path");
-  process.exit(1);
-}
-EOF
-      
-      chmod +x $out/lib/node_modules/@mariozechner/claude-trace/dist/claude-node-wrapper.js
-      
-      # Patch cli.js to use our Node.js wrapper instead of the bash script
-      sed -i 's|const claudePath = getClaudeAbsolutePath();|const claudePath = path.join(__dirname, "claude-node-wrapper.js");|g' \
-        $out/lib/node_modules/@mariozechner/claude-trace/dist/cli.js
-      
-      # Create wrapper that properly handles ES modules
-      makeWrapper ${final.nodejs}/bin/node $out/bin/claude-trace \
-        --add-flags "$out/lib/node_modules/@mariozechner/claude-trace/dist/cli.js" \
-        --set NODE_PATH "$out/lib/node_modules"
-      
-      runHook postInstall
+      if (claudeJSPath) {
+        // Set up process.argv to match what Claude expects
+        process.argv = [process.argv[0], claudeJSPath, ...args];
+
+        // Directly import and execute the Claude module (ESM)
+        import(claudeJSPath).catch(error => {
+          console.error("Error loading Claude module:", error);
+          process.exit(1);
+        });
+      } else {
+        console.error("Could not determine Claude Node.js module path");
+        process.exit(1);
+      }
+      EOF
+
+            chmod +x $out/lib/node_modules/@mariozechner/claude-trace/dist/claude-node-wrapper.js
+
+            # Patch cli.js to use our Node.js wrapper instead of the bash script
+            sed -i 's|const claudePath = getClaudeAbsolutePath();|const claudePath = path.join(__dirname, "claude-node-wrapper.js");|g' \
+              $out/lib/node_modules/@mariozechner/claude-trace/dist/cli.js
+
+            # Create wrapper that properly handles ES modules
+            makeWrapper ${final.nodejs}/bin/node $out/bin/claude-trace \
+              --add-flags "$out/lib/node_modules/@mariozechner/claude-trace/dist/cli.js" \
+              --set NODE_PATH "$out/lib/node_modules"
+
+            runHook postInstall
     '';
 
     meta = with final.lib; {
