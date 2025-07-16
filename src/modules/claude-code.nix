@@ -16,6 +16,7 @@ in {
     environment.systemPackages = with pkgs; [
       unfree.claude-code
       ccusage
+      claude-trace
     ];
 
     home-manager.users.nu = {...}: {
