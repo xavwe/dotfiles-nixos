@@ -29,6 +29,7 @@
       neovim.default = true;
       neovim.manpager = true;
       jujutsu.enable = true;
+      gh.enable = true;
       fastfetch.enable = true;
       just.enable = true;
       fzf.enable = true;
