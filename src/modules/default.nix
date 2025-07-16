@@ -22,6 +22,7 @@
     ./sudo.nix
     ./jujutsu.nix
     ./git.nix
+    ./gh.nix
     ./fastfetch.nix
     ./just.nix
     ./fzf.nix
