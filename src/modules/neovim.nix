@@ -121,6 +121,57 @@
                 -- Custom cursor line highlight
                 vim.api.nvim_set_hl(0, "CursorLine", { bg = "#2C2E34" })
               '';
+
+              # Key mappings
+              maps = {
+                normal = {
+                  # File explorer
+                  "<leader>e" = {
+                    action = "<cmd>Oil<CR>";
+                    desc = "Explorer";
+                  };
+                };
+              };
+
+              # Lazy loading configuration
+              lazy = {
+                enable = true;
+                plugins = {
+                  # mini.icons - Icon provider for oil.nvim
+                  "mini.nvim" = {
+                    package = pkgs.vimPlugins.mini-nvim;
+                    lazy = false;
+                    setupModule = "mini.icons";
+                    setupOpts = {};
+                  };
+                  
+                  # Oil.nvim - File explorer
+                  "oil.nvim" = {
+                    package = pkgs.vimPlugins.oil-nvim;
+                    lazy = true;
+                    cmd = ["Oil"];
+                    keys = [
+                      {
+                        key = "<leader>e";
+                        action = "<cmd>Oil<CR>";
+                        desc = "File Explorer";
+                        mode = "n";
+                      }
+                    ];
+                    setupModule = "oil";
+                    setupOpts = {
+                      default_file_explorer = true;
+                      view_options = {
+                        show_hidden = true;
+                      };
+                    };
+                  };
+                };
+              };
+
+              # Lua configuration for remaining plugins
+              luaConfigRC.extra-plugins = ''
+              '';
             };
           };
         };
