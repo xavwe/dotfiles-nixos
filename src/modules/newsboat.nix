@@ -28,6 +28,14 @@
               ];
               url = "https://blog.vaxry.net/feed";
             }
+            # Simon Willison - blog - en
+            {
+              tags = [
+                "tech"
+                "blog"
+              ];
+              url = "https://simonwillison.net/atom/everything/";
+            }
             # Drew DeVault - blog - en
             {
               tags = [
