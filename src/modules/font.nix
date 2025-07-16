@@ -12,7 +12,7 @@
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     noto-fonts-emoji
-    unifont          # Unicode fallback including dentistry symbols
+    unifont # Unicode fallback including dentistry symbols
     #jetbrains-mono
   ];
 }
