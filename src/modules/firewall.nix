@@ -10,7 +10,7 @@
   ...
 }: {
   networking.nftables.enable = true;
-  
+
   # Additional firewall rules for Traefik/Nginx setup
   networking.firewall = lib.mkMerge [
     # Block direct access to Nginx port 8080 from external sources
