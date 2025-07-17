@@ -1,58 +1,65 @@
-# Newton's NixOS Configuration
+# NixOS Configuration
 
-A modular NixOS configuration built with Nix flakes, featuring a clean architecture and comprehensive module system.
+[![License](https://img.shields.io/github/license/xavwe/dotfiles-nixos?style=for-the-badge)](https://github.com/xavwe/dotfiles-nixos/blob/main/LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/xavwe/dotfiles-nixos?style=for-the-badge)](https://github.com/xavwe/dotfiles-nixos/commits/main)
+[![Test](https://img.shields.io/github/actions/workflow/status/xavwe/dotfiles-nixos/test.yml?branch=main&label=Test&style=for-the-badge)](https://github.com/xavwe/dotfiles-nixos/actions/workflows/test.yml)
+[![NixOS](https://img.shields.io/badge/Built%20For-NixOS-5277C3?style=for-the-badge&logo=nixos&logoColor=white)](https://nixos.org)
+[![flake](https://img.shields.io/badge/flake-enabled-blue?style=for-the-badge&logo=nixos)](https://nixos.wiki/wiki/Flakes)
 
-## Architecture
 
-This configuration follows a layered approach:
+> Personal, modular, and reproducible NixOS configuration, built using Nix flakes.
 
-- **Flake Entry Point**: `flake.nix` defines inputs, outputs, and system configurations
-- **System Builder**: `src/lib/mkSystem.nix` parameterizes configurations by profile and hardware
-- **Profiles**: `src/profiles/` define which modules are enabled (desktop vs minimal)
-- **Modules**: `src/modules/` contain individual feature configurations with enable flags
-- **Hardware**: `src/hardware/` contains hardware-specific configurations
-- **Themes**: `src/colorschemes/` define visual themes
+## Roadmap
+- [ ] audio
+- [ ] hyprland
+- [ ] wakatime
+- [ ] pass
+- [ ] newsboat
+- [ ] disko
+- [ ] vm passthrough
+- [ ] bash
+- [ ] nushell
+- [ ] mutt
+- [ ] nixos-hardware
+- [ ] nh
+- [ ] styling
+- [ ] erase your darlings
+- [ ] homelab
+- [ ] gpg
 
-## Quick Start
+<!--
+## Features
 
-```bash
-# List available commands
-just
+- 🧩 Modular configuration with Flakes
+- 💻 Declarative desktop environments
 
-# Build and switch system configuration
-just upgrade switch newton-desktop    # For desktop profile
-just upgrade switch newton-minimal    # For minimal profile
 
-# Test configuration without switching
-just upgrade test newton-desktop
 
-# Update flake inputs
-just update
+## Getting Started
 
-# Format code
-just format
-```
+### Prerequisites
 
-## Module System
+* NixOS >= 25.05 recommended
 
-All modules follow a consistent pattern with enable flags. Configuration happens in profiles by setting `modules.<name>.enable = true`.
+### Setup Instructions
 
-### Available Modules
-
-See the [Module Reference](modules.md) for detailed information about each module's options and configuration.
+TODO
 
 ## Development
 
-1. **Module Development**: Create new modules in `src/modules/` following existing patterns
-2. **Profile Modification**: Edit profiles in `src/profiles/` to enable/disable modules  
-3. **Hardware Configuration**: Hardware-specific settings go in `src/hardware/`
-4. **Testing**: Always use `just check` before applying changes
-5. **Formatting**: Run `just format` to format Nix and Lua files
+TODO
 
-## Build Outputs
+## 🛠Customisation
 
-- `nixosConfigurations.newton-desktop`: Full desktop system
-- `nixosConfigurations.newton-minimal`: Minimal CLI-only system
-- `packages.x86_64-linux.iso-desktop`: Desktop ISO image
-- `packages.x86_64-linux.iso-minimal`: Minimal ISO image
-- `packages.x86_64-linux.docs`: This documentation
+- Add or modify modules under `src/modules/`
+
+TODO
+
+## Inspiration
+
+TODO
+-->
+
+## License
+
+This repository is licensed under the [MIT License](LICENSE). Feel free to fork and adapt, but attribution is appreciated.
