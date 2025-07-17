@@ -146,7 +146,7 @@
         inputs.ndg.packages.${system}.ndg-builder.override {
           title = "Newton's NixOS Configuration";
           inputDir = ./docs;
-          
+
           # Document all custom modules
           rawModules = [
             ./src/modules/bash.nix
@@ -194,7 +194,7 @@
             ./src/modules/zoxide.nix
             ./src/modules/zsh.nix
           ];
-          
+
           optionsDepth = 2;
         };
     };
