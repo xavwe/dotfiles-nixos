@@ -95,20 +95,21 @@ in {
 
       '';
 
-      systemd.user.services.claude-mcp-setup = {
-        Unit = {
-          Description = "Setup Claude MCP server";
-          After = ["network.target"];
-        };
-        Service = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.unfree.claude-code}/bin/claude mcp add -s user claude claude mcp serve";
-          RemainAfterExit = true;
-        };
-        Install = {
-          WantedBy = ["default.target"];
-        };
-      };
+      # Example mcp
+      # systemd.user.services.claude-mcp-setup = {
+      #   Unit = {
+      #     Description = "Setup Claude MCP server";
+      #     After = ["network.target"];
+      #   };
+      #   Service = {
+      #     Type = "oneshot";
+      #     ExecStart = "${pkgs.unfree.claude-code}/bin/claude mcp add -s user claude claude mcp serve";
+      #     RemainAfterExit = true;
+      #   };
+      #   Install = {
+      #     WantedBy = ["default.target"];
+      #   };
+      # };
     };
   };
 }
