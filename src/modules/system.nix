@@ -18,6 +18,11 @@
     gcc
   ];
 
+  # temporary hosts entries for testing xavwe.dev locally
+  networking.hosts = {
+    "127.0.0.1" = [ "test.xavwe.dev" "traefik.xavwe.dev" ];
+  };
+
   # shell aliases
   home-manager.users.nu = {
     home = {
