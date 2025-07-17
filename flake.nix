@@ -57,6 +57,11 @@
       url = "github:notashelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    ndg = {
+      url = "github:feel-co/ndg";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -133,6 +138,65 @@
         };
       in
         neovimSystem.config.home-manager.users.nu.programs.nvf.finalPackage;
+
+      docs = let
+        system = "x86_64-linux";
+        pkgs = nixpkgs.legacyPackages.${system};
+      in
+        inputs.ndg.packages.${system}.ndg-builder.override {
+          title = "Newton's NixOS Configuration";
+          inputDir = ./docs;
+
+          # Document all custom modules
+          rawModules = [
+            ./src/modules/bash.nix
+            ./src/modules/btop.nix
+            ./src/modules/chafa.nix
+            ./src/modules/claude-code.nix
+            ./src/modules/colors.nix
+            ./src/modules/dark-mode.nix
+            ./src/modules/direnv.nix
+            ./src/modules/distrobox.nix
+            ./src/modules/doas.nix
+            ./src/modules/extract.nix
+            ./src/modules/fastfetch.nix
+            ./src/modules/firefox.nix
+            ./src/modules/foot.nix
+            ./src/modules/fzf.nix
+            ./src/modules/gh.nix
+            ./src/modules/git.nix
+            ./src/modules/gpg.nix
+            ./src/modules/hyprland.nix
+            ./src/modules/jujutsu.nix
+            ./src/modules/just.nix
+            ./src/modules/kanata.nix
+            ./src/modules/libreoffice.nix
+            ./src/modules/links-browser.nix
+            ./src/modules/mpv.nix
+            ./src/modules/neovim.nix
+            ./src/modules/newsboat.nix
+            ./src/modules/nginx.nix
+            ./src/modules/nix-output-monitor.nix
+            ./src/modules/nvd.nix
+            ./src/modules/pass.nix
+            ./src/modules/podman.nix
+            ./src/modules/scrcpy.nix
+            ./src/modules/ssh.nix
+            ./src/modules/starship.nix
+            ./src/modules/sudo.nix
+            ./src/modules/tldr.nix
+            ./src/modules/traefik.nix
+            ./src/modules/virt-manager.nix
+            ./src/modules/wakatime.nix
+            ./src/modules/wl-clipboard.nix
+            ./src/modules/yazi.nix
+            ./src/modules/zathura.nix
+            ./src/modules/zoxide.nix
+            ./src/modules/zsh.nix
+          ];
+
+          optionsDepth = 2;
+        };
     };
 
     lib = import ./src/lib {inherit (nixpkgs) lib;};
