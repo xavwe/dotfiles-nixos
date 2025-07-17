@@ -28,3 +28,7 @@ gc:
 format:
   nix fmt -- -q .
   stylua .
+
+docs:
+  nix build .#docs
+  @echo "Documentation built in ./result/"
