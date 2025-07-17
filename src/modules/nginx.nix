@@ -18,11 +18,11 @@
     (lib.mkIf config.modules.nginx.enable {
       services.nginx = {
         enable = true;
-        
+
         # Listen only on localhost:8080 (internal port for Traefik)
         defaultHTTPListenPort = 8080;
         defaultSSLListenPort = 8443;
-        
+
         # Default server configuration
         virtualHosts = {
           "test.xavwe.dev" = {
@@ -32,7 +32,7 @@
                 port = 8080;
               }
             ];
-            
+
             locations = {
               "/" = {
                 root = "/var/www/html";
@@ -41,7 +41,7 @@
             };
           };
         };
-        
+
         # Enable gzip compression
         commonHttpConfig = ''
           gzip on;
@@ -107,11 +107,11 @@
           <body>
               <div class="container">
                   <h1>🚀 Welcome to Your NixOS Web Stack!</h1>
-                  
+
                   <div class="status">
                       <strong>✅ Status:</strong> Nginx is running successfully behind Traefik reverse proxy
                   </div>
-                  
+
                   <div class="tech-stack">
                       <div class="tech-item">
                           <h3>🔄 Traefik</h3>
@@ -129,7 +129,7 @@
                           <p>Declarative Setup</p>
                       </div>
                   </div>
-                  
+
                   <h2>🔧 Configuration Details</h2>
                   <ul>
                       <li><strong>Traefik:</strong> Handles SSL termination and routing</li>
@@ -137,13 +137,13 @@
                       <li><strong>Firewall:</strong> Only ports 80 and 443 are publicly accessible</li>
                       <li><strong>HTTPS:</strong> Automatic redirect from HTTP to HTTPS</li>
                   </ul>
-                  
+
                   <h2>📊 Access Information</h2>
                   <ul>
                       <li><strong>Website:</strong> <a href="https://test.xavwe.dev">https://test.xavwe.dev</a></li>
                       <li><strong>Traefik Dashboard:</strong> <a href="https://traefik.xavwe.dev">https://traefik.xavwe.dev</a></li>
                   </ul>
-                  
+
                   <p style="text-align: center; margin-top: 30px; color: #666;">
                       This is a sample website served by Nginx behind Traefik on NixOS<br>
                       <strong>Domain:</strong> test.xavwe.dev with Cloudflare DNS challenge
@@ -158,8 +158,8 @@
       # Copy the sample website to the web root
       systemd.services.nginx-setup = {
         description = "Setup Nginx sample website";
-        wantedBy = [ "nginx.service" ];
-        before = [ "nginx.service" ];
+        wantedBy = ["nginx.service"];
+        before = ["nginx.service"];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
