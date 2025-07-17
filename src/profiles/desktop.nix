@@ -60,6 +60,10 @@
       virt-manager.enable = true;
       wakatime.enable = true;
       colors.theme = "darknight";
+
+      # web services
+      traefik.enable = true;
+      nginx.enable = true;
     };
   };
 }
