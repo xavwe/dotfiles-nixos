@@ -20,7 +20,6 @@
 - [ ] bash
 - [ ] nushell
 - [ ] mutt
-- [ ] firefox
 - [ ] nixos-hardware
 - [ ] nh
 - [ ] styling
