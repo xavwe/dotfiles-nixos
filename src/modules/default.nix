@@ -75,5 +75,7 @@
     ./locale.nix
     ./misc.nix
     ./mpd.nix
+    ./traefik.nix
+    ./nginx.nix
   ];
 }
