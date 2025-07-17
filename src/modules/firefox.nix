@@ -331,6 +331,7 @@
               "browser.shell.checkDefaultBrowser" = false;
               "browser.search.widget.inNavBar" = false;
               "browser.translate.enable" = false;
+              "browser.translations.automaticallyPopup" = false;
 
               # Additional arkenfox settings
               "accessibility.force_disabled" = 1; # Disable accessibility services (fingerprinting)
