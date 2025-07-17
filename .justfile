@@ -32,3 +32,6 @@ format:
 docs:
   nix build .#docs
   @echo "Documentation built in ./result/"
+
+nvim:
+  nix run .#nvim
