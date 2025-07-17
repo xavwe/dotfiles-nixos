@@ -12,6 +12,16 @@
       default = false;
       description = "Use jujutsu";
     };
+    username = lib.mkOption {
+      type = lib.types.str;
+      default = "xavwe";
+      description = "Jujutsu username";
+    };
+    mail = lib.mkOption {
+      type = lib.types.str;
+      default = "xaver.wenhart@proton.me";
+      description = "Jujutsu email";
+    };
   };
 
   config = lib.mkMerge [
@@ -25,8 +35,8 @@
           "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
 
           [user]
-          name = "Xaver Wenhart"
-          email = "xaver.wenhart@proton.me"
+          name = "${config.modules.jujutsu.username}"
+          email = "${config.modules.jujutsu.mail}"
 
           [ui]
           default-command = [ "log" ]

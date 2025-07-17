@@ -11,49 +11,112 @@
     # hostname
     networking.hostName = "newton";
 
-    modules = {
-      # gui
-      firefox.enable = false;
-      firefox.default = false;
-      hyprland.enable = false;
-      foot.enable = false;
-      zathura.enable = false;
-      zathura.default = false;
-      libreoffice.enable = false;
-      libreoffice.default = false;
+    dotfiles = {
+      enable = true;
+      locales = "en_US.UTF-8";
+      theme = "darknight";
 
-      # cli
-      neovim.enable = true;
-      neovim.default = true;
-      neovim.manpager = true;
-      jujutsu.enable = true;
+      window-manager = {
+        enable = false;
+      };
+
+      shell = {
+        default = "zsh";
+        zsh = {
+          enable = true;
+        };
+      };
+
+      browser = {
+        enable = false;
+      };
+
+      terminal-emulator = {
+        enable = false;
+      };
+
+      editor = {
+        enable = true;
+        default = "neovim";
+        neovim = {
+          enable = true;
+          manpager = true;
+        };
+      };
+
+      container-engine = {
+        enable = true;
+        default = "podman";
+        podman = {
+          enable = true;
+        };
+      };
+
+      reverse-proxy = {
+        enable = false;
+      };
+    };
+
+    # Keep old modules configuration for system-level modules not yet categorized
+    modules = {
+      colors.theme = "darknight";
+
+      # Misc applications
+      git = {
+        enable = true;
+        username = "xavwe";
+        mail = "xaver.wenhart@proton.me";
+      };
+      jujutsu = {
+        enable = true;
+        username = "xavwe";
+        mail = "xaver.wenhart@proton.me";
+      };
+      scrcpy.enable = false;
+      nginx.enable = false;
+      gh.enable = false;
       fastfetch.enable = true;
       just.enable = true;
       fzf.enable = true;
       btop.enable = true;
       direnv.enable = true;
-      chafa.enable = true;
-      chafa.default = true;
-      zoxide.enable = true;
-      zoxide.default = true;
-      mpv.enable = true;
-      mpv.default = true;
-      yazi.enable = true;
-      yazi.default = true;
+      chafa = {
+        enable = true;
+        default = true;
+      };
+      zoxide = {
+        enable = true;
+        default = true;
+      };
+      mpv = {
+        enable = true;
+        default = true;
+      };
+      yazi = {
+        enable = true;
+        default = true;
+      };
       extract.enable = true;
-      podman.enable = true;
       distrobox.enable = false;
       tldr.enable = true;
       pass.enable = true;
       gpg.enable = true;
       newsboat.enable = false;
-
-      # system
+      nvd.enable = false;
+      nix-output-monitor.enable = false;
+      claude-code.enable = false;
+      zathura = {
+        enable = false;
+        default = false;
+      };
+      libreoffice = {
+        enable = false;
+        default = false;
+      };
       dark-mode.enable = false;
       starship.enable = false;
       virt-manager.enable = false;
       wakatime.enable = true;
-      colors.theme = "darknight";
     };
   };
 }

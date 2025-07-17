@@ -13,6 +13,11 @@
       default = false;
       description = "Use foot";
     };
+    default = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Make foot default terminal";
+    };
   };
 
   config = lib.mkMerge [
@@ -52,6 +57,10 @@
           };
         };
       };
+    })
+
+    (lib.mkIf config.modules.foot.default {
+      environment.variables.TERMINAL = "foot";
     })
   ];
 }

@@ -6,6 +6,9 @@
   ...
 }: {
   imports = [
+    # New dotfiles structure
+    ./dotfiles.nix
+
     # gui
     ./firefox.nix
     ./hyprland.nix

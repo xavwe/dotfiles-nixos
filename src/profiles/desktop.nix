@@ -11,40 +11,111 @@
     # hostname
     networking.hostName = "newton";
 
-    modules = {
-      # gui
-      firefox.enable = true;
-      firefox.default = true;
-      hyprland.enable = true;
-      hyprland.xwayland.enable = true;
-      foot.enable = true;
-      zathura.enable = true;
-      zathura.default = true;
-      libreoffice.enable = true;
-      libreoffice.default = true;
-      scrcpy.enable = true;
+    dotfiles = {
+      enable = true;
+      locales = "en_US.UTF-8";
+      theme = "darknight";
 
-      # cli
-      neovim.enable = true;
-      neovim.default = true;
-      neovim.manpager = true;
-      jujutsu.enable = true;
+      window-manager = {
+        enable = true;
+        default = "hyprland";
+        hyprland = {
+          enable = true;
+          xwayland = {
+            enable = true;
+          };
+        };
+      };
+
+      shell = {
+        default = "zsh";
+        zsh = {
+          enable = true;
+        };
+      };
+
+      browser = {
+        enable = true;
+        default = "firefox";
+        firefox = {
+          enable = true;
+        };
+      };
+
+      terminal-emulator = {
+        enable = true;
+        default = "foot";
+        foot = {
+          enable = true;
+        };
+      };
+
+      editor = {
+        enable = true;
+        default = "neovim";
+        neovim = {
+          enable = true;
+          manpager = true;
+        };
+      };
+
+      container-engine = {
+        enable = true;
+        default = "podman";
+        podman = {
+          enable = true;
+        };
+      };
+
+      reverse-proxy = {
+        enable = true;
+        default = "traefik";
+        traefik = {
+          enable = true;
+        };
+      };
+    };
+
+    # Keep old modules configuration for system-level modules not yet categorized
+    modules = {
+      colors.theme = "darknight";
+
+      # Misc applications
+      git = {
+        enable = true;
+        username = "xavwe";
+        mail = "xaver.wenhart@proton.me";
+      };
+      jujutsu = {
+        enable = true;
+        username = "xavwe";
+        mail = "xaver.wenhart@proton.me";
+      };
+      scrcpy.enable = true;
+      nginx.enable = true;
       gh.enable = true;
       fastfetch.enable = true;
       just.enable = true;
       fzf.enable = true;
       btop.enable = true;
       direnv.enable = true;
-      chafa.enable = true;
-      chafa.default = true;
-      zoxide.enable = true;
-      zoxide.default = true;
-      mpv.enable = true;
-      mpv.default = true;
-      yazi.enable = true;
-      yazi.default = true;
+      chafa = {
+        enable = true;
+        default = true;
+      };
+      zoxide = {
+        enable = true;
+        default = true;
+      };
+      mpv = {
+        enable = true;
+        default = true;
+      };
+      yazi = {
+        enable = true;
+        default = true;
+      };
       extract.enable = true;
-      podman.enable = true;
       distrobox.enable = true;
       tldr.enable = true;
       pass.enable = true;
@@ -53,17 +124,18 @@
       nvd.enable = true;
       nix-output-monitor.enable = true;
       claude-code.enable = true;
-
-      # system
+      zathura = {
+        enable = true;
+        default = true;
+      };
+      libreoffice = {
+        enable = true;
+        default = true;
+      };
       dark-mode.enable = true;
       starship.enable = true;
       virt-manager.enable = true;
       wakatime.enable = true;
-      colors.theme = "darknight";
-      
-      # web services
-      traefik.enable = true;
-      nginx.enable = true;
     };
   };
 }

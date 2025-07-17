@@ -12,6 +12,16 @@
       default = true;
       description = "Use git";
     };
+    username = lib.mkOption {
+      type = lib.types.str;
+      default = "xavwe";
+      description = "Git username";
+    };
+    mail = lib.mkOption {
+      type = lib.types.str;
+      default = "xaver.wenhart@proton.me";
+      description = "Git email";
+    };
     aliases.yolo = lib.mkOption {
       type = lib.types.bool;
       default = true;
@@ -24,8 +34,8 @@
       home-manager.users.nu = {...}: {
         programs.git = {
           enable = true;
-          userName = "xavwe";
-          userEmail = "xaver.wenhart@proton.me";
+          userName = config.modules.git.username;
+          userEmail = config.modules.git.mail;
           aliases = lib.mkIf config.modules.git.aliases.yolo {
             yolo = "!git commit -m \"$(curl -s https://whatthecommit.com/index.txt)\"";
           };

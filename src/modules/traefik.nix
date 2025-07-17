@@ -12,6 +12,11 @@
       default = false;
       description = "Enable Traefik reverse proxy";
     };
+    default = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Make Traefik default reverse proxy";
+    };
   };
 
   config = lib.mkMerge [
@@ -59,7 +64,7 @@
                 storage = "${config.services.traefik.dataDir}/acme.json";
                 dnsChallenge = {
                   provider = "cloudflare";
-                  resolvers = [ "1.1.1.1:53" "1.0.0.1:53" ];
+                  resolvers = ["1.1.1.1:53" "1.0.0.1:53"];
                 };
               };
             };
@@ -117,7 +122,7 @@
 
       # Firewall configuration
       networking.firewall = {
-        allowedTCPPorts = [ 80 443 ];
+        allowedTCPPorts = [80 443];
       };
 
       # User and group

@@ -12,6 +12,11 @@
       default = false;
       description = "Use podman";
     };
+    default = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Make podman default container engine";
+    };
   };
 
   config = lib.mkMerge [
@@ -57,6 +62,10 @@
           ExecStart = ''/run/current-system/sw/bin/podman start --all --filter restart-policy=always'';
         };
       };
+    })
+
+    (lib.mkIf config.modules.podman.default {
+      environment.variables.DOCKER_HOST = "unix://${config.users.users.nu.home}/.local/share/containers/podman/machine/podman.sock";
     })
   ];
 }
