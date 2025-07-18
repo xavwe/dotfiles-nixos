@@ -137,7 +137,7 @@
               lazy = {
                 enable = true;
                 plugins = {
-                  # mini.icons - Icon provider for oil.nvim
+                  # mini.icons - Icon provider for oil.nvim, snacks.nvim, which-key.nvim
                   "mini.nvim" = {
                     package = pkgs.vimPlugins.mini-nvim;
                     lazy = false;
@@ -145,7 +145,7 @@
                     setupOpts = {};
                   };
 
-                  # Oil.nvim - File explorer
+                  # oil.nvim - File explorer
                   "oil.nvim" = {
                     package = pkgs.vimPlugins.oil-nvim;
                     lazy = true;
