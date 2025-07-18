@@ -50,6 +50,9 @@
           scrollback = {
             lines = "5000";
           };
+          key-bindings = {
+            spawn-terminal = "Super+Shift+q";
+          };
         };
       };
     })
