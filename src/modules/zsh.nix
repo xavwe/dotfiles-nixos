@@ -41,6 +41,14 @@
               zstyle ':completion:*' completer _expand_alias _complete _ignored
               precmd() {
                 print -Pn "\e]0;$(fc -ln -1)\a"
+
+                # Check if last command was git clone without --recursive or --bare
+                local last_cmd=$(fc -ln -1 | xargs)
+                if [[ "$last_cmd" =~ ^git[[:space:]]+clone[[:space:]] ]]; then
+                  if ! ([[ "$last_cmd" =~ --recursive ]] && [[ "$last_cmd" =~ --bare ]]); then
+                    echo "Info: Consider using 'git clone --recursive --bare'"
+                  fi
+                fi
               }
               screenshot() {
                 IMG=~/screenshot/$(date +%Y-%m-%d_%H-%m-%s).png && grim -g "$(slurp)" $IMG && wl-copy < $IMG
