@@ -166,6 +166,17 @@
                       };
                     };
                   };
+                  # which-key.nvim - Key mapping hints
+                  "which-key.nvim" = {
+                    package = pkgs.vimPlugins.which-key-nvim;
+                    lazy = false;
+                    setupModule = "which-key";
+                    setupOpts = {
+                      preset = "classic";
+                      delay = 500;
+                      # spec = [];
+                    };
+                  };
                 };
               };
 
