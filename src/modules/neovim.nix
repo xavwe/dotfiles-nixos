@@ -166,6 +166,28 @@
                       };
                     };
                   };
+                  # indent-blankline.nvim - Indentation guides
+                  "indent-blankline.nvim" = {
+                    package = pkgs.vimPlugins.indent-blankline-nvim;
+                    lazy = false;
+                    setupModule = "ibl";
+                    setupOpts = {
+                      indent = {
+                        char = "│";
+                        tab_char = "│";
+                      };
+                      whitespace = {
+                        highlight = ["Whitespace"];
+                        remove_blankline_trail = false;
+                      };
+                      scope = {
+                        enabled = false;
+                        show_start = false;
+                        show_end = false;
+                      };
+                    };
+                  };
+
                   # which-key.nvim - Key mapping hints
                   "which-key.nvim" = {
                     package = pkgs.vimPlugins.which-key-nvim;
