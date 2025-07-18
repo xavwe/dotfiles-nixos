@@ -166,6 +166,28 @@
                       };
                     };
                   };
+                  # flash.nvim - Navigation
+                  "flash.nvim" = {
+                    package = pkgs.vimPlugins.flash-nvim;
+                    lazy = true;
+                    keys = [
+                      {
+                        key = "s";
+                        mode = ["n" "x" "o"];
+                        action = "<cmd>lua require('flash').jump()<CR>";
+                        desc = "Flash";
+                      }
+                      {
+                        key = "S";
+                        mode = ["n" "x" "o"];
+                        action = "<cmd>lua require('flash').treesitter()<CR>";
+                        desc = "Flash Treesitter";
+                      }
+                    ];
+                    setupModule = "flash";
+                    setupOpts = {};
+                  };
+
                   # indent-blankline.nvim - Indentation guides
                   "indent-blankline.nvim" = {
                     package = pkgs.vimPlugins.indent-blankline-nvim;
