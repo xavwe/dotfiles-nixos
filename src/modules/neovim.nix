@@ -166,6 +166,41 @@
                       };
                     };
                   };
+
+                  # snacks.nvim - Picker
+                  "snacks.nvim" = {
+                    package = pkgs.vimPlugins.snacks-nvim;
+                    lazy = true;
+                    keys = [
+                      {
+                        key = "<leader><leader>";
+                        action = "<cmd>lua Snacks.picker.files()<CR>";
+                        desc = "Find Files";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>/";
+                        action = "<cmd>lua Snacks.picker.grep()<CR>";
+                        desc = "Grep";
+                        mode = "n";
+                      }
+                    ];
+                    setupModule = "snacks";
+                    setupOpts = {
+                      picker = {
+                        enabled = true;
+                        sources = {
+                          grep = {
+                            hidden = true;
+                          };
+                          files = {
+                            hidden = true;
+                          };
+                        };
+                      };
+                    };
+                  };
+
                   # flash.nvim - Navigation
                   "flash.nvim" = {
                     package = pkgs.vimPlugins.flash-nvim;
