@@ -1,0 +1,138 @@
+name: auto-fix
+
+on:
+  workflow_run:
+    workflows: ["test"]
+    types:
+      - completed
+
+jobs:
+  auto-fix-on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Get failed workflow details
+        id: workflow-info
+        run: |
+          echo "branch=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_OUTPUT
+          echo "sha=${{ github.event.workflow_run.head_sha }}" >> $GITHUB_OUTPUT
+          echo "run-id=${{ github.event.workflow_run.id }}" >> $GITHUB_OUTPUT
+      
+      - name: Check if auto-fix branch already exists
+        id: branch-check
+        run: |
+          BRANCH_NAME="auto-fix/${{ steps.workflow-info.outputs.branch }}-${{ steps.workflow-info.outputs.run-id }}"
+          if git ls-remote --exit-code --heads origin "$BRANCH_NAME"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Branch $BRANCH_NAME already exists, skipping auto-fix"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "branch-name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create auto-fix branch
+        if: steps.branch-check.outputs.exists == 'false'
+        run: |
+          git checkout -b "${{ steps.branch-check.outputs.branch-name }}" ${{ steps.workflow-info.outputs.sha }}
+          git push origin "${{ steps.branch-check.outputs.branch-name }}"
+      
+      - name: Install Nix
+        if: steps.branch-check.outputs.exists == 'false'
+        uses: cachix/install-nix-action@v25
+      
+      - name: Get workflow logs
+        if: steps.branch-check.outputs.exists == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh run view ${{ steps.workflow-info.outputs.run-id }} --log > workflow-logs.txt || echo "Could not retrieve logs"
+      
+      - name: Run Claude Code to fix issues
+        if: steps.branch-check.outputs.exists == 'false'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_oauth_token: ${{ secrets.CLAUDE_OAUTH_TOKEN }}
+          prompt: |
+            The CI test workflow has failed. Please analyze the failure and fix the issues.
+            
+            Repository context:
+            - This is a NixOS configuration repository using flakes
+            - The test workflow runs `nix flake check --all-systems`
+            - Available commands are documented in CLAUDE.md
+            
+            Please:
+            1. Analyze the test failure from the workflow logs (see workflow-logs.txt)
+            2. Fix any issues found in the Nix configuration
+            3. Run `just check` to verify the fix works
+            4. Commit the changes with a descriptive message
+            
+            Focus on common Nix flake issues like:
+            - Formatting problems (run `just format`)
+            - Missing inputs or outputs in flake.nix
+            - Module configuration errors
+            - Hardware configuration issues
+          
+          fallback_on_error: |
+            echo "Claude Code failed, attempting common fixes"
+            just format
+            git add -A
+            git commit -m "auto-fix: format code after test failure" || echo "No changes to commit"
+      
+      - name: Push changes
+        if: steps.branch-check.outputs.exists == 'false'
+        run: |
+          git push origin "${{ steps.branch-check.outputs.branch-name }}"
+      
+      - name: Run tests on auto-fix branch
+        if: steps.branch-check.outputs.exists == 'false'
+        run: |
+          nix flake check --all-systems
+      
+      - name: Create Pull Request
+        if: steps.branch-check.outputs.exists == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Check if there are any changes
+          if git diff --quiet HEAD~1 HEAD; then
+            echo "No changes made, skipping PR creation"
+            exit 0
+          fi
+          
+          # Create PR
+          gh pr create \
+            --title "🤖 Auto-fix: Resolve test failures from ${{ steps.workflow-info.outputs.branch }}" \
+            --body "$(cat << 'EOF'
+          ## Auto-generated fix
+          
+          This PR was automatically created to fix test failures from the \`test\` workflow.
+          
+          **Original workflow run:** ${{ github.event.workflow_run.html_url }}
+          **Original branch:** ${{ steps.workflow-info.outputs.branch }}
+          **Original commit:** ${{ steps.workflow-info.outputs.sha }}
+          
+          ### Changes made
+          
+          The changes in this PR were generated by Claude Code to resolve the test failures.
+          
+          ### Testing
+          
+          - ✅ `nix flake check --all-systems` passes on this branch
+          
+          Please review the changes before merging.
+          EOF
+          )" \
+            --base "${{ steps.workflow-info.outputs.branch }}" \
+            --head "${{ steps.branch-check.outputs.branch-name }}"
