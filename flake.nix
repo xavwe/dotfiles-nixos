@@ -138,22 +138,13 @@
               ];
             }
             {
-              options.modules.wakatime = {
-                enable = nixpkgs.lib.mkOption {
-                  type = nixpkgs.lib.types.bool;
-                  default = false;
-                };
-              };
-              config = {
-                modules.neovim.enable = true;
-                modules.wakatime.enable = false;
-                users.users.nu.isNormalUser = true;
-                home-manager.users.nu = {
-                  imports = [inputs.nvf.homeManagerModules.default];
-                  home = {
-                    stateVersion = "23.11";
-                    homeDirectory = "/home/nu";
-                  };
+              modules.neovim.enable = true;
+              users.users.nu.isNormalUser = true;
+              home-manager.users.nu = {
+                imports = [inputs.nvf.homeManagerModules.default];
+                home = {
+                  stateVersion = "23.11";
+                  homeDirectory = "/home/nu";
                 };
               };
             }
