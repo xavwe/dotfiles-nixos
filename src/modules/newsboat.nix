@@ -108,6 +108,14 @@
               ];
               url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw";
             }
+            # TheVimeagen - YouTube - en
+            {
+              tags = [
+                "tech"
+                "video"
+              ];
+              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCVk4b-svNJoeytrrlOixebQ";
+            }
             # David Kriesel - blog - de
             {
               tags = [
@@ -116,8 +124,31 @@
               ];
               url = "https://www.dkriesel.com/feed.php?linkto=current&content=html&mode=blogtng&blog=blog-de";
             }
+            # Mental Outlaw - YouTube - en
+            {
+              tags = [
+                "tech"
+                "video"
+              ];
+              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC7YOGHUfC1Tb6E4pudI9STA";
+            }
+            # IBM - YouTube - en
+            {
+              tags = [
+                "tech"
+                "video"
+              ];
+              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCKWaEZ-_VweaEx1j62do_vQ";
+            }
           ];
           extraConfig = ''
+            # Key bindings
+            bind-key j down
+            bind-key k up
+
+            # Macro to open in mpv with floating window
+            macro p set browser "mpv --ontop --no-border --force-window --autofit=500x280 --geometry=-15-10 %u"; open-in-browser ; set browser "$BROWSER %u"
+
             color background          color7     color0
             color listnormal          color240      color0
             color listnormal_unread   color7      color0
