@@ -18,7 +18,6 @@
 
     # cli
     ./neovim.nix
-    ./nvim-treesitter.nix
     ./doas.nix
     ./sudo.nix
     ./jujutsu.nix
