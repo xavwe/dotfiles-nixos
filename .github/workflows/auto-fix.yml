@@ -15,6 +15,7 @@ jobs:
       contents: write
       pull-requests: write
       actions: read
+      id-token: write
     
     steps:
       - name: Checkout code
@@ -63,8 +64,8 @@ jobs:
         if: steps.branch-check.outputs.exists == 'false'
         uses: anthropics/claude-code-action@v0.0.40
         with:
-          claude_oauth_token: ${{ secrets.CLAUDE_OAUTH_TOKEN }}
-          prompt: |
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          direct_prompt: |
             The CI test workflow has failed. Please analyze the failure and fix the issues.
             
             Repository context:
@@ -84,11 +85,6 @@ jobs:
             - Module configuration errors
             - Hardware configuration issues
           
-          fallback_on_error: |
-            echo "Claude Code failed, attempting common fixes"
-            just format
-            git add -A
-            git commit -m "auto-fix: format code after test failure" || echo "No changes to commit"
       
       - name: Push changes
         if: steps.branch-check.outputs.exists == 'false'
