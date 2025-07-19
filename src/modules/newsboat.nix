@@ -145,6 +145,14 @@
             # Key bindings
             bind-key j down
             bind-key k up
+            bind-key j down feedlist
+            bind-key k up feedlist
+            bind-key j next articlelist
+            bind-key k prev articlelist
+            bind-key J next-feed articlelist
+            bind-key K prev-feed articlelist
+            bind-key j down article
+            bind-key k up article
 
             # Macro to open in mpv with floating window
             macro p set browser "mpv --ontop --no-border --force-window --autofit=500x280 --geometry=-15-10 %u"; open-in-browser ; set browser "$BROWSER %u"
