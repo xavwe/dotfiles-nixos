@@ -605,8 +605,9 @@
 
               # Remaining plugins that need to be loaded at startup
               startPlugins = with pkgs.vimPlugins; [
-                vim-wakatime # Time tracking - needs to be loaded at startup
                 pkgs.workspace-diagnostics-nvim
+              ] ++ lib.optionals config.modules.wakatime.enable [
+                vim-wakatime # Time tracking - needs to be loaded at startup
               ];
 
               # Lua configuration for remaining plugins
