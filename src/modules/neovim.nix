@@ -424,7 +424,7 @@
 
               # Lua configuration for remaining plugins
               luaConfigRC.extra-plugins = ''
-                -- Configure which-key git group
+                -- Configure which-key groups
                 require("which-key").add({
                   { "<leader>g", group = "git", icon = { icon = "", hl = "" } },
                   { "<leader>s", group = "settings", icon = { icon = "", hl = "" } }
