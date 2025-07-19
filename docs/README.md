@@ -17,7 +17,6 @@
 - [ ] disko
 - [ ] vm passthrough
 - [ ] bash
-- [ ] nushell
 - [ ] mutt
 - [ ] nixos-hardware
 - [ ] nh
