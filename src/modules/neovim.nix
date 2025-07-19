@@ -253,7 +253,7 @@
                     setupOpts = {
                       preset = "classic";
                       delay = 500;
-                      # spec = [];
+                      icons.group = "";
                     };
                   };
 
@@ -394,13 +394,13 @@
                       }
                       # Toggles
                       {
-                        key = "<leader>tb";
+                        key = "<leader>sb";
                         action = "<cmd>lua require('gitsigns').toggle_current_line_blame()<CR>";
                         desc = "Toggle blame";
                         mode = "n";
                       }
                       {
-                        key = "<leader>tw";
+                        key = "<leader>sw";
                         action = "<cmd>lua require('gitsigns').toggle_word_diff()<CR>";
                         desc = "Toggle word diff";
                         mode = "n";
@@ -426,7 +426,8 @@
               luaConfigRC.extra-plugins = ''
                 -- Configure which-key git group
                 require("which-key").add({
-                  { "<leader>g", group = "git", icon = "" }
+                  { "<leader>g", group = "git", icon = { icon = "", hl = "" } },
+                  { "<leader>s", group = "settings", icon = { icon = "", hl = "" } }
                 })
               '';
             };
