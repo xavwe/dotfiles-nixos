@@ -122,17 +122,6 @@
                 vim.api.nvim_set_hl(0, "CursorLine", { bg = "#2C2E34" })
               '';
 
-              # Key mappings
-              # maps = {
-              #   normal = {
-              #     # File explorer
-              #     "<leader>e" = {
-              #       action = "<cmd>Oil<CR>";
-              #       desc = "Explorer";
-              #     };
-              #   };
-              # };
-
               # Lazy loading configuration
               lazy = {
                 enable = true;
