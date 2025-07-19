@@ -105,16 +105,16 @@
     };
 
     packages.x86_64-linux = {
-      iso-desktop = mkSystem {
-        profile = "desktop";
-        hardware = "iso";
-        format = "iso";
-      };
-      iso-minimal = mkSystem {
-        profile = "minimal";
-        hardware = "iso";
-        format = "iso";
-      };
+      # iso-desktop = mkSystem {
+      #   profile = "desktop";
+      #   hardware = "iso";
+      #   format = "iso";
+      # };
+      # iso-minimal = mkSystem {
+      #   profile = "minimal";
+      #   hardware = "iso";
+      #   format = "iso";
+      # };
       nvim = let
         system = "x86_64-linux";
         pkgs = nixpkgs.legacyPackages.${system};
