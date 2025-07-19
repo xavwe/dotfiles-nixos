@@ -80,10 +80,16 @@
       packages = with nixpkgs.legacyPackages."x86_64-linux"; [
         just
         sops
-        stylua
+
+        # Lua
         lua-language-server
+        stylua
+        tree-sitter-grammars.tree-sitter-lua
+
+        # Nix
         nixd
         alejandra
+        tree-sitter-grammars.tree-sitter-nix
       ];
     };
 
