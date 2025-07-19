@@ -19,7 +19,6 @@
 - [ ] bash
 - [ ] mutt
 - [ ] nixos-hardware
-- [ ] nh
 - [ ] styling
 - [ ] erase your darlings
 - [ ] homelab
