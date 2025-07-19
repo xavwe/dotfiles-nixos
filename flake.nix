@@ -8,7 +8,7 @@
 
     nixpkgs-stable = {
       url = "github:nixos/nixpkgs/nixos-24.05";
-    }
+    };
 
     nixway = {
       url = "github:the-nix-way/dev-templates";
