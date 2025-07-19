@@ -10,10 +10,8 @@
 > Personal, modular, and reproducible NixOS configuration, built using Nix flakes.
 
 ## Roadmap
-- [ ] audio
-- [ ] hyprland
-- [ ] pass
 - [ ] newsboat
+- [ ] neovim
 - [ ] disko
 - [ ] bash
 - [ ] mutt
