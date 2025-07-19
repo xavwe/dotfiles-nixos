@@ -15,7 +15,6 @@
 - [ ] pass
 - [ ] newsboat
 - [ ] disko
-- [ ] vm passthrough
 - [ ] bash
 - [ ] mutt
 - [ ] nixos-hardware
