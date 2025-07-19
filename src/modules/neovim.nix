@@ -441,6 +441,50 @@
                       };
                     };
                   };
+
+                  # nvim-treesitter-textobjects - Enhanced text objects
+                  "nvim-treesitter-textobjects" = {
+                    package = pkgs.vimPlugins.nvim-treesitter-textobjects;
+                    lazy = true;
+                    event = ["BufReadPost" "BufNewFile"];
+                    setupModule = "nvim-treesitter.configs";
+                    setupOpts = {
+                      textobjects = {
+                        select = {
+                          enable = true;
+                          lookahead = true;
+                          keymaps = {
+                            "af" = "@function.outer";
+                            "if" = "@function.inner";
+                            "ac" = "@class.outer";
+                            "ic" = "@class.inner";
+                            "ap" = "@parameter.outer";
+                            "ip" = "@parameter.inner";
+                          };
+                        };
+                        move = {
+                          enable = true;
+                          set_jumps = true;
+                          goto_next_start = {
+                            "]f" = "@function.outer";
+                            "]c" = "@class.outer";
+                          };
+                          goto_next_end = {
+                            "]F" = "@function.outer";
+                            "]C" = "@class.outer";
+                          };
+                          goto_previous_start = {
+                            "[f" = "@function.outer";
+                            "[c" = "@class.outer";
+                          };
+                          goto_previous_end = {
+                            "[F" = "@function.outer";
+                            "[C" = "@class.outer";
+                          };
+                        };
+                      };
+                    };
+                  };
                   #
                 };
               };
@@ -448,7 +492,6 @@
               # Remaining plugins that need to be loaded at startup
               startPlugins = with pkgs.vimPlugins; [
                 vim-wakatime # Time tracking - needs to be loaded at startup
-                # nvim-treesitter-textobjects # Text objects - needs treesitter to load first
               ];
 
               # Lua configuration for remaining plugins
@@ -458,6 +501,38 @@
                   { "<leader>g", group = "git", icon = { icon = "", hl = "" } },
                   { "<leader>s", group = "settings", icon = { icon = "", hl = "" } }
                 })
+
+
+                -- Configure treesitter textobjects for diff mode compatibility
+                -- When in diff mode, we want to use the default
+                -- vim text objects c & C instead of the treesitter ones.
+                vim.api.nvim_create_autocmd("User", {
+                  pattern = "LazyDone",
+                  callback = function()
+                    local ok_move, move = pcall(require, "nvim-treesitter.textobjects.move")
+                    local ok_configs, configs = pcall(require, "nvim-treesitter.configs")
+
+                    if ok_move and ok_configs then
+                      for name, fn in pairs(move) do
+                        if name:find("goto") == 1 then
+                          move[name] = function(q, ...)
+                            if vim.wo.diff then
+                              local config = configs.get_module("textobjects.move")[name] ---@type table<string,string>
+                              for key, query in pairs(config or {}) do
+                                if q == query and key:find("[%]%[][cC]") then
+                                  vim.cmd("normal! " .. key)
+                                  return
+                                end
+                              end
+                            end
+                            return fn(q, ...)
+                          end
+                        end
+                      end
+                    end
+                  end,
+                 })
+
 
                 -- Per-directory treesitter grammar support for NixOS
                 local function setup_per_directory_treesitter()
