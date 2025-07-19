@@ -149,12 +149,12 @@
                 modules.wakatime.enable = false;
                 users.users.nu.isNormalUser = true;
                 home-manager.users.nu = {
-                imports = [inputs.nvf.homeManagerModules.default];
-                home = {
-                  stateVersion = "23.11";
-                  homeDirectory = "/home/nu";
+                  imports = [inputs.nvf.homeManagerModules.default];
+                  home = {
+                    stateVersion = "23.11";
+                    homeDirectory = "/home/nu";
+                  };
                 };
-              };
               };
             }
           ];
