@@ -189,4 +189,15 @@
   };
 
   extract = inputs.extract.packages.x86_64-linux.default;
+
+  workspace-diagnostics-nvim = final.vimUtils.buildVimPlugin {
+    pname = "workspace-diagnostics-nvim";
+    version = "unstable-2025-01-08";
+    src = final.fetchFromGitHub {
+      owner = "artemave";
+      repo = "workspace-diagnostics.nvim";
+      rev = "60f9175b2501ae3f8b1aba9719c0df8827610c8e";
+      sha256 = "sha256-jSpKaKnGyip/nzqU52ypWLgoCtvccYN+qb5jzlwAnd4=";
+    };
+  };
 }
