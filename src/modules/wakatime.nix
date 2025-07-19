@@ -42,5 +42,14 @@
         '';
       };
     })
+
+    # Install wakatime plugin for neovim when both wakatime and neovim are enabled
+    (lib.mkIf (config.modules.wakatime.enable && config.modules.neovim.enable) {
+      home-manager.users.nu = {
+        programs.nvf.settings.vim.startPlugins = with pkgs.vimPlugins; [
+          vim-wakatime # Time tracking - needs to be loaded at startup
+        ];
+      };
+    })
   ];
 }
