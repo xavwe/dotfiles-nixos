@@ -414,12 +414,41 @@
                       }
                     ];
                   };
+
+                  # nvim-treesitter - Syntax highlighting and parsing
+                  # check if language present: :lua print(require('nvim-treesitter.parsers').has_parser('lua'))
+                  "nvim-treesitter" = {
+                    package = pkgs.vimPlugins.nvim-treesitter;
+                    lazy = false;
+                    setupModule = "nvim-treesitter.configs";
+                    setupOpts = {
+                      ensure_installed = {};
+                      auto_install = false;
+                      sync_install = false;
+                      prefer_git = false;
+                      highlight = {
+                        enable = true;
+                        disable = ''
+                          function(lang, buf)
+                            local max_filesize = 100 * 1024 -- 100 KB
+                            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+                            if ok and stats and stats.size > max_filesize then
+                              return true
+                            end
+                          end
+                        '';
+                        additional_vim_regex_highlighting = false;
+                      };
+                    };
+                  };
+                  #
                 };
               };
 
               # Remaining plugins that need to be loaded at startup
               startPlugins = with pkgs.vimPlugins; [
                 vim-wakatime # Time tracking - needs to be loaded at startup
+                # nvim-treesitter-textobjects # Text objects - needs treesitter to load first
               ];
 
               # Lua configuration for remaining plugins
@@ -429,6 +458,221 @@
                   { "<leader>g", group = "git", icon = { icon = "", hl = "" } },
                   { "<leader>s", group = "settings", icon = { icon = "", hl = "" } }
                 })
+
+                -- Per-directory treesitter grammar support for NixOS
+                local function setup_per_directory_treesitter()
+                  -- Function to detect available treesitter grammars from nix packages in PATH
+                  local function get_available_nix_grammars()
+                    local available_grammars = {}
+
+                    -- print("DEBUG: Scanning for nix treesitter grammar packages...")
+
+                    -- Check nativeBuildInputs environment variable which contains the packages
+                    local native_build_inputs = vim.env.nativeBuildInputs or ""
+                    -- print("DEBUG: nativeBuildInputs = " .. native_build_inputs)
+
+                    -- Parse the nativeBuildInputs to find treesitter grammar packages
+                    for store_path in string.gmatch(native_build_inputs, "([^%s]+)") do
+                      if string.match(store_path, "tree%-sitter.*grammar") then
+                        -- print("DEBUG: Found treesitter grammar package: " .. store_path)
+
+                        -- Check for the parser file (in NixOS it's just called "parser", not "parser.so")
+                        local parser_path = store_path .. "/parser"
+                        local file = io.open(parser_path, "r")
+                        if file then
+                          file:close()
+                          -- print("DEBUG: Found parser at: " .. parser_path)
+
+                          -- Extract language name from store path
+                          local lang = string.match(store_path, "tree%-sitter%-([^-]+)%-grammar")
+                          if lang then
+                            -- print("DEBUG: Detected language: " .. lang .. " -> " .. parser_path)
+                            available_grammars[lang] = parser_path
+                          end
+                        end
+                      end
+                    end
+
+                    -- Also check PATH for any additional store paths (backup method)
+                    local path = vim.env.PATH or ""
+                    local nix_store_paths = {}
+
+                    -- Collect all nix store paths from PATH
+                    for dir in string.gmatch(path, "([^:]+)") do
+                      if string.match(dir, "/nix/store/") then
+                        local store_path = string.match(dir, "(/nix/store/[^/]+)")
+                        if store_path then
+                          nix_store_paths[store_path] = true
+                        end
+                      end
+                    end
+
+                    -- Also check NIX_PROFILES
+                    local nix_profiles = vim.env.NIX_PROFILES or ""
+                    for profile in string.gmatch(nix_profiles, "([^%s]+)") do
+                      nix_store_paths[profile] = true
+                    end
+
+                    -- print("DEBUG: Also checking nix store paths from PATH: " .. vim.inspect(vim.tbl_keys(nix_store_paths)))
+
+                    -- Look for treesitter grammar packages in PATH store paths
+                    for store_path, _ in pairs(nix_store_paths) do
+                      if string.match(store_path, "tree%-sitter.*grammar") then
+                        -- print("DEBUG: Found treesitter grammar package in PATH: " .. store_path)
+
+                        -- Check for the parser file
+                        local parser_path = store_path .. "/parser"
+                        local file = io.open(parser_path, "r")
+                        if file then
+                          file:close()
+                          -- print("DEBUG: Found parser at: " .. parser_path)
+
+                          -- Extract language name from store path
+                          local lang = string.match(store_path, "tree%-sitter%-([^-]+)%-grammar")
+                          if lang then
+                            -- print("DEBUG: Detected language: " .. lang .. " -> " .. parser_path)
+                            available_grammars[lang] = parser_path
+                          end
+                        end
+                      end
+                    end
+
+                    -- print("DEBUG: Available grammars: " .. vim.inspect(available_grammars))
+                    return available_grammars
+                  end
+
+                  -- Function to load available grammars into treesitter
+                  local function load_available_grammars()
+                    local grammars = get_available_nix_grammars()
+
+                    for lang, grammar_path in pairs(grammars) do
+                      -- print("DEBUG: Loading grammar for " .. lang .. " from " .. grammar_path)
+
+                      -- Verify the file exists
+                      local file = io.open(grammar_path, "r")
+                      if file then
+                        file:close()
+
+                        -- Register with nvim-treesitter's parser configs first
+                        local parser_configs = require("nvim-treesitter.parsers").get_parser_configs()
+                        if not parser_configs[lang] then
+                          parser_configs[lang] = {
+                            install_info = {
+                              url = "file://" .. grammar_path,
+                              files = { grammar_path },
+                              branch = "main",
+                            },
+                            filetype = lang,
+                          }
+                          -- print("DEBUG: Registered parser config for " .. lang)
+                        end
+
+                        -- Try to register the language with treesitter core
+                        local success, err = pcall(function()
+                          vim.treesitter.language.add(lang, {
+                            path = grammar_path
+                          })
+                        end)
+
+                        if success then
+                          -- print("DEBUG: Successfully loaded " .. lang .. " grammar")
+
+                          -- Also try to set up filetype mapping if it doesn't exist
+                          local ft_success, ft_err = pcall(function()
+                            if not vim.treesitter.language.get_filetypes(lang)[1] then
+                              vim.treesitter.language.register(lang, lang)
+                            end
+                          end)
+
+                          if ft_success then
+                            -- print("DEBUG: Successfully registered filetype for " .. lang)
+                          else
+                            -- print("DEBUG: Failed to register filetype for " .. lang .. ": " .. tostring(ft_err))
+                          end
+
+                          -- Mark as available in nvim-treesitter's internal state
+                          local install_success, install_err = pcall(function()
+                            local install = require("nvim-treesitter.install")
+                            if install and install.commands and install.commands.TSInstall then
+                              -- Create a symbolic link or mark as installed in nvim-treesitter's tracking
+                              local info = require("nvim-treesitter.info")
+                              if info and info.installed_parsers then
+                                local installed = info.installed_parsers()
+                                if not vim.tbl_contains(installed, lang) then
+                                  -- Force refresh nvim-treesitter's installed parser list
+                                  vim.schedule(function()
+                                    vim.cmd("silent! TSUpdateSync")
+                                  end)
+                                end
+                              end
+                            end
+                          end)
+
+                          if install_success then
+                            -- print("DEBUG: Successfully integrated " .. lang .. " with nvim-treesitter")
+                          else
+                            -- print("DEBUG: Warning: Could not integrate " .. lang .. " with nvim-treesitter: " .. tostring(install_err))
+                          end
+
+                        else
+                          -- print("DEBUG: Failed to load " .. lang .. " grammar: " .. tostring(err))
+                        end
+                      else
+                        -- print("DEBUG: Grammar file not accessible: " .. grammar_path)
+                      end
+                    end
+
+                    -- Refresh treesitter after loading new grammars
+                    vim.schedule(function()
+                      vim.cmd("silent! doautocmd FileType")
+                    end)
+                  end
+
+                  -- Initialize on startup
+                  load_available_grammars()
+
+                  -- Reload when directory changes (for direnv)
+                  vim.api.nvim_create_autocmd({"DirChanged", "VimEnter"}, {
+                    group = vim.api.nvim_create_augroup("nix-treesitter-reload", { clear = true }),
+                    callback = function()
+                      -- print("DEBUG: Directory/environment changed, reloading treesitter grammars...")
+                      vim.defer_fn(function()
+                        load_available_grammars()
+
+                        -- Refresh syntax for all buffers
+                        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+                          if vim.api.nvim_buf_is_loaded(buf) then
+                            vim.api.nvim_buf_call(buf, function()
+                              local ft = vim.bo.filetype
+                              if ft and ft ~= "" then
+                                -- Trigger treesitter to re-evaluate
+                                vim.cmd("edit!")
+                              end
+                            end)
+                          end
+                        end
+                      end, 300)
+                    end,
+                  })
+
+                  -- Manual reload command
+                  vim.api.nvim_create_user_command("TSReloadNixGrammars", function()
+                    -- print("Manually reloading nix treesitter grammars...")
+                    load_available_grammars()
+                  end, { desc = "Reload treesitter grammars from nix environment" })
+
+                  -- Debug command to show available grammars
+                  vim.api.nvim_create_user_command("TSShowNixGrammars", function()
+                    local grammars = get_available_nix_grammars()
+                    -- print("Available nix treesitter grammars:")
+                    for lang, path in pairs(grammars) do
+                      -- print("  " .. lang .. " -> " .. path)
+                    end
+                  end, { desc = "Show available treesitter grammars from nix" })
+                end
+
+                -- Initialize nix treesitter support
+                setup_per_directory_treesitter()
               '';
             };
           };
