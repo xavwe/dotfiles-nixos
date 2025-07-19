@@ -327,63 +327,69 @@
                       }
                       # Actions
                       {
-                        key = "<leader>hs";
+                        key = "<leader>gs";
                         action = "<cmd>lua require('gitsigns').stage_hunk()<CR>";
                         desc = "Stage hunk";
                         mode = "n";
                       }
                       {
-                        key = "<leader>hr";
+                        key = "<leader>gr";
                         action = "<cmd>lua require('gitsigns').reset_hunk()<CR>";
                         desc = "Reset hunk";
                         mode = "n";
                       }
                       {
-                        key = "<leader>hs";
+                        key = "<leader>gs";
                         action = "<cmd>lua require('gitsigns').stage_hunk({vim.fn.line('.'), vim.fn.line('v')})<CR>";
                         desc = "Stage hunk";
                         mode = "v";
                       }
                       {
-                        key = "<leader>hr";
+                        key = "<leader>gr";
                         action = "<cmd>lua require('gitsigns').reset_hunk({vim.fn.line('.'), vim.fn.line('v')})<CR>";
                         desc = "Reset hunk";
                         mode = "v";
                       }
                       {
-                        key = "<leader>hS";
+                        key = "<leader>gS";
                         action = "<cmd>lua require('gitsigns').stage_buffer()<CR>";
                         desc = "Stage buffer";
                         mode = "n";
                       }
                       {
-                        key = "<leader>hR";
+                        key = "<leader>gR";
                         action = "<cmd>lua require('gitsigns').reset_buffer()<CR>";
                         desc = "Reset buffer";
                         mode = "n";
                       }
                       {
-                        key = "<leader>hp";
+                        key = "<leader>gp";
                         action = "<cmd>lua require('gitsigns').preview_hunk()<CR>";
                         desc = "Preview hunk";
                         mode = "n";
                       }
                       {
-                        key = "<leader>hi";
+                        key = "<leader>gi";
                         action = "<cmd>lua require('gitsigns').preview_hunk_inline()<CR>";
                         desc = "Preview hunk inline";
                         mode = "n";
                       }
                       {
-                        key = "<leader>hQ";
+                        key = "<leader>gQ";
                         action = "<cmd>lua require('gitsigns').setqflist('all')<CR>";
                         desc = "Quickfix all";
                         mode = "n";
                       }
                       {
-                        key = "<leader>hq";
+                        key = "<leader>gq";
                         action = "<cmd>lua require('gitsigns').setqflist()<CR>";
                         desc = "Quickfix hunks";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>gb";
+                        action = "<cmd>Gitsigns blame<CR>";
+                        desc = "Show Blame";
                         mode = "n";
                       }
                       # Toggles
@@ -418,6 +424,10 @@
 
               # Lua configuration for remaining plugins
               luaConfigRC.extra-plugins = ''
+                -- Configure which-key git group
+                require("which-key").add({
+                  { "<leader>g", group = "git", icon = "" }
+                })
               '';
             };
           };
