@@ -12,7 +12,6 @@
 ## Roadmap
 - [ ] audio
 - [ ] hyprland
-- [ ] wakatime
 - [ ] pass
 - [ ] newsboat
 - [ ] disko
