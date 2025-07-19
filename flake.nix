@@ -120,15 +120,23 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         # Create a minimal system with just neovim enabled
+        overlays = import ./src/overlays {inherit inputs;};
         neovimSystem = nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit inputs;
+            inherit inputs overlays;
             lib = nixpkgs.lib // self.lib;
           };
           modules = [
             inputs.home-manager.nixosModules.home-manager
             ./src/modules/neovim.nix
+            {
+              nixpkgs.overlays = [
+                overlays.stable-packages
+                overlays.packages
+                overlays.unfree-packages
+              ];
+            }
             {
               modules.neovim.enable = true;
               users.users.nu.isNormalUser = true;

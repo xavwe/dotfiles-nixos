@@ -3,6 +3,7 @@
   lib,
   config,
   pkgs,
+  overlays,
   home-manager,
   ...
 }: {
@@ -474,12 +475,138 @@
                       };
                     };
                   };
+
+                  # plenary.nvim - Lua utility library
+                  "plenary.nvim" = {
+                    package = pkgs.vimPlugins.plenary-nvim;
+                    lazy = true;
+                  };
+
+                  # todo-comments.nvim - Highlight and navigate TODO comments
+                  "todo-comments.nvim" = {
+                    package = pkgs.vimPlugins.todo-comments-nvim;
+                    lazy = true;
+                    cmd = ["TodoTrouble"];
+                    setupModule = "todo-comments";
+                    setupOpts = {};
+                    keys = [
+                      {
+                        key = "]t";
+                        action = "<cmd>lua require('todo-comments').jump_next()<CR>";
+                        desc = "Next Todo Comment";
+                        mode = "n";
+                      }
+                      {
+                        key = "[t";
+                        action = "<cmd>lua require('todo-comments').jump_prev()<CR>";
+                        desc = "Previous Todo Comment";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>t";
+                        action = "<cmd>Trouble todo toggle<CR>";
+                        desc = "Todo";
+                        mode = "n";
+                      }
+                    ];
+                  };
+
+                  # conform.nvim - Code formatting
+                  "conform.nvim" = {
+                    package = pkgs.vimPlugins.conform-nvim;
+                    lazy = false;
+                    setupModule = "conform";
+                    setupOpts = {
+                      formatters_by_ft = {
+                        lua = ["stylua"];
+                        nix = ["alejandra"];
+                        haskell = ["ormolu"];
+                        tex = ["latexindent"];
+                        latex = ["latexindent"];
+                      };
+                      formatters = {
+                        latexindent = {
+                          prepend_args = ["-l" "-m"];
+                        };
+                      };
+                      format_on_save = {
+                        timeout_ms = 500;
+                        lsp_fallback = true;
+                      };
+                    };
+                  };
+
+                  # lazydev.nvim - Lua development support
+                  "lazydev.nvim" = {
+                    package = pkgs.vimPlugins.lazydev-nvim;
+                    lazy = true;
+                    ft = ["lua"];
+                    setupModule = "lazydev";
+                    setupOpts = {
+                      library = [
+                        {
+                          path = "\${3rd}/luv/library";
+                          words = ["vim%.uv"];
+                        }
+                      ];
+                    };
+                  };
+
+                  # friendly-snippets - Snippet collection
+                  "friendly-snippets" = {
+                    package = pkgs.vimPlugins.friendly-snippets;
+                    lazy = true;
+                  };
+
+                  # blink.cmp - Completion engine
+                  "blink.cmp" = {
+                    package = pkgs.vimPlugins.blink-cmp;
+                    lazy = false;
+                    setupModule = "blink.cmp";
+                    setupOpts = {
+                      keymap = {
+                        preset = "default";
+                      };
+                      appearance = {
+                        use_nvim_cmp_as_default = true;
+                        nerd_font_variant = "mono";
+                      };
+                      signature = {
+                        enabled = true;
+                      };
+                    };
+                  };
+
+                  # trouble.nvim - Diagnostics list
+                  "trouble.nvim" = {
+                    package = pkgs.vimPlugins.trouble-nvim;
+                    lazy = true;
+                    cmd = ["Trouble"];
+                    setupModule = "trouble";
+                    setupOpts = {};
+                    keys = [
+                      {
+                        key = "<leader>x";
+                        action = "<cmd>Trouble diagnostics toggle<cr>";
+                        desc = "Diagnostics";
+                        mode = "n";
+                      }
+                    ];
+                  };
+
+                  # nvim-lspconfig - LSP configuration
+                  "nvim-lspconfig" = {
+                    package = pkgs.vimPlugins.nvim-lspconfig;
+                    lazy = false;
+                    setupModule = null;
+                  };
                 };
               };
 
               # Remaining plugins that need to be loaded at startup
               startPlugins = with pkgs.vimPlugins; [
                 vim-wakatime # Time tracking - needs to be loaded at startup
+                pkgs.workspace-diagnostics-nvim
               ];
 
               # Lua configuration for remaining plugins
@@ -490,6 +617,95 @@
                   { "<leader>s", group = "settings", icon = { icon = "", hl = "" } }
                 })
 
+                -- LSP Configuration
+                local capabilities = require("blink.cmp").get_lsp_capabilities()
+
+                vim.diagnostic.config({
+                  underline = true,
+                  signs = {
+                    text = {
+                      [vim.diagnostic.severity.ERROR] = "",
+                      [vim.diagnostic.severity.WARN] = "",
+                      [vim.diagnostic.severity.HINT] = "",
+                      [vim.diagnostic.severity.INFO] = "",
+                    },
+                  },
+                  update_in_insert = false,
+                  severity_sort = true,
+                })
+
+                -- Lua Language Server
+                if vim.fn.executable("lua-language-server") == 1 then
+                  require("lspconfig").lua_ls.setup({
+                    capabilities = capabilities,
+                    on_attach = function(client, bufnr)
+                      require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                    settings = {
+                      Lua = {
+                        workspace = {
+                          checkThirdParty = false,
+                          library = vim.api.nvim_get_runtime_file("", true),
+                          fileOperations = {
+                            didRename = true,
+                            willRename = true,
+                          },
+                          didChangeWatchedFiles = true,
+                        },
+                        codeLens = {
+                          enable = true,
+                        },
+                        completion = {
+                          callSnippet = "Replace",
+                        },
+                        doc = {
+                          privateName = { "^_" },
+                        },
+                        hint = {
+                          enable = true,
+                          setType = false,
+                          paramType = true,
+                          paramName = "Disable",
+                          semicolon = "Disable",
+                          arrayIndex = "Disable",
+                        },
+                        telemetry = {
+                          enable = false,
+                        },
+                      },
+                    },
+                  })
+                end
+
+                -- Nixd Language Server
+                if vim.fn.executable("nixd") == 1 then
+                  require("lspconfig").nixd.setup({
+                    capabilities = capabilities,
+                    on_attach = function(client, bufnr)
+                      require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                  })
+                end
+
+                -- Haskell Language Server
+                if vim.fn.executable("haskell-language-server-wrapper") == 1 then
+                  require("lspconfig").hls.setup({
+                    capabilities = capabilities,
+                    on_attach = function(client, bufnr)
+                      require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                  })
+                end
+
+                -- TeXLab Language Server
+                if vim.fn.executable("texlab") == 1 then
+                  require("lspconfig").texlab.setup({
+                    capabilities = capabilities,
+                    on_attach = function(client, bufnr)
+                      require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                  })
+                end
 
                 -- Configure treesitter textobjects for diff mode compatibility
                 -- When in diff mode, we want to use the default
