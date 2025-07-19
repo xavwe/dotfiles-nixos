@@ -132,3 +132,9 @@ jobs:
           )" \
             --base "${{ steps.workflow-info.outputs.branch }}" \
             --head "${{ steps.branch-check.outputs.branch-name }}"
+      
+      - name: Cleanup branch on failure
+        if: failure() && steps.branch-check.outputs.exists == 'false' && steps.branch-check.outputs.branch-name != ''
+        run: |
+          echo "Workflow failed, cleaning up auto-fix branch: ${{ steps.branch-check.outputs.branch-name }}"
+          git push origin --delete "${{ steps.branch-check.outputs.branch-name }}" || echo "Branch may not exist on remote"
