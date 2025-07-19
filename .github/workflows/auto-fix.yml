@@ -61,7 +61,7 @@ jobs:
       
       - name: Run Claude Code to fix issues
         if: steps.branch-check.outputs.exists == 'false'
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@v0.0.40
         with:
           claude_oauth_token: ${{ secrets.CLAUDE_OAUTH_TOKEN }}
           prompt: |
