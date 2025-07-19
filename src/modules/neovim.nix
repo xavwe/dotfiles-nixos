@@ -256,6 +256,160 @@
                       # spec = [];
                     };
                   };
+
+                  # gitsigns.nvim - Git
+                  "gitsigns.nvim" = {
+                    package = pkgs.vimPlugins.gitsigns-nvim;
+                    lazy = true;
+                    event = ["BufReadPre" "BufNewFile"];
+                    setupModule = "gitsigns";
+                    setupOpts = {
+                      signs = {
+                        add = { text = "┃"; };
+                        change = { text = "┃"; };
+                        delete = { text = "_"; };
+                        topdelete = { text = "‾"; };
+                        changedelete = { text = "~"; };
+                        untracked = { text = "┆"; };
+                      };
+                      signs_staged = {
+                        add = { text = "┃"; };
+                        change = { text = "┃"; };
+                        delete = { text = "_"; };
+                        topdelete = { text = "‾"; };
+                        changedelete = { text = "~"; };
+                        untracked = { text = "┆"; };
+                      };
+                      signs_staged_enable = true;
+                      signcolumn = true;
+                      numhl = false;
+                      linehl = false;
+                      word_diff  = false;
+                      watch_gitdir = {
+                        follow_files = true;
+                      };
+                      auto_attach = true;
+                      attach_to_untracked = false;
+                      current_line_blame = true;
+                      current_line_blame_opts = {
+                        virt_text = true;
+                        virt_text_pos = "eol";
+                        delay = 1000;
+                        ignore_whitespace = false;
+                        virt_text_priority = 100;
+                        use_focus = true;
+                      };
+                      current_line_blame_formatter = "  <author>, <author_time:%R> - <summary>";
+                      sign_priority = 6;
+                      update_debounce = 100;
+                      status_formatter = null;
+                      max_file_length = 40000;
+                      preview_config = {
+                        style = "minimal";
+                        relative = "cursor";
+                        row = 0;
+                        col = 1;
+                      };
+                    };
+                    keys = [
+                      # Navigation
+                      {
+                        key = "]c";
+                        action = "<cmd>lua if vim.wo.diff then vim.cmd.normal({']c', bang = true}) else require('gitsigns').nav_hunk('next') end<CR>";
+                        desc = "Next hunk";
+                        mode = "n";
+                      }
+                      {
+                        key = "[c";
+                        action = "<cmd>lua if vim.wo.diff then vim.cmd.normal({'[c', bang = true}) else require('gitsigns').nav_hunk('prev') end<CR>";
+                        desc = "Previous hunk";
+                        mode = "n";
+                      }
+                      # Actions
+                      {
+                        key = "<leader>hs";
+                        action = "<cmd>lua require('gitsigns').stage_hunk()<CR>";
+                        desc = "Stage hunk";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>hr";
+                        action = "<cmd>lua require('gitsigns').reset_hunk()<CR>";
+                        desc = "Reset hunk";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>hs";
+                        action = "<cmd>lua require('gitsigns').stage_hunk({vim.fn.line('.'), vim.fn.line('v')})<CR>";
+                        desc = "Stage hunk";
+                        mode = "v";
+                      }
+                      {
+                        key = "<leader>hr";
+                        action = "<cmd>lua require('gitsigns').reset_hunk({vim.fn.line('.'), vim.fn.line('v')})<CR>";
+                        desc = "Reset hunk";
+                        mode = "v";
+                      }
+                      {
+                        key = "<leader>hS";
+                        action = "<cmd>lua require('gitsigns').stage_buffer()<CR>";
+                        desc = "Stage buffer";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>hR";
+                        action = "<cmd>lua require('gitsigns').reset_buffer()<CR>";
+                        desc = "Reset buffer";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>hp";
+                        action = "<cmd>lua require('gitsigns').preview_hunk()<CR>";
+                        desc = "Preview hunk";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>hi";
+                        action = "<cmd>lua require('gitsigns').preview_hunk_inline()<CR>";
+                        desc = "Preview hunk inline";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>hQ";
+                        action = "<cmd>lua require('gitsigns').setqflist('all')<CR>";
+                        desc = "Quickfix all";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>hq";
+                        action = "<cmd>lua require('gitsigns').setqflist()<CR>";
+                        desc = "Quickfix hunks";
+                        mode = "n";
+                      }
+                      # Toggles
+                      {
+                        key = "<leader>tb";
+                        action = "<cmd>lua require('gitsigns').toggle_current_line_blame()<CR>";
+                        desc = "Toggle blame";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>tw";
+                        action = "<cmd>lua require('gitsigns').toggle_word_diff()<CR>";
+                        desc = "Toggle word diff";
+                        mode = "n";
+                      }
+                      # Text object
+                      {
+                        key = "ih";
+                        action = "<cmd>lua require('gitsigns').select_hunk()<CR>";
+                        desc = "Select hunk";
+                        mode = ["o" "x"];
+                      }
+                    ];
+
+                  };
+
                 };
               };
 
