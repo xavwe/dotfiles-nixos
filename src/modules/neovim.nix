@@ -123,15 +123,15 @@
               '';
 
               # Key mappings
-              maps = {
-                normal = {
-                  # File explorer
-                  "<leader>e" = {
-                    action = "<cmd>Oil<CR>";
-                    desc = "Explorer";
-                  };
-                };
-              };
+              # maps = {
+              #   normal = {
+              #     # File explorer
+              #     "<leader>e" = {
+              #       action = "<cmd>Oil<CR>";
+              #       desc = "Explorer";
+              #     };
+              #   };
+              # };
 
               # Lazy loading configuration
               lazy = {
