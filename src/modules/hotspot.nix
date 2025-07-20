@@ -38,36 +38,43 @@
     # Don't enable dnsmasq globally - create_ap will handle it when needed
     # services.dnsmasq.enable = true;
     
-    # Allow hotspot traffic through firewall
+    # Allow hotspot traffic through firewall (using nftables like virt-manager)
     networking.firewall = {
       allowedTCPPorts = [ 53 67 ];  # DNS and DHCP
       allowedUDPPorts = [ 53 67 68 ]; # DNS, DHCP server and client
+      
+      # Allow DNS/DHCP traffic from hotspot interfaces
+      extraInputRules = ''
+        # Allow DNS/DHCP from hotspot interfaces
+        iifname "ap0" tcp dport 53 accept
+        iifname "ap0" udp dport 53 accept
+        iifname "ap0" udp dport 67 accept
+        iifname "wlo1" tcp dport 53 accept
+        iifname "wlo1" udp dport 53 accept
+        iifname "wlo1" udp dport 67 accept
+      '';
+      
+      # Allow hotspot traffic forwarding (similar to virt-manager setup)
+      extraForwardRules = ''
+        # Allow hotspot traffic forwarding
+        iifname "ap0" oifname != "ap0" accept
+        iifname != "ap0" oifname "ap0" ct state { related, established } accept
+        iifname "wlo1" oifname != "wlo1" accept
+        iifname != "wlo1" oifname "wlo1" ct state { related, established } accept
+        
+        # NAT for hotspot traffic specifically to ethernet interface
+        oifname "enp6s0" ip saddr 192.168.12.0/24 masquerade
+        oifname "enp6s0" ip saddr 192.168.4.0/24 masquerade
+        
+        # Allow traffic from hotspot to ethernet
+        iifname "ap0" oifname "enp6s0" accept
+        iifname "enp6s0" oifname "ap0" ct state { related, established } accept
+      '';
     };
 
     # Add user to netdev group for wireless interface management
     users.groups.netdev = {};
     
-    # Home manager configuration for shell aliases
-    home-manager.users.nu = {
-      home.shellAliases = lib.mkIf config.modules.hotspot.enable {
-        # GUI application (if enabled)
-        hotspot-gui = lib.mkIf config.modules.hotspot.gui "wihotspot-gui";
-        
-        # Main hotspot commands using create_ap from linux-wifi-hotspot
-        hotspot-start = "sudo create_ap wlan0 eth0 MyHotspot password123";
-        hotspot-stop = "sudo create_ap --stop wlan0";
-        hotspot-status = "sudo create_ap --list-running";
-        hotspot-clients = "sudo create_ap --list-clients wlan0";
-        
-        # Alternative: TUI interface 
-        hotspot-tui = "wihotspot";
-        
-        # Advanced options
-        hotspot-daemon = "sudo create_ap --daemon wlan0 eth0 MyHotspot password123";
-        hotspot-no-internet = "sudo create_ap -n wlan0 MyHotspot password123";
-        hotspot-hidden = "sudo create_ap --hidden wlan0 eth0 MyHotspot password123";
-      };
-    };
 
     # Enable IP forwarding for hotspot functionality
     boot.kernel.sysctl = {
