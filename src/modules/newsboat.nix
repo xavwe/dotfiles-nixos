@@ -154,7 +154,7 @@
             bind-key j down article
             bind-key k up article
 
-            # Macro to open in mpv with floating window
+            # Macro to open in mpv with floating window (https://www.reddit.com/r/commandline/comments/mqkqig/comment/mzp3jvw/)
             macro p set browser "mpv --ontop --no-border --force-window --autofit=500x280 --geometry=-15-10 %u"; open-in-browser ; set browser "$BROWSER %u"
 
             color background          color7     color0
