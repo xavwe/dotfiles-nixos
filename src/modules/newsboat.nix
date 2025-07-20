@@ -26,7 +26,7 @@
             urls-source "miniflux"
             miniflux-url "https://rss.xavwe.dev/"
             miniflux-login "nu"
-            miniflux-passwordfile "${config.sops.secrets.freshrss.path}"
+            miniflux-passwordfile "/run/user/1000/miniflux/password"
 
             # Key bindings
             bind-key j down
