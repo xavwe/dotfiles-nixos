@@ -92,6 +92,14 @@
                 tls:
                   certResolver: "cloudflare"
 
+              freshrss:
+                rule: "Host(`rss.xavwe.dev`)"
+                service: "freshrss"
+                entryPoints:
+                  - "websecure"
+                tls:
+                  certResolver: "cloudflare"
+
               traefik-dashboard:
                 rule: "Host(`traefik.xavwe.dev`)"
                 service: "api@internal"
@@ -105,6 +113,11 @@
                 loadBalancer:
                   servers:
                     - url: "http://127.0.0.1:8080"
+              
+              freshrss:
+                loadBalancer:
+                  servers:
+                    - url: "http://127.0.0.1:8081"
         '';
         mode = "0644";
       };

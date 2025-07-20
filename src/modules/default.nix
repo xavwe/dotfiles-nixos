@@ -77,5 +77,6 @@
     ./mpd.nix
     ./traefik.nix
     ./nginx.nix
+    ./freshrss.nix
   ];
 }
