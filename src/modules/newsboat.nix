@@ -65,7 +65,6 @@
             highlight feedlist "^─.*$" color6 color6 bold
           '';
         };
-
       };
     })
   ];
