@@ -94,6 +94,12 @@
           ADMIN_PASSWORD=$(cat ${config.sops.secrets.freshrss.path})
           EOF
           chmod 644 /run/miniflux/admin-credentials
+          
+          # Also create a user-readable password file for newsboat
+          mkdir -p /run/user/1000/miniflux
+          tr -d '\n' < ${config.sops.secrets.freshrss.path} > /run/user/1000/miniflux/password
+          chown nu:users /run/user/1000/miniflux/password
+          chmod 600 /run/user/1000/miniflux/password
         '';
       };
 
