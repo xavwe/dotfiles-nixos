@@ -64,6 +64,7 @@
       # web services
       traefik.enable = true;
       nginx.enable = true;
+      freshrss.enable = true;
     };
   };
 }
