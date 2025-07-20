@@ -77,7 +77,6 @@
     ./mpd.nix
     ./traefik.nix
     ./nginx.nix
-    ./freshrss.nix
-    ./tt-rss.nix
+    ./miniflux.nix
   ];
 }

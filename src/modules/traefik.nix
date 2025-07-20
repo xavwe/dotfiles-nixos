@@ -92,9 +92,9 @@
                 tls:
                   certResolver: "cloudflare"
 
-              freshrss:
+              miniflux:
                 rule: "Host(`rss.xavwe.dev`)"
-                service: "freshrss"
+                service: "miniflux"
                 entryPoints:
                   - "websecure"
                 tls:
@@ -114,7 +114,7 @@
                   servers:
                     - url: "http://127.0.0.1:8080"
               
-              freshrss:
+              miniflux:
                 loadBalancer:
                   servers:
                     - url: "http://127.0.0.1:8081"
