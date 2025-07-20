@@ -26,7 +26,7 @@
             urls-source "miniflux"
             miniflux-url "https://rss.xavwe.dev/"
             miniflux-login "nu"
-            miniflux-passwordfile "/run/user/1000/miniflux/password"
+            miniflux-passwordfile "/tmp/miniflux-password"
 
             # Configure reload behavior to handle virtual feeds gracefully
             reload-threads 1
@@ -65,6 +65,7 @@
             highlight feedlist "^─.*$" color6 color6 bold
           '';
         };
+
       };
     })
   ];

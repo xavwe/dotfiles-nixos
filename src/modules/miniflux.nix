@@ -112,12 +112,13 @@
         sopsFile = ../secrets.yaml;
         owner = "root";
         group = "root";
-        mode = "0400";
+        mode = "0644";
       };
 
       # Create runtime directory for miniflux credentials
       systemd.tmpfiles.rules = [
         "d /run/miniflux 0755 root root -"
+        "d /run/user/1000/miniflux 0755 nu users -"
       ];
 
       # Create admin credentials file for Miniflux
@@ -140,11 +141,9 @@
           EOF
           chmod 644 /run/miniflux/admin-credentials
 
-          # Also create a user-readable password file for newsboat
-          mkdir -p /run/user/1000/miniflux
-          tr -d '\n' < ${config.sops.secrets.freshrss.path} > /run/user/1000/miniflux/password
-          chown nu:users /run/user/1000/miniflux/password
-          chmod 600 /run/user/1000/miniflux/password
+          # Create a user-readable password file for newsboat in /tmp (always available)
+          tr -d '\n' < ${config.sops.secrets.freshrss.path} > /tmp/miniflux-password
+          chmod 644 /tmp/miniflux-password
         '';
       };
 
@@ -178,6 +177,7 @@
         after = ["miniflux-create-credentials.service"];
         wants = ["miniflux-create-credentials.service"];
       };
+
 
       # Service to create categories and add feeds declaratively
       systemd.services.miniflux-setup-feeds = {
