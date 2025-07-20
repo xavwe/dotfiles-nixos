@@ -178,7 +178,6 @@
         wants = ["miniflux-create-credentials.service"];
       };
 
-
       # Service to create categories and add feeds declaratively
       systemd.services.miniflux-setup-feeds = {
         description = "Declaratively setup RSS feeds in Miniflux";
