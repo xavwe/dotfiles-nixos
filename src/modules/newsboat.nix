@@ -22,13 +22,11 @@
           # Connect to FreshRSS via Google Reader API
           urls = [];
           extraConfig = ''
-            # FreshRSS API configuration
-            urls-source "freshrss"
-            freshrss-url "https://rss.xavwe.dev/api/greader.php"
-            freshrss-login "admin"
-            freshrss-password "admin123"
-            freshrss-flag-share "a"
-            freshrss-flag-star "s"
+            # TT-RSS API configuration
+            urls-source "ttrss"
+            ttrss-url "https://rss.xavwe.dev/api/"
+            ttrss-login ""
+            ttrss-password ""
 
             # Key bindings
             bind-key j down
