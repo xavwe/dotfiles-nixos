@@ -64,8 +64,9 @@
       # web services
       traefik.enable = true;
       nginx.enable = true;
-      freshrss.enable = true;
-      freshrss.feeds = {
+      freshrss.enable = false;
+      tt-rss.enable = true;
+      tt-rss.feeds = {
         "Test Feeds" = [
           { title = "Hacker News"; url = "https://hnrss.org/frontpage"; }
           { title = "NixOS Weekly"; url = "https://weekly.nixos.org/feeds/all.rss.xml"; }
