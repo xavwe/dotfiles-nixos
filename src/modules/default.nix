@@ -78,5 +78,6 @@
     ./traefik.nix
     ./nginx.nix
     ./miniflux.nix
+    ./hotspot.nix
   ];
 }
