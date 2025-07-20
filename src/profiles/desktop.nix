@@ -64,18 +64,7 @@
       # web services
       traefik.enable = true;
       nginx.enable = true;
-      freshrss.enable = false;
-      tt-rss.enable = true;
-      tt-rss.feeds = {
-        "Test Feeds" = [
-          { title = "Hacker News"; url = "https://hnrss.org/frontpage"; }
-          { title = "NixOS Weekly"; url = "https://weekly.nixos.org/feeds/all.rss.xml"; }
-        ];
-        "Tech Blogs" = [
-          { title = "Vaxry Blog"; url = "https://blog.vaxry.net/feed"; }
-          { title = "Drew DeVault"; url = "https://drewdevault.com/blog/index.xml"; }
-        ];
-      };
+      miniflux.enable = true;
     };
   };
 }
