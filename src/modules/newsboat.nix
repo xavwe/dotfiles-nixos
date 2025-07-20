@@ -19,14 +19,14 @@
       home-manager.users.nu = {...}: {
         programs.newsboat = {
           enable = true;
-          # Connect to FreshRSS via Google Reader API
+          # Connect to Miniflux via Google Reader API
           urls = [];
           extraConfig = ''
-            # TT-RSS API configuration
-            urls-source "ttrss"
-            ttrss-url "https://rss.xavwe.dev/api/"
-            ttrss-login ""
-            ttrss-password ""
+            # Miniflux API configuration
+            urls-source "miniflux"
+            miniflux-url "https://rss.xavwe.dev/"
+            miniflux-login "nu"
+            miniflux-passwordfile "${config.sops.secrets.freshrss.path}"
 
             # Key bindings
             bind-key j down
