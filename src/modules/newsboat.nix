@@ -27,7 +27,12 @@
             miniflux-url "https://rss.xavwe.dev/"
             miniflux-login "nu"
             miniflux-passwordfile "/run/user/1000/miniflux/password"
-
+            
+            # Configure reload behavior to handle virtual feeds gracefully
+            reload-threads 1
+            reload-time 60
+            auto-reload no
+            
             # Key bindings
             bind-key j down
             bind-key k up
