@@ -120,6 +120,37 @@
         ];
       };
 
+      # Service to enable API globally
+      systemd.services.freshrss-enable-api = {
+        description = "Enable FreshRSS API globally";
+        after = ["freshrss-config.service"];
+        before = ["freshrss-import-feeds.service"];
+        wantedBy = ["multi-user.target"];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        path = with pkgs; [ systemd ];
+        script = ''
+          # Create config.local.php to enable API
+          cat > "${config.services.freshrss.dataDir}/config.local.php" <<EOF
+          <?php
+          return array(
+            'api_enabled' => true,
+          );
+          EOF
+          
+          # Ensure proper ownership
+          chown freshrss:freshrss "${config.services.freshrss.dataDir}/config.local.php"
+          chmod 644 "${config.services.freshrss.dataDir}/config.local.php"
+          
+          echo "FreshRSS API enabled globally"
+          
+          # Restart PHP-FPM to reload configuration
+          systemctl restart phpfpm-freshrss.service
+        '';
+      };
+
       # Generate OPML file dynamically from feeds configuration
       environment.etc."freshrss/feeds.opml" = let
         generateOutlines = categoryName: feeds:
@@ -147,9 +178,9 @@
         mode = "0644";
       };
 
-      # Service to import feeds from OPML after FreshRSS is configured
+      # Service to configure API and import feeds
       systemd.services.freshrss-import-feeds = {
-        description = "Import RSS feeds to FreshRSS from OPML";
+        description = "Configure FreshRSS API and import RSS feeds from OPML";
         after = ["freshrss-config.service"];
         wants = ["freshrss-config.service"];
         wantedBy = ["multi-user.target"];
@@ -159,7 +190,7 @@
           User = "freshrss";
           Group = "freshrss";
         };
-        path = with pkgs; [ php ];
+        path = with pkgs; [ php gnused ];
         script = ''
           set -eu
           
@@ -169,7 +200,21 @@
             sleep 2
           done
           
-          echo "FreshRSS is ready, importing feeds from OPML..."
+          echo "FreshRSS is ready, configuring API and importing feeds..."
+          
+          # Enable API access directly in user config file
+          USER_CONFIG="${config.services.freshrss.dataDir}/users/${config.services.freshrss.defaultUser}/config.php"
+          echo "Enabling API access in user configuration..."
+          
+          # Check if API access is already enabled
+          if ! grep -q "allow_api_access" "$USER_CONFIG"; then
+            # Add API access configuration
+            sed -i "/return array (/a\\
+            \\t'allow_api_access' => true," "$USER_CONFIG"
+          else
+            # Update existing configuration
+            sed -i "s/'allow_api_access' => false/'allow_api_access' => true/" "$USER_CONFIG"
+          fi
           
           # Copy FreshRSS to a writable location temporarily for CLI operations
           TEMP_DIR=$(mktemp -d)
@@ -180,7 +225,16 @@
           cd "$TEMP_DIR"
           rm -rf data && ln -sf "${config.services.freshrss.dataDir}" data
           
+          # Set API password for the user (force update)
+          echo "Setting API password..."
+          php ./cli/update-user.php --user "${config.services.freshrss.defaultUser}" --api-password "$(cat ${config.sops.secrets.freshrss.path})"
+          
+          # Verify API password was set
+          echo "Verifying API setup..."
+          php ./cli/user-info.php --user "${config.services.freshrss.defaultUser}"
+          
           # Import feeds from the generated OPML file
+          echo "Importing feeds from OPML..."
           php ./cli/import-for-user.php \
             --user "${config.services.freshrss.defaultUser}" \
             --filename "/etc/freshrss/feeds.opml"
@@ -188,7 +242,7 @@
           # Clean up
           rm -rf "$TEMP_DIR"
           
-          echo "Feeds imported successfully"
+          echo "API configured and feeds imported successfully"
         '';
         environment = {
           # Set the data directory so FreshRSS CLI can find the configuration
