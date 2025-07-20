@@ -19,129 +19,17 @@
       home-manager.users.nu = {...}: {
         programs.newsboat = {
           enable = true;
-          urls = [
-            # Vaxry - blog - en
-            {
-              tags = [
-                "tech"
-                "blog"
-              ];
-              url = "https://blog.vaxry.net/feed";
-            }
-            # Simon Willison - blog - en
-            {
-              tags = [
-                "tech"
-                "blog"
-              ];
-              url = "https://simonwillison.net/atom/everything/";
-            }
-            # Drew DeVault - blog - en
-            {
-              tags = [
-                "tech"
-                "blog"
-              ];
-              url = "https://drewdevault.com/blog/index.xml";
-            }
-            # Ruby Granger - YouTube - en
-            {
-              tags = [
-                "study"
-                "video"
-              ];
-              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC6a8lp6vaCMhUVXPyynhjUA";
-            }
-            # UnJaded Jade - YouTube - en
-            {
-              tags = [
-                "study"
-                "video"
-              ];
-              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC4-uObu-mfafJyxxZFEwbvQ";
-            }
-            # Luke Smith - blog - en
-            {
-              tags = [
-                "tech"
-                "blog"
-              ];
-              url = "https://lukesmith.xyz/index.xml";
-            }
-            # Sami - YouTube - en
-            {
-              tags = [
-                "tech"
-                "video"
-              ];
-              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCNFFrCzvkeF4CIAkE5sv3WA";
-            }
-            # Philipp Lackner - YouTube - en
-            {
-              tags = [
-                "tech"
-                "video"
-              ];
-              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCKNTZMRHPLXfqlbdOI7mCkg";
-            }
-            # The Engineering Mindset - YouTube - en
-            {
-              tags = [
-                "engineering"
-                "video"
-              ];
-              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCk0fGHsCEzGig-rSzkfCjMw";
-            }
-            # Beyond Fireship - YouTube - en
-            {
-              tags = [
-                "tech"
-                "video"
-              ];
-              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC2Xd-TjJByJyK2w1zNwY0zQ";
-            }
-            # ThePrimeagen - YouTube - en
-            {
-              tags = [
-                "tech"
-                "video"
-              ];
-              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw";
-            }
-            # TheVimeagen - YouTube - en
-            {
-              tags = [
-                "tech"
-                "video"
-              ];
-              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCVk4b-svNJoeytrrlOixebQ";
-            }
-            # David Kriesel - blog - de
-            {
-              tags = [
-                "tech"
-                "blog"
-              ];
-              url = "https://www.dkriesel.com/feed.php?linkto=current&content=html&mode=blogtng&blog=blog-de";
-            }
-            # Mental Outlaw - YouTube - en
-            {
-              tags = [
-                "tech"
-                "video"
-              ];
-              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC7YOGHUfC1Tb6E4pudI9STA";
-            }
-            # IBM - YouTube - en
-            {
-              tags = [
-                "tech"
-                "video"
-              ];
-              url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCKWaEZ-_VweaEx1j62do_vQ";
-            }
-          ];
+          # Connect to FreshRSS via Google Reader API
+          urls = [];
           extraConfig = ''
+            # FreshRSS API configuration
+            urls-source "freshrss"
+            freshrss-url "https://rss.xavwe.dev/api/greader.php"
+            freshrss-login "admin"
+            freshrss-password "admin123"
+            freshrss-flag-share "a"
+            freshrss-flag-star "s"
+
             # Key bindings
             bind-key j down
             bind-key k up
