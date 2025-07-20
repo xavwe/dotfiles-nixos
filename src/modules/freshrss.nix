@@ -12,6 +12,52 @@
       default = false;
       description = "Enable FreshRSS RSS aggregator";
     };
+
+    feeds = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.listOf (lib.types.submodule {
+        options = {
+          title = lib.mkOption {
+            type = lib.types.str;
+            description = "Feed title";
+          };
+          url = lib.mkOption {
+            type = lib.types.str;
+            description = "Feed URL";
+          };
+          description = lib.mkOption {
+            type = lib.types.str;
+            default = "";
+            description = "Feed description";
+          };
+        };
+      }));
+      default = {
+        "Tech Blogs" = [
+          { title = "Vaxry Blog"; url = "https://blog.vaxry.net/feed"; }
+          { title = "Simon Willison"; url = "https://simonwillison.net/atom/everything/"; }
+          { title = "Drew DeVault"; url = "https://drewdevault.com/blog/index.xml"; }
+          { title = "Luke Smith"; url = "https://lukesmith.xyz/index.xml"; }
+          { title = "David Kriesel"; url = "https://www.dkriesel.com/feed.php?linkto=current&content=html&mode=blogtng&blog=blog-de"; }
+        ];
+        "YouTube Tech" = [
+          { title = "Sami"; url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCNFFrCzvkeF4CIAkE5sv3WA"; }
+          { title = "Philipp Lackner"; url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCKNTZMRHPLXfqlbdOI7mCkg"; }
+          { title = "Beyond Fireship"; url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC2Xd-TjJByJyK2w1zNwY0zQ"; }
+          { title = "ThePrimeagen"; url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw"; }
+          { title = "TheVimeagen"; url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCVk4b-svNJoeytrrlOixebQ"; }
+          { title = "Mental Outlaw"; url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC7YOGHUfC1Tb6E4pudI9STA"; }
+          { title = "IBM"; url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCKWaEZ-_VweaEx1j62do_vQ"; }
+        ];
+        "Study" = [
+          { title = "Ruby Granger"; url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC6a8lp6vaCMhUVXPyynhjUA"; }
+          { title = "UnJaded Jade"; url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC4-uObu-mfafJyxxZFEwbvQ"; }
+        ];
+        "Engineering" = [
+          { title = "The Engineering Mindset"; url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCk0fGHsCEzGig-rSzkfCjMw"; }
+        ];
+      };
+      description = "RSS feeds organized by category";
+    };
   };
 
   config = lib.mkMerge [
@@ -74,44 +120,81 @@
         ];
       };
 
-      # Generate OPML file with all feeds
-      environment.etc."freshrss/feeds.opml" = {
+      # Generate OPML file dynamically from feeds configuration
+      environment.etc."freshrss/feeds.opml" = let
+        generateOutlines = categoryName: feeds:
+          lib.concatMapStringsSep "\n                " (feed: 
+            ''<outline type="rss" text="${lib.escapeXML feed.title}" title="${lib.escapeXML feed.title}" xmlUrl="${lib.escapeXML feed.url}" />''
+          ) feeds;
+        
+        generateCategories = lib.concatStringsSep "\n              " (lib.mapAttrsToList (categoryName: feeds: ''
+          <outline title="${lib.escapeXML categoryName}" text="${lib.escapeXML categoryName}">
+                ${generateOutlines categoryName feeds}
+              </outline>''
+        ) config.modules.freshrss.feeds);
+      in {
         text = ''
           <?xml version="1.0" encoding="UTF-8"?>
           <opml version="2.0">
             <head>
-              <title>Newsboat Feeds Export</title>
+              <title>FreshRSS Feeds Export</title>
             </head>
             <body>
-              <outline title="Tech Blogs" text="Tech Blogs">
-                <outline type="rss" text="Vaxry Blog" title="Vaxry Blog" xmlUrl="https://blog.vaxry.net/feed" />
-                <outline type="rss" text="Simon Willison" title="Simon Willison" xmlUrl="https://simonwillison.net/atom/everything/" />
-                <outline type="rss" text="Drew DeVault" title="Drew DeVault" xmlUrl="https://drewdevault.com/blog/index.xml" />
-                <outline type="rss" text="Luke Smith" title="Luke Smith" xmlUrl="https://lukesmith.xyz/index.xml" />
-                <outline type="rss" text="David Kriesel" title="David Kriesel" xmlUrl="https://www.dkriesel.com/feed.php?linkto=current&amp;content=html&amp;mode=blogtng&amp;blog=blog-de" />
-              </outline>
-              <outline title="YouTube Tech" text="YouTube Tech">
-                <outline type="rss" text="Sami" title="Sami" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCNFFrCzvkeF4CIAkE5sv3WA" />
-                <outline type="rss" text="Philipp Lackner" title="Philipp Lackner" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCKNTZMRHPLXfqlbdOI7mCkg" />
-                <outline type="rss" text="Beyond Fireship" title="Beyond Fireship" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC2Xd-TjJByJyK2w1zNwY0zQ" />
-                <outline type="rss" text="ThePrimeagen" title="ThePrimeagen" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw" />
-                <outline type="rss" text="TheVimeagen" title="TheVimeagen" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCVk4b-svNJoeytrrlOixebQ" />
-                <outline type="rss" text="Mental Outlaw" title="Mental Outlaw" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC7YOGHUfC1Tb6E4pudI9STA" />
-                <outline type="rss" text="IBM" title="IBM" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCKWaEZ-_VweaEx1j62do_vQ" />
-              </outline>
-              <outline title="Study" text="Study">
-                <outline type="rss" text="Ruby Granger" title="Ruby Granger" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC6a8lp6vaCMhUVXPyynhjUA" />
-                <outline type="rss" text="UnJaded Jade" title="UnJaded Jade" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC4-uObu-mfafJyxxZFEwbvQ" />
-              </outline>
-              <outline title="Engineering" text="Engineering">
-                <outline type="rss" text="The Engineering Mindset" title="The Engineering Mindset" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCk0fGHsCEzGig-rSzkfCjMw" />
-              </outline>
+              ${generateCategories}
             </body>
           </opml>
         '';
         mode = "0644";
       };
 
+      # Service to import feeds from OPML after FreshRSS is configured
+      systemd.services.freshrss-import-feeds = {
+        description = "Import RSS feeds to FreshRSS from OPML";
+        after = ["freshrss-config.service"];
+        wants = ["freshrss-config.service"];
+        wantedBy = ["multi-user.target"];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "freshrss";
+          Group = "freshrss";
+        };
+        path = with pkgs; [ php ];
+        script = ''
+          set -eu
+          
+          # Wait for FreshRSS to be fully initialized
+          echo "Waiting for FreshRSS to be ready..."
+          while [ ! -f "${config.services.freshrss.dataDir}/users/${config.services.freshrss.defaultUser}/config.php" ]; do
+            sleep 2
+          done
+          
+          echo "FreshRSS is ready, importing feeds from OPML..."
+          
+          # Copy FreshRSS to a writable location temporarily for CLI operations
+          TEMP_DIR=$(mktemp -d)
+          cp -r "${config.services.freshrss.package}"/* "$TEMP_DIR/"
+          chmod -R u+w "$TEMP_DIR"
+          
+          # Change to temp directory and set up symlinks to actual data
+          cd "$TEMP_DIR"
+          rm -rf data && ln -sf "${config.services.freshrss.dataDir}" data
+          
+          # Import feeds from the generated OPML file
+          php ./cli/import-for-user.php \
+            --user "${config.services.freshrss.defaultUser}" \
+            --filename "/etc/freshrss/feeds.opml"
+          
+          # Clean up
+          rm -rf "$TEMP_DIR"
+          
+          echo "Feeds imported successfully"
+        '';
+        environment = {
+          # Set the data directory so FreshRSS CLI can find the configuration
+          FRESHRSS_DATA_PATH = config.services.freshrss.dataDir;
+        };
+      };
 
       # Override nginx virtual host to listen on internal port for Traefik
       services.nginx.virtualHosts."rss.xavwe.dev" = {
