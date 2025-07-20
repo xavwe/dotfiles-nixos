@@ -60,6 +60,7 @@
       virt-manager.enable = true;
       wakatime.enable = true;
       colors.theme = "darknight";
+      hotspot.enable = true;
 
       # web services
       traefik.enable = true;
