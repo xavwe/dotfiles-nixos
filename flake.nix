@@ -76,9 +76,63 @@
   in {
     formatter."x86_64-linux" = nixpkgs.legacyPackages."x86_64-linux".alejandra;
 
+    apps.x86_64-linux = {
+      test = let
+        script = nixpkgs.legacyPackages."x86_64-linux".writeShellScriptBin "test" ''
+          #!/usr/bin/env sh
+          nix flake check .
+        '';
+      in {
+        type = "app";
+        program = "${script}/bin/test";
+        meta.description = "A test app to run nix flake check";
+      };
+
+      secret = let
+        script = nixpkgs.legacyPackages."x86_64-linux".writeShellScriptBin "secret" ''
+          #!/usr/bin/env sh
+          sops ./src/secrets.yaml
+        '';
+      in {
+        type = "app";
+        program = "${script}/bin/secret";
+        meta.description = "A test";
+      };
+
+      format = let
+        script = nixpkgs.legacyPackages."x86_64-linux".writeShellScriptBin "format" ''
+          #!/usr/bin/env sh
+          nix fmt -- -q .
+        '';
+      in {
+        type = "app";
+        program = "${script}/bin/format";
+        meta.description = "A test";
+      };
+
+      deploy = let
+        script = nixpkgs.legacyPackages."x86_64-linux".writeShellScriptBin "deploy" ''
+          #!/usr/bin/env sh
+          set -eu
+          if [ "$#" -ne 2 ]; then
+              echo "Usage: nix run .#deploy -- <switch|boot|test|build> <hostname>"
+              exit 1
+          fi
+          if command -v nom >/dev/null 2>&1; then
+            nixos-rebuild "$1" --flake ".#$2" 2>&1 | nom
+          else
+            nixos-rebuild "$1" --flake ".#$2"
+          fi
+        '';
+      in {
+        type = "app";
+        program = "${script}/bin/deploy";
+        meta.description = "A wrapper around nixos-rebuild to deploy a configuration.";
+      };
+    };
+
     devShells."x86_64-linux".default = nixpkgs.legacyPackages."x86_64-linux".mkShell {
       packages = with nixpkgs.legacyPackages."x86_64-linux"; [
-        just
         sops
 
         # Lua
