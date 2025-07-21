@@ -144,6 +144,10 @@ in {
               workspace_swipe = false;
             };
 
+            ecosystem = {
+              no_update_news = true;
+            };
+
             device = [
               {
                 name = "epic-mouse-v1";
