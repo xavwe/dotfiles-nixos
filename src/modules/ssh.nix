@@ -19,23 +19,36 @@
         services.ssh-agent.enable = true;
         programs.ssh = {
           enable = true;
-          extraConfig = ''
-            Host homelab
-              HostName 192.168.178.110
-              User xaver_adm
-
-            Host vps
-              HostName 195.15.206.239
-              User ubuntu
-
-            Host github.com
-              AddKeysToAgent yes
-              IdentityFile ~/.ssh/github
-
-            Host codeberg.org
-              AddKeysToAgent yes
-              IdentityFile ~/.ssh/codeberg
-          '';
+          matchBlocks = {
+            homelab = {
+              hostname = "192.168.178.110";
+              user = "xaver_adm";
+              extraOptions = {
+                AddKeysToAgent = "yes";
+                IdentityFile = "~/.ssh/homelab";
+              };
+            };
+            vps = {
+              hostname = "195.15.206.239";
+              user = "ubuntu";
+              extraOptions = {
+                AddKeysToAgent = "yes";
+                IdentityFile = "~/.ssh/infomaniak";
+              };
+            };
+            "github.com" = {
+              extraOptions = {
+                AddKeysToAgent = "yes";
+                IdentityFile = "~/.ssh/github";
+              };
+            };
+            "codeberg.org" = {
+              extraOptions = {
+                AddKeysToAgent = "yes";
+                IdentityFile = "~/.ssh/codeberg";
+              };
+            };
+          };
         };
       };
     })
