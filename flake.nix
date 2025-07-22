@@ -119,9 +119,9 @@
               exit 1
           fi
           if command -v nom >/dev/null 2>&1; then
-            nixos-rebuild "$1" --flake ".#$2" 2>&1 | nom
+            nixos-rebuild "$1" --flake path:.#$2 2>&1 | nom
           else
-            nixos-rebuild "$1" --flake ".#$2"
+            nixos-rebuild "$1" --flake path:.#$2
           fi
         '';
       in {
