@@ -12,6 +12,7 @@
     ./foot.nix
     ./zathura.nix
     ./libreoffice.nix
+    ./calibre.nix
     ./pavucontrol.nix
     ./helvum.nix
     ./scrcpy.nix
