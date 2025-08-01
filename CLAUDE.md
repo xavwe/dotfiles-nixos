@@ -8,18 +8,18 @@ This is a modular NixOS configuration built with Nix flakes. It uses a custom sy
 
 ## Commands
 
-- `nix run .#test` - Run flake check to validate configuration
-- `nix run .#format` - Format Nix code using alejandra formatter
-- `nix run .#secret` - Edit secrets using sops
-- `nix run .#deploy -- <switch|boot|test|build> <newton-desktop|newton-minimal>` - Deploy configuration to system
+- `nix run path:.#test` - Run flake check to validate configuration
+- `nix run path:.#format` - Format Nix code using alejandra formatter
+- `nix run path:.#secret` - Edit secrets using sops
+- `nix run path:.#deploy -- <switch|boot|test|build> <newton-desktop|newton-minimal>` - Deploy configuration to system
 
 ### Available Configurations
 - `newton-desktop` - Full desktop environment with GUI applications
 - `newton-minimal` - Minimal server configuration without GUI
 
 ### Package Building
-- `nix build .#nvim` - Build standalone neovim package
-- `nix build .#docs` - Build documentation using ndg
+- `nix build path:.#nvim` - Build standalone neovim package
+- `nix build path:.#docs` - Build documentation using ndg
 
 ## Architecture
 
