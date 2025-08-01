@@ -22,6 +22,7 @@
       zathura.default = true;
       libreoffice.enable = true;
       libreoffice.default = true;
+      calibre.enable = true;
       scrcpy.enable = true;
 
       # cli

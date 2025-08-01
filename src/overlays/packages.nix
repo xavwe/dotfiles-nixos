@@ -1,4 +1,36 @@
-{inputs}: final: prev: {
+{inputs}: final: prev: let
+  # Generic function for creating Calibre plugins from release ZIP files
+  mkCalibrePlugin = {
+    pname,
+    version,
+    url,
+    sha256,
+    meta ? {},
+  }: final.stdenv.mkDerivation {
+    inherit pname version;
+    
+    src = final.fetchurl {
+      inherit url sha256;
+    };
+    
+    dontUnpack = true;
+    dontBuild = true;
+    
+    installPhase = ''
+      runHook preInstall
+      
+      # Create plugin directory and copy the ZIP file
+      mkdir -p $out/share/calibre-plugins
+      cp $src $out/share/calibre-plugins/${pname}.zip
+      
+      runHook postInstall
+    '';
+    
+    meta = with final.lib; {
+      platforms = platforms.all;
+    } // meta;
+  };
+in {
   btop-gpu = prev.stdenv.mkDerivation rec {
     pname = "btop";
     version = "1.4.4";
@@ -198,6 +230,84 @@
       repo = "workspace-diagnostics.nvim";
       rev = "60f9175b2501ae3f8b1aba9719c0df8827610c8e";
       sha256 = "sha256-jSpKaKnGyip/nzqU52ypWLgoCtvccYN+qb5jzlwAnd4=";
+    };
+  };
+
+  calibre-plugin-worddumb = mkCalibrePlugin {
+    pname = "WordDumb";
+    version = "3.33.3";
+    url = "https://github.com/xxyzz/WordDumb/releases/download/v3.33.3/worddumb-v3.33.3.zip";
+    sha256 = "sha256-tbT8l86x6enY2+3n0Rr8WBEp59AnSImrItkq0krFr0s=";
+
+    meta = {
+      description = "A Calibre plugin that generates Word Wise and X-Ray files for Kindle e-books";
+      homepage = "https://github.com/xxyzz/WordDumb";
+      license = final.lib.licenses.gpl3Plus;
+    };
+  };
+
+  calibre-plugin-epubsplit = mkCalibrePlugin {
+    pname = "EpubSplit";
+    version = "3.12.0";
+    url = "https://github.com/JimmXinu/EpubSplit/releases/download/v3.12.0/EpubSplit.zip";
+    sha256 = "sha256-B2cfPekrJUMJDA0aBPkCZ9Gfa0gP1I64XXr8JvycuQ8=";
+
+    meta = {
+      description = "A Calibre plugin to split EPUB files into separate volumes";
+      homepage = "https://github.com/JimmXinu/EpubSplit";
+      license = final.lib.licenses.asl20;
+    };
+  };
+
+  # DeDRM tools come as a multi-plugin package, we need to extract individual plugins
+  calibre-plugin-dedrm = final.stdenv.mkDerivation {
+    pname = "calibre-plugin-dedrm";
+    version = "10.0.3";
+    
+    src = final.fetchurl {
+      url = "https://github.com/noDRM/DeDRM_tools/releases/download/v10.0.3/DeDRM_tools_10.0.3.zip";
+      sha256 = "sha256-hknjDvsMJunMoRMd9MnQLVHsy1Ao05bM6Ffw+nWmKEk=";
+    };
+
+    nativeBuildInputs = [ final.unzip ];
+    
+    dontUnpack = true;
+    dontBuild = true;
+    
+    installPhase = ''
+      runHook preInstall
+      
+      # Extract the downloaded ZIP
+      unzip -q $src
+      
+      # Create output directory
+      mkdir -p $out/share/calibre-plugins
+      
+      # The DeDRM release already contains individual plugin ZIP files
+      # Just copy them directly
+      cp DeDRM_plugin.zip $out/share/calibre-plugins/DeDRM.zip
+      cp Obok_plugin.zip $out/share/calibre-plugins/Obok.zip
+      
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "DeDRM tools for removing DRM from various ebook formats";
+      homepage = "https://github.com/noDRM/DeDRM_tools";
+      license = final.lib.licenses.gpl3Plus;
+    };
+  };
+
+  calibre-plugin-epubmerge = mkCalibrePlugin {
+    pname = "EpubMerge";
+    version = "3.2.0";
+    url = "https://github.com/JimmXinu/EpubMerge/releases/download/v3.2.0/EpubMerge.zip";
+    sha256 = "sha256-GH6JE7bnnytdOocNtSnh5ENV5cEr7vM6BRyJC8uTijU=";
+
+    meta = {
+      description = "A Calibre plugin to merge multiple EPUB files into a single volume";
+      homepage = "https://github.com/JimmXinu/EpubMerge";
+      license = final.lib.licenses.asl20;
     };
   };
 }
