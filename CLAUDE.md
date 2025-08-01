@@ -2,80 +2,66 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Architecture Overview
+## Overview
 
-This is a modular NixOS configuration repository built with Nix flakes. The architecture follows a layered approach:
+This is a modular NixOS configuration built with Nix flakes. It uses a custom system builder function and modular architecture to create reproducible, declarative system configurations.
 
-- **`flake.nix`**: Main entry point defining inputs, outputs, and system configurations
-- **`src/lib/mkSystem.nix`**: Core system builder function that parameterizes configurations by profile and hardware
-- **`src/profiles/`**: System profiles (desktop, minimal) that define which modules are enabled
-- **`src/modules/`**: Individual feature modules (Firefox, Neovim, Hyprland, etc.) with enable flags
-- **`src/hardware/`**: Hardware-specific configurations (newton.nix, iso.nix)
-- **`src/colorschemes/`**: Theme definitions (darknight, tokyonight)
-- **`src/overlays/`**: Package overlays including unfree packages and stable packages
+## Commands
 
-The configuration uses Home Manager for user-level configuration and SOPS for secrets management.
+- `nix run .#test` - Run flake check to validate configuration
+- `nix run .#format` - Format Nix code using alejandra formatter
+- `nix run .#secret` - Edit secrets using sops
+- `nix run .#deploy -- <switch|boot|test|build> <newton-desktop|newton-minimal>` - Deploy configuration to system
 
-## Common Commands
+### Available Configurations
+- `newton-desktop` - Full desktop environment with GUI applications
+- `newton-minimal` - Minimal server configuration without GUI
 
-Use the `just` task runner for all operations:
+### Package Building
+- `nix build .#nvim` - Build standalone neovim package
+- `nix build .#docs` - Build documentation using ndg
 
-```bash
-# List available commands
-just
+## Architecture
 
-# Update flake inputs
-just update
+### Core Structure
+- `flake.nix` - Main flake definition with inputs, outputs, and system configurations
+- `src/lib/mkSystem.nix` - System builder function that creates NixOS configurations
+- `src/modules/` - Individual feature modules (can be enabled/disabled per profile)
+- `src/profiles/` - System profiles (desktop.nix, minimal.nix) that enable module combinations
+- `src/hardware/` - Hardware-specific configurations
+- `src/overlays/` - Package overlays for stable, packages, and unfree packages
+- `src/colorschemes/` - Color scheme definitions
 
-# Check flake validity
-just check
-
-# Show flake outputs
-just list
-
-# Build and switch system configuration
-just upgrade switch newton-desktop    # For desktop profile
-just upgrade switch newton-minimal    # For minimal profile
-
-# Test configuration without switching
-just upgrade test newton-desktop
-
-# Format code
-just format
-
-# Garbage collection
-just gc
-
-# Edit secrets
-just secret
-```
-
-## Development Workflow
-
-1. **Module Development**: Create new modules in `src/modules/` following the existing pattern with enable flags
-2. **Profile Modification**: Edit profiles in `src/profiles/` to enable/disable modules
-3. **Hardware Configuration**: Hardware-specific settings go in `src/hardware/`
-4. **Testing**: Always use `just check` before applying changes
-5. **Formatting**: Run `just format` to format Nix files with alejandra and Lua files with stylua
-
-## Key Files
-
-- `src/lib/mkSystem.nix`: System builder function - central to understanding how configurations are composed
-- `src/modules/default.nix`: Module imports and default configurations
-- `src/profiles/desktop.nix` vs `src/profiles/minimal.nix`: Compare to understand module organization
-- `flake.nix`: Input sources and system definitions
-
-## Module System
-
-Modules follow a consistent pattern:
-- Each module has an `enable` flag
-- Some modules have additional options like `default` (to set as system default)
+### Module System
+Each module in `src/modules/` follows the pattern:
+- Declares options under `modules.<name>`
+- Can be enabled with `modules.<name>.enable = true`
 - Modules are imported via `src/modules/default.nix`
-- Configuration happens in profiles by setting `modules.<name>.enable = true`
+- Profiles enable specific module combinations
 
-## Build Outputs
+### Key Inputs
+- `nixpkgs` - Main package repository (unstable)
+- `nixpkgs-stable` - Stable package repository (24.05)
+- `home-manager` - User environment management
+- `sops-nix` - Secret management
+- `disko` - Disk partitioning
+- `nvf` - Neovim configuration framework
 
-- `nixosConfigurations.newton-desktop`: Full desktop system
-- `nixosConfigurations.newton-minimal`: Minimal CLI-only system  
-- `packages.x86_64-linux.iso-desktop`: Desktop ISO image
-- `packages.x86_64-linux.iso-minimal`: Minimal ISO image
+### System Building
+The `mkSystem` function:
+- Takes `profile`, `hardware`, and optionally `system`/`format` parameters
+- Combines modules, profiles, hardware configs, and colorschemes
+- Can generate either NixOS systems or installer ISOs
+
+### Secrets Management
+- Secrets stored in `src/secrets.yaml`
+- Managed with sops-nix
+- Edit with `nix run .#secret`
+
+## Development Environment
+
+The dev shell includes:
+- `sops` - Secret management
+- `nixd` - Nix language server
+- `alejandra` - Nix formatter
+- `tree-sitter-grammars.tree-sitter-nix` - Nix syntax highlighting
