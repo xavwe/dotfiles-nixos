@@ -2,8 +2,8 @@
 # It is parameterized by profile and hardware, and optionally by system and format.
 {
   nixpkgs,
-  self,
   inputs,
+  localLib,
 }: ({
   profile,
   hardware,
@@ -13,7 +13,7 @@
   systemConfig = {
     specialArgs = {
       inherit inputs;
-      lib = nixpkgs.lib // self.lib;
+      lib = nixpkgs.lib // localLib;
       overlays = import ../overlays {inherit inputs;};
     };
     modules = [

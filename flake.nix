@@ -69,10 +69,13 @@
     nixpkgs,
     ...
   } @ inputs: let
+    # Import local lib functions independently from Git
+    localLib = import ./src/lib {inherit (nixpkgs) lib;};
+    
     # The `mkSystem` function is imported from `./src/lib/mkSystem.nix`.
-    # It takes `nixpkgs`, `self`, and `inputs` as arguments and returns a function
+    # It takes `nixpkgs`, `localLib`, and `inputs` as arguments and returns a function
     # that can be used to build NixOS system configurations or generator packages.
-    mkSystem = import ./src/lib/mkSystem.nix {inherit nixpkgs self inputs;};
+    mkSystem = import ./src/lib/mkSystem.nix {inherit nixpkgs inputs localLib;};
   in {
     formatter."x86_64-linux" = nixpkgs.legacyPackages."x86_64-linux".alejandra;
 
@@ -174,7 +177,7 @@
           inherit system;
           specialArgs = {
             inherit inputs overlays;
-            lib = nixpkgs.lib // self.lib;
+            lib = nixpkgs.lib // localLib;
           };
           modules = [
             inputs.home-manager.nixosModules.home-manager
@@ -214,6 +217,7 @@
           rawModules = [
             ./src/modules/bash.nix
             ./src/modules/btop.nix
+            ./src/modules/calibre.nix
             ./src/modules/chafa.nix
             ./src/modules/claude-code.nix
             ./src/modules/colors.nix
@@ -262,6 +266,6 @@
         };
     };
 
-    lib = import ./src/lib {inherit (nixpkgs) lib;};
+    lib = localLib;
   };
 }
