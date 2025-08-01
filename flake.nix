@@ -71,7 +71,7 @@
   } @ inputs: let
     # Import local lib functions independently from Git
     localLib = import ./src/lib {inherit (nixpkgs) lib;};
-    
+
     # The `mkSystem` function is imported from `./src/lib/mkSystem.nix`.
     # It takes `nixpkgs`, `localLib`, and `inputs` as arguments and returns a function
     # that can be used to build NixOS system configurations or generator packages.
