@@ -49,7 +49,7 @@
       tldr.enable = true;
       pass.enable = true;
       gpg.enable = true;
-      newsboat.enable = true;
+      # newsboat.enable = true;
       nvd.enable = true;
       nix-output-monitor.enable = true;
       claude-code.enable = true;
@@ -65,7 +65,7 @@
       # web services
       traefik.enable = true;
       nginx.enable = true;
-      miniflux.enable = true;
+      #miniflux.enable = true;
     };
   };
 }
