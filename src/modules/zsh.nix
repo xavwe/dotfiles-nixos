@@ -21,10 +21,12 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.zsh.enable {
-      home-manager.users.nu = {...}: {
+      home-manager.users.nu = {...} @ hmArgs: let
+        hmConfig = hmArgs.config;
+      in {
         programs.zsh = {
           enable = true;
-          dotDir = ".config/zsh";
+          dotDir = "${hmConfig.xdg.configHome}/zsh";
           autosuggestion.enable = true;
           syntaxHighlighting.enable = true;
           initContent = lib.concatLines [
@@ -74,7 +76,7 @@
             fi
           '';
           history = {
-            path = "$ZDOTDIR/.zsh_history";
+            path = "${hmConfig.xdg.configHome}/zsh/.zsh_history";
             size = 10000;
             save = 10000;
           };
