@@ -6,30 +6,33 @@
     url,
     sha256,
     meta ? {},
-  }: final.stdenv.mkDerivation {
-    inherit pname version;
-    
-    src = final.fetchurl {
-      inherit url sha256;
+  }:
+    final.stdenv.mkDerivation {
+      inherit pname version;
+
+      src = final.fetchurl {
+        inherit url sha256;
+      };
+
+      dontUnpack = true;
+      dontBuild = true;
+
+      installPhase = ''
+        runHook preInstall
+
+        # Create plugin directory and copy the ZIP file
+        mkdir -p $out/share/calibre-plugins
+        cp $src $out/share/calibre-plugins/${pname}.zip
+
+        runHook postInstall
+      '';
+
+      meta = with final.lib;
+        {
+          platforms = platforms.all;
+        }
+        // meta;
     };
-    
-    dontUnpack = true;
-    dontBuild = true;
-    
-    installPhase = ''
-      runHook preInstall
-      
-      # Create plugin directory and copy the ZIP file
-      mkdir -p $out/share/calibre-plugins
-      cp $src $out/share/calibre-plugins/${pname}.zip
-      
-      runHook postInstall
-    '';
-    
-    meta = with final.lib; {
-      platforms = platforms.all;
-    } // meta;
-  };
 in {
   btop-gpu = prev.stdenv.mkDerivation rec {
     pname = "btop";
@@ -263,31 +266,31 @@ in {
   calibre-plugin-dedrm = final.stdenv.mkDerivation {
     pname = "calibre-plugin-dedrm";
     version = "10.0.3";
-    
+
     src = final.fetchurl {
       url = "https://github.com/noDRM/DeDRM_tools/releases/download/v10.0.3/DeDRM_tools_10.0.3.zip";
       sha256 = "sha256-hknjDvsMJunMoRMd9MnQLVHsy1Ao05bM6Ffw+nWmKEk=";
     };
 
-    nativeBuildInputs = [ final.unzip ];
-    
+    nativeBuildInputs = [final.unzip];
+
     dontUnpack = true;
     dontBuild = true;
-    
+
     installPhase = ''
       runHook preInstall
-      
+
       # Extract the downloaded ZIP
       unzip -q $src
-      
+
       # Create output directory
       mkdir -p $out/share/calibre-plugins
-      
+
       # The DeDRM release already contains individual plugin ZIP files
       # Just copy them directly
       cp DeDRM_plugin.zip $out/share/calibre-plugins/DeDRM.zip
       cp Obok_plugin.zip $out/share/calibre-plugins/Obok.zip
-      
+
       runHook postInstall
     '';
 

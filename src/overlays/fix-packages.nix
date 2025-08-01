@@ -1,16 +1,22 @@
 {inputs}: final: prev: {
   fix = {
     ncmpcpp = prev.ncmpcpp.overrideAttrs (oldAttrs: {
-      nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [
-        prev.pkg-config
-      ];
-      buildInputs = (oldAttrs.buildInputs or []) ++ [
-        prev.boost.dev
-      ];
-      configureFlags = (oldAttrs.configureFlags or []) ++ [
-        "--with-boost=${prev.boost.dev}"
-        "--with-boost-libdir=${prev.boost.out}/lib"
-      ];
+      nativeBuildInputs =
+        (oldAttrs.nativeBuildInputs or [])
+        ++ [
+          prev.pkg-config
+        ];
+      buildInputs =
+        (oldAttrs.buildInputs or [])
+        ++ [
+          prev.boost.dev
+        ];
+      configureFlags =
+        (oldAttrs.configureFlags or [])
+        ++ [
+          "--with-boost=${prev.boost.dev}"
+          "--with-boost-libdir=${prev.boost.out}/lib"
+        ];
       # Ensure boost headers are found during configure
       preConfigure = ''
         export BOOST_ROOT=${prev.boost.dev}
