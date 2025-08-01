@@ -13,7 +13,7 @@
   home-manager.users.nu = {pkgs, ...}: {
     programs.ncmpcpp = {
       enable = true;
-      package = pkgs.ncmpcpp.override {visualizerSupport = true;};
+      package = pkgs.fix.ncmpcpp.override {visualizerSupport = true;};
       mpdMusicDir = "/home/nu/music/";
       settings = {
         mpd_host = "localhost";

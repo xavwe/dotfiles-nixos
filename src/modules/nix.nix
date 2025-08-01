@@ -41,6 +41,7 @@
       overlays.stable-packages
       overlays.packages
       overlays.unfree-packages
+      overlays.fix-packages
     ];
     config = {
       allowUnfree = false;
