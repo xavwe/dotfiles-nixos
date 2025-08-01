@@ -98,6 +98,16 @@
       ];
     };
 
+    "/home/nu/book" = {
+      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
+      fsType = "btrfs";
+      options = [
+        "subvol=@book"
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+
     "/home/nu/images" = {
       device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
       fsType = "btrfs";
