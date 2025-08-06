@@ -54,6 +54,7 @@
       nvd.enable = true;
       nix-output-monitor.enable = true;
       claude-code.enable = true;
+      ollama.enable = true;
 
       # system
       dark-mode.enable = true;
@@ -62,6 +63,7 @@
       wakatime.enable = true;
       colors.theme = "darknight";
       hotspot.enable = true;
+      syncthing.enable = true;
 
       # web services
       traefik.enable = true;

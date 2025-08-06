@@ -49,6 +49,7 @@
     ./ncmpcpp.nix
     ./mpc.nix
     ./claude-code.nix
+    ./ollama.nix
 
     # shell
     ./zsh.nix
@@ -80,5 +81,6 @@
     ./nginx.nix
     ./miniflux.nix
     ./hotspot.nix
+    ./syncthing.nix
   ];
 }
