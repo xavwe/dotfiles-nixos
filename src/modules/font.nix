@@ -10,7 +10,7 @@
   ...
 }: {
   fonts = {
-    enableDefaultPackages = true;
+    enableDefaultPackages = false;
     packages = with pkgs; [
       nerd-fonts.jetbrains-mono
       noto-fonts-emoji
