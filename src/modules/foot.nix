@@ -21,7 +21,7 @@
         enable = true;
         settings = {
           main = {
-            font = "JetBrainsMono Nerdfont:size=13";
+            font = "monospace:size=13";
           };
           colors = with config.colors; {
             foreground = base06;
