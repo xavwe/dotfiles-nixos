@@ -9,9 +9,19 @@
   sops-nix,
   ...
 }: {
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-    noto-fonts-emoji
-    unifont
-  ];
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+      noto-fonts-emoji
+      unifont
+    ];
+    fontconfig = {
+      defaultFonts = {
+        #serif = ["Liberation Serif" "Vazirmatn"];
+        #sansSerif = ["Ubuntu" "Vazirmatn"];
+        monospace = ["JetBrainsMono Nerd Font"];
+      };
+    };
+  };
 }
