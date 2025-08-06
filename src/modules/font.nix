@@ -15,10 +15,11 @@
       nerd-fonts.jetbrains-mono
       noto-fonts-emoji
       unifont
+      literata
     ];
     fontconfig = {
       defaultFonts = {
-        #serif = ["Liberation Serif" "Vazirmatn"];
+        serif = ["Literata"];
         #sansSerif = ["Ubuntu" "Vazirmatn"];
         monospace = ["JetBrainsMono Nerd Font"];
       };
