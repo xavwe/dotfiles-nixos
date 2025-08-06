@@ -334,5 +334,6 @@
   # Set ownership of ollama models directory
   systemd.tmpfiles.rules = lib.mkIf config.modules.ollama.enable [
     "d /var/lib/ollama/models 0755 ollama ollama -"
+    "Z /var/lib/ollama/models - ollama ollama - -"
   ];
 }
