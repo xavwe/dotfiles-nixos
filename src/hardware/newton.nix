@@ -296,4 +296,28 @@
     config.boot.kernelPackages.turbostat
     pkgs.smartmontools
   ];
+
+  services.syncthing.settings = lib.mkIf config.modules.syncthing.enable {
+    devices = {
+      #"device1" = {id = "DEVICE-ID-GOES-HERE";};
+      #"device2" = {id = "DEVICE-ID-GOES-HERE";};
+      "phone" = {
+        id = "LQOQG7N-J7RQKEX-S55F0D3-ZRORR4N-ASH4HUG-UYX3RFS-HNQYYWO-5KG6BQK";
+      };
+    };
+    folders = {
+      "book" = {
+        # Name of folder in Syncthing, also the folder ID
+        path = "/mnt/btrfs/@book"; # Which folder to add to Syncthing
+        devices = ["phone"]; # Which devices to share the folder with
+      };
+      "projects" = {
+        # Name of folder in Syncthing, also the folder ID
+        path = "/mnt/btrfs/@projects"; # Which folder to add to Syncthing
+        devices = ["phone"]; # Which devices to share the folder with
+      };
+    };
+  };
+
+  services.ollama.acceleration = lib.mkIf config.modules.ollama.enable false;
 }
