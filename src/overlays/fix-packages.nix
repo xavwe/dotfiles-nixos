@@ -25,7 +25,7 @@
         ${oldAttrs.preConfigure or ""}
       '';
     });
-    
+
     ollama = prev.ollama.overrideAttrs (oldAttrs: rec {
       version = "0.11.2";
       src = prev.fetchFromGitHub {
