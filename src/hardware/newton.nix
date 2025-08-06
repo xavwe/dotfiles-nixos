@@ -128,6 +128,16 @@
       ];
     };
 
+    "/var/lib/ollama/models" = {
+      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
+      fsType = "btrfs";
+      options = [
+        "subvol=@ollama-models"
+        "compress=zstd"
+        "noatime"
+      ];
+    };
+
     "/home/nu/.ssh" = {
       device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
       fsType = "btrfs";
@@ -320,4 +330,9 @@
   };
 
   services.ollama.acceleration = lib.mkIf config.modules.ollama.enable false;
+
+  # Set ownership of ollama models directory
+  systemd.tmpfiles.rules = lib.mkIf config.modules.ollama.enable [
+    "d /var/lib/ollama/models 0755 ollama ollama -"
+  ];
 }
