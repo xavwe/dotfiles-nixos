@@ -18,7 +18,7 @@
     (lib.mkIf config.modules.ollama.enable {
       services.ollama = {
         enable = true;
-        loadModels = ["gpt-oss:20b"];
+        #loadModels = ["gpt-oss:20b"];
         package = pkgs.fix.ollama;
       };
     })
