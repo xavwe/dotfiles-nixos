@@ -313,4 +313,33 @@ in {
       license = final.lib.licenses.asl20;
     };
   };
+
+  literata = final.stdenv.mkDerivation rec {
+    pname = "literata";
+    version = "3.103";
+
+    src = final.fetchzip {
+      url = "https://github.com/googlefonts/literata/releases/download/${version}/${version}.zip";
+      hash = "sha256-XwwvyzwO2uhi1Bay9HtB75j1QfAJR4TMETgy/zyvwZ0=";
+      stripRoot = false;
+    };
+
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share/fonts/truetype
+      find . -name "*.ttf" -exec cp {} $out/share/fonts/truetype/ \;
+
+      runHook postInstall
+    '';
+
+    meta = with final.lib; {
+      description = "A serif typeface designed for ebooks and optimized for reading";
+      homepage = "https://github.com/googlefonts/literata";
+      license = licenses.ofl;
+      platforms = platforms.all;
+    };
+  };
 }
