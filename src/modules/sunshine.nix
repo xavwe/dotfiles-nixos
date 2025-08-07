@@ -30,7 +30,7 @@
     networking.firewall = {
       allowedTCPPorts = [
         47984 # HTTPS Web UI
-        47989 # HTTP Web UI  
+        47989 # HTTP Web UI
         48010 # RTSP
       ];
       allowedUDPPorts = [
