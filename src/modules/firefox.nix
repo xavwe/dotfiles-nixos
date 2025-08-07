@@ -26,6 +26,10 @@
           enable = true;
           profiles.nu = {
             settings = {
+              "toolkit.zoomManager.zoomValues" = ".05,.1,.2,.3,.5,.67,.75,.8,.85,.9,.95,1,1.1,1.2,1.33,1.5,1.7,2,2.4,3,4,5";
+              "zoom.minPercent" = 5;
+              "zoom.maxPercent" = 500;
+
               # =========================
               # SECURITY & PRIVACY CORE
               # =========================
