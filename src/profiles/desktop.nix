@@ -65,6 +65,7 @@
       colors.theme = "darknight";
       hotspot.enable = true;
       syncthing.enable = true;
+      ssh.daemon.enable = true;
 
       # web services
       traefik.enable = true;
