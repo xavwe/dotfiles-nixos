@@ -32,6 +32,10 @@
           ];
         };
       };
+      
+      environment.systemPackages = with pkgs; [
+        doas-sudo-shim
+      ];
     })
   ];
 }
