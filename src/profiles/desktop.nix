@@ -24,6 +24,7 @@
       libreoffice.default = true;
       calibre.enable = true;
       scrcpy.enable = true;
+      sunshine.enable = true;
 
       # cli
       neovim.enable = true;
