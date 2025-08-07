@@ -236,6 +236,18 @@
     matchConfig.Name = "enp6s0";
     linkConfig.WakeOnLan = "magic";
   };
+  
+  # Ensure WOL is enabled at boot and persist through power cycles
+  systemd.services.enable-wol = {
+    description = "Enable Wake-on-LAN for enp6s0";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.ethtool}/bin/ethtool -s enp6s0 wol g";
+    };
+  };
   services.resolved = {
     enable = true;
     dnssec = "true";
@@ -305,6 +317,7 @@
     config.boot.kernelPackages.cpupower
     config.boot.kernelPackages.turbostat
     pkgs.smartmontools
+    pkgs.ethtool
   ];
 
   services.syncthing.settings = lib.mkIf config.modules.syncthing.enable {
