@@ -11,9 +11,27 @@
       default = true;
       description = "Use ssh";
     };
+    daemon = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable SSH daemon on port 22";
+      };
+    };
   };
 
   config = lib.mkMerge [
+    (lib.mkIf config.modules.ssh.daemon.enable {
+      services.openssh = {
+        enable = true;
+        ports = [22];
+        settings = {
+          PasswordAuthentication = false;
+          PermitRootLogin = "no";
+          KbdInteractiveAuthentication = false;
+        };
+      };
+    })
     (lib.mkIf config.modules.fzf.enable {
       home-manager.users.nu = {...}: {
         services.ssh-agent.enable = true;
