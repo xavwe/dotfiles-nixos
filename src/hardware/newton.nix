@@ -236,12 +236,12 @@
     matchConfig.Name = "enp6s0";
     linkConfig.WakeOnLan = "magic";
   };
-  
+
   # Ensure WOL is enabled at boot and persist through power cycles
   systemd.services.enable-wol = {
     description = "Enable Wake-on-LAN for enp6s0";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
+    wantedBy = ["multi-user.target"];
+    after = ["network.target"];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
