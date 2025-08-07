@@ -678,7 +678,7 @@
                 passff
                 dearrow
                 return-youtube-dislikes
-                skip-redirect
+                # skip-redirect
                 wayback-machine
               ];
             };
