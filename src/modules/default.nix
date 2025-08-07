@@ -16,6 +16,7 @@
     ./pavucontrol.nix
     ./helvum.nix
     ./scrcpy.nix
+    ./sunshine.nix
 
     # cli
     ./neovim.nix
