@@ -363,7 +363,7 @@ in {
       '';
 
       outputHashAlgo = "sha256";
-      outputHash = "sha256-V9wM6FQHmsfJlGwotPtfk6DHjbiQgrni1tqeOtkk9so=";
+      outputHash = "sha256-bNp5URqHJBzSJ7NmYu7KA3AlseYE6RLhTauqbUJNkQM=";
       outputHashMode = "flat";
     };
   in
