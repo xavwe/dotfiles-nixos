@@ -35,28 +35,3 @@ jobs:
             git commit -m "style(*.nix): format with alejandra"
             git push origin HEAD:${{ github.head_ref || github.ref_name }}
           fi
-  lua-format:
-    name: Auto format Lua files with StyLua
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Install StyLua && Format Lua files
-        uses: JohnnyMorganz/stylua-action@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          version: latest
-          args: .
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet; then
-            git add .
-            git commit -m "style(*.lua): format with stylua"
-            git push origin HEAD:${{ github.head_ref || github.ref_name }}
-          fi
