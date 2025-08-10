@@ -7,7 +7,7 @@
   ...
 }: let
   hyprVars = {
-    terminal = "foot";
+    terminal = "foot --working-directory ~";
     browser = "firefox";
     private-browser = "tor-browser";
     virt-manager = "virt-manager";
