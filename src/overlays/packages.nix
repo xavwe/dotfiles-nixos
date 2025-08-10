@@ -342,4 +342,71 @@ in {
       platforms = platforms.all;
     };
   };
+
+  rofi-nerdy = let
+    lockFile = final.stdenv.mkDerivation {
+      pname = "rofi-nerdy-lock";
+      version = "0.0.7";
+
+      src = final.fetchFromGitHub {
+        owner = "rolv-apneseth";
+        repo = "rofi-nerdy";
+        rev = "v0.0.7";
+        sha256 = "sha256-Sfo9p/4aqR6DRo7mXihQpn0MvVCFPh/izNQiVEzk/LM=";
+      };
+
+      nativeBuildInputs = [final.cargo final.cacert];
+
+      installPhase = ''
+        cargo generate-lockfile
+        cp Cargo.lock $out
+      '';
+
+      outputHashAlgo = "sha256";
+      outputHash = "sha256-V9wM6FQHmsfJlGwotPtfk6DHjbiQgrni1tqeOtkk9so=";
+      outputHashMode = "flat";
+    };
+  in
+    final.rustPlatform.buildRustPackage rec {
+      pname = "rofi-nerdy";
+      version = "0.0.7";
+
+      src = final.fetchFromGitHub {
+        owner = "rolv-apneseth";
+        repo = "rofi-nerdy";
+        rev = "v${version}";
+        sha256 = "sha256-Sfo9p/4aqR6DRo7mXihQpn0MvVCFPh/izNQiVEzk/LM=";
+      };
+
+      cargoLock.lockFile = lockFile;
+
+      postPatch = ''
+        cp ${lockFile} Cargo.lock
+      '';
+
+      nativeBuildInputs = with final; [
+        pkg-config
+        just
+        rofi-wayland
+      ];
+
+      buildInputs = with final; [
+        glib
+        cairo
+        pango
+      ];
+
+      installPhase = ''
+        runHook preInstall
+        just --set PKGDIR "$out" install
+        runHook postInstall
+      '';
+
+      meta = with final.lib; {
+        description = "Nerd font icon selector plugin for rofi";
+        homepage = "https://github.com/Rolv-Apneseth/rofi-nerdy";
+        license = licenses.agpl3Plus;
+        platforms = platforms.linux;
+      };
+    };
 }
