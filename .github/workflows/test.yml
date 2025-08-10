@@ -1,8 +1,10 @@
 name: test
 
 on:
-  push:
   pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
   workflow_run:
     workflows: ["update-flake", "format"]
     types:
