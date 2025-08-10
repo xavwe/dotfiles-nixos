@@ -6,6 +6,13 @@
   home-manager,
   ...
 }: let
+  appEntries = with config.modules; [
+    (lib.optionalString firefox.enable "Firefox|${pkgs.firefox}/bin/firefox")
+    (lib.optionalString foot.enable "Foot|${pkgs.foot}/bin/foot")
+    (lib.optionalString libreoffice.enable "LibreOffice|${pkgs.libreoffice}/bin/libreoffice")
+    (lib.optionalString calibre.enable "Calibre|${pkgs.calibre}/bin/calibre")
+  ];
+  apps = lib.concatStringsSep "\n" (lib.filter (s: s != "") appEntries);
   rofiLauncherScript = pkgs.writeShellScriptBin "rofi-launcher" ''
     #!/usr/bin/env bash
 
@@ -37,7 +44,13 @@
             hyprctl clients -j | ${pkgs.jq}/bin/jq -r '.[] | "\(.address)\t\(.workspace.id)\t\(.title)"' | rofi -dmenu -p "Address | Workspace | Title" | cut -f 1 | xargs -r -I {} hyprctl dispatch focuswindow address:{}
             ;;
         "app")
-            rofi -modi drun -show drun
+            # Curated list of applications from enabled modules.
+            apps="${apps}"
+            selected_line=$(echo -e "$apps" | rofi -dmenu -p "App" -i)
+            if [ -n "$selected_line" ]; then
+                app_cmd=$(echo "$selected_line" | cut -d'|' -f2)
+                hyprctl dispatch exec -- "$app_cmd"
+            fi
             ;;
         *)
             # Everything mode - combine all options
