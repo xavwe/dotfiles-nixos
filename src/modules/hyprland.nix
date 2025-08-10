@@ -204,7 +204,7 @@ in {
 
               "${hyprVars.mainMod}, mouse_down, workspace, e+1"
               "${hyprVars.mainMod}, mouse_up, workspace, e-1"
-            ] ++ (lib.mkIf config.modules.rofi.enable [
+            ] ++ (lib.lists.optionals config.modules.rofi.enable [
               "${hyprVars.mainMod}, space, exec, rofi-launcher"
               ''${hyprVars.mainMod}, F, exec, hyprctl clients -j | jq -r '.[] | "\(.address)\t\(.workspace.id)\t\(.title)"' | rofi -dmenu -p "Address | Workspace | Title" | cut -f 1 | xargs -r -I {} hyprctl dispatch focuswindow address:{}''
             ]);
