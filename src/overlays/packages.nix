@@ -314,50 +314,6 @@ in {
     };
   };
 
-  rofi-nerdfont = final.stdenv.mkDerivation rec {
-    pname = "rofi-nerdfont";
-    version = "unstable-2025-08-10";
-
-    src = final.fetchFromGitHub {
-      owner = "mikamo3";
-      repo = "rofi-nerd-fonts-icons";
-      rev = "2ff62d8";
-      hash = "sha256-fspr/ehrPYxX7bRFuC7TG9O2F/PpswiTz0jK8hqUVZY=";
-    };
-
-    nativeBuildInputs = [ final.makeWrapper ];
-
-    buildInputs = with final; [
-      python3
-      python3.pkgs.cssutils
-      python3.pkgs.requests
-      rofi-wayland
-      wl-clipboard
-    ];
-
-    dontBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/bin
-      cp main.py $out/bin/rofi-nerdfont
-      chmod +x $out/bin/rofi-nerdfont
-      
-      wrapProgram $out/bin/rofi-nerdfont \
-        --prefix PATH : ${final.lib.makeBinPath [ final.rofi-wayland final.wl-clipboard ]} \
-        --prefix PYTHONPATH : "$PYTHONPATH"
-      runHook postInstall
-    '';
-
-    meta = with final.lib; {
-      description = "Rofi script for searching and copying Nerd Font icons";
-      homepage = "https://github.com/mikamo3/rofi-nerd-fonts-icons";
-      license = licenses.mit;
-      platforms = platforms.linux;
-      maintainers = [];
-    };
-  };
-
   literata = final.stdenv.mkDerivation rec {
     pname = "literata";
     version = "3.103";
