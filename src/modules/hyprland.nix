@@ -155,7 +155,6 @@ in {
             ];
 
             bind = [
-              "${hyprVars.mainMod}, space, exec, rofi-launcher"
               "${hyprVars.mainMod}, Q, exec, ${hyprVars.terminal}"
               "${hyprVars.mainMod}, W, exec, ${hyprVars.browser}"
               "${hyprVars.mainMod} SHIFT, W, exec, ${hyprVars.private-browser}"
@@ -171,7 +170,6 @@ in {
               "${hyprVars.mainMod}, H, togglesplit," # dwindle
               "${hyprVars.mainMod}, Y, exec, hyprlock"
               ''${hyprVars.mainMod}, S, exec, IMG=~/screenshot/$(date +%Y-%m-%d_%H-%m-%s).png && grim -g "$(slurp)" $IMG && wl-copy < $IMG''
-              ''${hyprVars.mainMod}, F, exec, hyprctl clients -j | jq -r '.[] | "\(.address)\t\(.workspace.id)\t\(.title)"' | rofi -dmenu -p "Address | Workspace | Title" | cut -f 1 | xargs -r -I {} hyprctl dispatch focuswindow address:{}''
 
               "${hyprVars.mainMod}, left, movefocus, l"
               "${hyprVars.mainMod}, H, movefocus, l"
@@ -206,7 +204,10 @@ in {
 
               "${hyprVars.mainMod}, mouse_down, workspace, e+1"
               "${hyprVars.mainMod}, mouse_up, workspace, e-1"
-            ];
+            ] ++ (lib.mkIf config.modules.rofi.enable [
+              "${hyprVars.mainMod}, space, exec, rofi-launcher"
+              ''${hyprVars.mainMod}, F, exec, hyprctl clients -j | jq -r '.[] | "\(.address)\t\(.workspace.id)\t\(.title)"' | rofi -dmenu -p "Address | Workspace | Title" | cut -f 1 | xargs -r -I {} hyprctl dispatch focuswindow address:{}''
+            ]);
 
             bindm = [
               "${hyprVars.mainMod}, mouse:272, movewindow"
