@@ -20,6 +20,8 @@ repository:
 branches:
   - name: main
     protection:
+      enforce_admins: true
+      required_pull_request_reviews: null
       required_status_checks:
         strict: false
         contexts:
@@ -28,4 +30,4 @@ branches:
           - "shellcheck"
       required_linear_history: true
       required_signatures: true
-      #restrict_pushes: true
+      restrictions: null
