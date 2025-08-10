@@ -29,5 +29,5 @@ branches:
           - "nix-flake-check"
           - "shellcheck"
       required_linear_history: true
-      required_signatures: true
+      required_signatures: null
       restrictions: null
