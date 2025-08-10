@@ -399,7 +399,7 @@ in {
         sha256 = "sha256-Sfo9p/4aqR6DRo7mXihQpn0MvVCFPh/izNQiVEzk/LM=";
       };
 
-      nativeBuildInputs = [ final.cargo final.cacert ];
+      nativeBuildInputs = [final.cargo final.cacert];
 
       installPhase = ''
         cargo generate-lockfile
