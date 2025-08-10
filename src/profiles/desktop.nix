@@ -56,6 +56,7 @@
       nix-output-monitor.enable = true;
       claude-code.enable = true;
       ollama.enable = true;
+      graphite.enable = true;
 
       # system
       dark-mode.enable = true;
