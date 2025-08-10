@@ -1,8 +1,10 @@
 name: format
 
 on:
-  push:
   pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
 
 jobs:
   nix-format:
