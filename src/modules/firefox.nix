@@ -675,6 +675,7 @@
               packages = with inputs.firefox-addons.packages."x86_64-linux"; [
                 private-grammar-checker-harper
                 vimium
+                refined-github
                 ublock-origin
                 sponsorblock
                 youtube-shorts-block
