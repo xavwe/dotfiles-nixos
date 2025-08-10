@@ -1,0 +1,31 @@
+repository:
+  name: dotfiles-nixos
+  description: my nixos config
+  private: false
+
+  has_issues: false
+  has_projects: false
+  has_wiki: false
+  has_downloads: false
+
+  default_branch: main
+
+  allow_squash_merge: true
+  allow_merge_commit: true
+  allow_rebase_merge: true
+
+  delete_branch_on_merge: true
+
+# Branch protection rules
+branches:
+  - name: main
+    protection:
+      required_status_checks:
+        strict: false
+        contexts:
+          - "Auto format Nix files with alejandra"
+          - "nix-flake-check"
+          - "shellcheck"
+      required_linear_history: true
+      required_signatures: true
+      #restrict_pushes: true
