@@ -154,60 +154,62 @@ in {
               }
             ];
 
-            bind = [
-              "${hyprVars.mainMod}, Q, exec, ${hyprVars.terminal}"
-              "${hyprVars.mainMod}, W, exec, ${hyprVars.browser}"
-              "${hyprVars.mainMod} SHIFT, W, exec, ${hyprVars.private-browser}"
-              "${hyprVars.mainMod}, N, exec, ${hyprVars.note}"
-              "${hyprVars.mainMod}, V, exec, ${hyprVars.virt-manager}"
-              "${hyprVars.mainMod}, A, exec, ${hyprVars.colorpicker}"
-              "${hyprVars.mainMod}, C, killactive,"
-              "${hyprVars.mainMod} SHIFT, C, exit,"
-              "${hyprVars.mainMod}, G, togglegroup,"
-              "${hyprVars.mainMod}, Tab, changegroupactive, +1"
-              "${hyprVars.mainMod} SHIFT, Tab, changegroupactive, -1"
-              "${hyprVars.mainMod}, O, togglefloating,"
-              "${hyprVars.mainMod}, H, togglesplit," # dwindle
-              "${hyprVars.mainMod}, Y, exec, hyprlock"
-              ''${hyprVars.mainMod}, S, exec, IMG=~/screenshot/$(date +%Y-%m-%d_%H-%m-%s).png && grim -g "$(slurp)" $IMG && wl-copy < $IMG''
+            bind =
+              [
+                "${hyprVars.mainMod}, Q, exec, ${hyprVars.terminal}"
+                "${hyprVars.mainMod}, W, exec, ${hyprVars.browser}"
+                "${hyprVars.mainMod} SHIFT, W, exec, ${hyprVars.private-browser}"
+                "${hyprVars.mainMod}, N, exec, ${hyprVars.note}"
+                "${hyprVars.mainMod}, V, exec, ${hyprVars.virt-manager}"
+                "${hyprVars.mainMod}, A, exec, ${hyprVars.colorpicker}"
+                "${hyprVars.mainMod}, C, killactive,"
+                "${hyprVars.mainMod} SHIFT, C, exit,"
+                "${hyprVars.mainMod}, G, togglegroup,"
+                "${hyprVars.mainMod}, Tab, changegroupactive, +1"
+                "${hyprVars.mainMod} SHIFT, Tab, changegroupactive, -1"
+                "${hyprVars.mainMod}, O, togglefloating,"
+                "${hyprVars.mainMod}, H, togglesplit," # dwindle
+                "${hyprVars.mainMod}, Y, exec, hyprlock"
+                ''${hyprVars.mainMod}, S, exec, IMG=~/screenshot/$(date +%Y-%m-%d_%H-%m-%s).png && grim -g "$(slurp)" $IMG && wl-copy < $IMG''
 
-              "${hyprVars.mainMod}, left, movefocus, l"
-              "${hyprVars.mainMod}, H, movefocus, l"
-              "${hyprVars.mainMod}, right, movefocus, r"
-              "${hyprVars.mainMod}, L, movefocus, r"
-              "${hyprVars.mainMod}, up, movefocus, u"
-              "${hyprVars.mainMod}, K, movefocus, u"
-              "${hyprVars.mainMod}, down, movefocus, d"
-              "${hyprVars.mainMod}, J, movefocus, d"
+                "${hyprVars.mainMod}, left, movefocus, l"
+                "${hyprVars.mainMod}, H, movefocus, l"
+                "${hyprVars.mainMod}, right, movefocus, r"
+                "${hyprVars.mainMod}, L, movefocus, r"
+                "${hyprVars.mainMod}, up, movefocus, u"
+                "${hyprVars.mainMod}, K, movefocus, u"
+                "${hyprVars.mainMod}, down, movefocus, d"
+                "${hyprVars.mainMod}, J, movefocus, d"
 
-              "${hyprVars.mainMod}, 1, workspace, 1"
-              "${hyprVars.mainMod}, 2, workspace, 2"
-              "${hyprVars.mainMod}, 3, workspace, 3"
-              "${hyprVars.mainMod}, 4, workspace, 4"
-              "${hyprVars.mainMod}, 5, workspace, 5"
-              "${hyprVars.mainMod}, 6, workspace, 6"
-              "${hyprVars.mainMod}, 7, workspace, 7"
-              "${hyprVars.mainMod}, 8, workspace, 8"
-              "${hyprVars.mainMod}, 9, workspace, 9"
-              "${hyprVars.mainMod}, 0, workspace, 10"
+                "${hyprVars.mainMod}, 1, workspace, 1"
+                "${hyprVars.mainMod}, 2, workspace, 2"
+                "${hyprVars.mainMod}, 3, workspace, 3"
+                "${hyprVars.mainMod}, 4, workspace, 4"
+                "${hyprVars.mainMod}, 5, workspace, 5"
+                "${hyprVars.mainMod}, 6, workspace, 6"
+                "${hyprVars.mainMod}, 7, workspace, 7"
+                "${hyprVars.mainMod}, 8, workspace, 8"
+                "${hyprVars.mainMod}, 9, workspace, 9"
+                "${hyprVars.mainMod}, 0, workspace, 10"
 
-              "${hyprVars.mainMod} SHIFT, 1, movetoworkspace, 1"
-              "${hyprVars.mainMod} SHIFT, 2, movetoworkspace, 2"
-              "${hyprVars.mainMod} SHIFT, 3, movetoworkspace, 3"
-              "${hyprVars.mainMod} SHIFT, 4, movetoworkspace, 4"
-              "${hyprVars.mainMod} SHIFT, 5, movetoworkspace, 5"
-              "${hyprVars.mainMod} SHIFT, 6, movetoworkspace, 6"
-              "${hyprVars.mainMod} SHIFT, 7, movetoworkspace, 7"
-              "${hyprVars.mainMod} SHIFT, 8, movetoworkspace, 8"
-              "${hyprVars.mainMod} SHIFT, 9, movetoworkspace, 9"
-              "${hyprVars.mainMod} SHIFT, 0, movetoworkspace, 10"
+                "${hyprVars.mainMod} SHIFT, 1, movetoworkspace, 1"
+                "${hyprVars.mainMod} SHIFT, 2, movetoworkspace, 2"
+                "${hyprVars.mainMod} SHIFT, 3, movetoworkspace, 3"
+                "${hyprVars.mainMod} SHIFT, 4, movetoworkspace, 4"
+                "${hyprVars.mainMod} SHIFT, 5, movetoworkspace, 5"
+                "${hyprVars.mainMod} SHIFT, 6, movetoworkspace, 6"
+                "${hyprVars.mainMod} SHIFT, 7, movetoworkspace, 7"
+                "${hyprVars.mainMod} SHIFT, 8, movetoworkspace, 8"
+                "${hyprVars.mainMod} SHIFT, 9, movetoworkspace, 9"
+                "${hyprVars.mainMod} SHIFT, 0, movetoworkspace, 10"
 
-              "${hyprVars.mainMod}, mouse_down, workspace, e+1"
-              "${hyprVars.mainMod}, mouse_up, workspace, e-1"
-            ] ++ (lib.lists.optionals config.modules.rofi.enable [
-              "${hyprVars.mainMod}, space, exec, rofi-launcher"
-              ''${hyprVars.mainMod}, F, exec, hyprctl clients -j | jq -r '.[] | "\(.address)\t\(.workspace.id)\t\(.title)"' | rofi -dmenu -p "Address | Workspace | Title" | cut -f 1 | xargs -r -I {} hyprctl dispatch focuswindow address:{}''
-            ]);
+                "${hyprVars.mainMod}, mouse_down, workspace, e+1"
+                "${hyprVars.mainMod}, mouse_up, workspace, e-1"
+              ]
+              ++ (lib.lists.optionals config.modules.rofi.enable [
+                "${hyprVars.mainMod}, space, exec, rofi-launcher"
+                ''${hyprVars.mainMod}, F, exec, hyprctl clients -j | jq -r '.[] | "\(.address)\t\(.workspace.id)\t\(.title)"' | rofi -dmenu -p "Address | Workspace | Title" | cut -f 1 | xargs -r -I {} hyprctl dispatch focuswindow address:{}''
+              ]);
 
             bindm = [
               "${hyprVars.mainMod}, mouse:272, movewindow"
