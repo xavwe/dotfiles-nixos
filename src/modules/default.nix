@@ -9,6 +9,7 @@
     # gui
     ./firefox.nix
     ./hyprland.nix
+    ./rofi.nix
     ./foot.nix
     ./zathura.nix
     ./libreoffice.nix

@@ -54,7 +54,6 @@ in {
         home.packages = with pkgs; [
           grim
           slurp
-          rofi-wayland
           jq
           xdg-utils
           nushell
@@ -156,6 +155,7 @@ in {
             ];
 
             bind = [
+              "${hyprVars.mainMod}, space, exec, rofi-launcher"
               "${hyprVars.mainMod}, Q, exec, ${hyprVars.terminal}"
               "${hyprVars.mainMod}, W, exec, ${hyprVars.browser}"
               "${hyprVars.mainMod} SHIFT, W, exec, ${hyprVars.private-browser}"
