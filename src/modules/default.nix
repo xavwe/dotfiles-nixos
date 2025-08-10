@@ -19,6 +19,7 @@
     ./sunshine.nix
 
     # cli
+    ./graphite.nix
     ./neovim.nix
     ./doas.nix
     ./sudo.nix
