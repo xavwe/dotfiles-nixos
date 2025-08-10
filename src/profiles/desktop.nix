@@ -17,6 +17,7 @@
       firefox.default = true;
       hyprland.enable = true;
       hyprland.xwayland.enable = true;
+      rofi.enable = true;
       foot.enable = true;
       zathura.enable = true;
       zathura.default = true;
