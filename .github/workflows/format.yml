@@ -13,6 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref || github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Nix
@@ -30,7 +31,7 @@ jobs:
           if ! git diff --quiet; then
             git add .
             git commit -m "style(*.nix): format with alejandra"
-            git push
+            git push origin HEAD:${{ github.head_ref || github.ref_name }}
           fi
   lua-format:
     name: Auto format Lua files with StyLua
@@ -40,6 +41,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref || github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install StyLua && Format Lua files
         uses: JohnnyMorganz/stylua-action@v4
@@ -54,5 +56,5 @@ jobs:
           if ! git diff --quiet; then
             git add .
             git commit -m "style(*.lua): format with stylua"
-            git push
+            git push origin HEAD:${{ github.head_ref || github.ref_name }}
           fi
