@@ -95,7 +95,6 @@ in {
             rofi-calc
             rofi-nerdy
           ];
-          #theme = "DarkBlue";
         };
       };
     })
