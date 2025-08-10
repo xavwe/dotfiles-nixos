@@ -16,7 +16,6 @@ repository:
 
   delete_branch_on_merge: true
 
-# Branch protection rules
 branches:
   - name: main
     protection:
