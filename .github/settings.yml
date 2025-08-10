@@ -20,7 +20,7 @@ repository:
 branches:
   - name: main
     protection:
-      enforce_admins: true
+      enforce_admins: null
       required_conversation_resolution: true
       required_pull_request_reviews: null
       required_status_checks:
