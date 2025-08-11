@@ -113,11 +113,11 @@ in {
 
   claude-trace = final.stdenv.mkDerivation rec {
     pname = "claude-trace";
-    version = "1.0.3";
+    version = "1.0.8";
 
     src = final.fetchzip {
       url = "https://registry.npmjs.org/@mariozechner/claude-trace/-/claude-trace-${version}.tgz";
-      hash = "sha256-cbTb37Th0t182CMRVNdyHbquzEHLcn0/WMdeRscxKuM=";
+      hash = "sha256-TYCrN2cFBfgwXLIgLGiojIdiKCOD3hUbLgmTQ6MCL4A=";
     };
 
     nativeBuildInputs = with final; [makeWrapper];
