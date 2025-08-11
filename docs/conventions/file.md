@@ -1,5 +1,5 @@
-# Conventional Files
+# Conventional files
 
-## File Naming
+## File naming
 
 Use kebab-case for file names.
