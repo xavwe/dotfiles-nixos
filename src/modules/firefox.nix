@@ -687,10 +687,13 @@
                 return-youtube-dislikes
                 # skip-redirect
                 wayback-machine
-              ] ++ (with pkgs.firefox-addons-custom; [
-                github-lines-of-code
-                conventional-comments
-              ]);
+              ];
+              # Custom addons available in overlay if needed:
+              # ] ++ (with pkgs.firefox-addons-custom; [
+              #   tech-stack
+              #   github-lines-of-code
+              #   conventional-comments
+              # ]);
             };
           };
         };
