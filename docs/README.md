@@ -9,6 +9,12 @@
 
 > Personal, modular, and reproducible NixOS configuration, built using Nix flakes.
 
+## Table of contents
+
+- [Tech Stack](#tech-stack)
+- [License](#license)
+- [References](#references)
+
 ## Tech Stack
 
 ### Core Technologies
