@@ -8,13 +8,13 @@ The dev shell includes:
 
 ## Secret Scanning
 
-This project uses [secretlint](https://github.com/secretlint/secretlint) to prevent accidental commits of secrets and credentials.
+This project uses [gitleaks](https://github.com/gitleaks/gitleaks) to prevent accidental commits of secrets and credentials.
 
 ### Setup
 
-1. Install Node.js dependencies:
+1. Enter the development shell (gitleaks will be available):
    ```bash
-   npm install
+   nix develop
    ```
 
 2. Install git hooks (including pre-push hook):
@@ -24,6 +24,7 @@ This project uses [secretlint](https://github.com/secretlint/secretlint) to prev
 
 ### Usage
 
-- Run secretlint manually: `npm run secretlint`
-- The pre-push hook will automatically run secretlint before each push
-- CI/CD pipeline also runs secretlint on all pull requests and pushes to main
+- Run secret scanning manually: `nix run .#secretlint` (uses gitleaks under the hood)
+- Available in dev shell: `gitleaks detect --verbose`
+- The pre-push hook will automatically run gitleaks before each push
+- CI/CD pipeline also runs gitleaks on all pull requests and pushes to main

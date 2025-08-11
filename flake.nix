@@ -102,6 +102,17 @@
         meta.description = "A test";
       };
 
+      secretlint = let
+        script = nixpkgs.legacyPackages."x86_64-linux".writeShellScriptBin "secretlint" ''
+          #!/usr/bin/env sh
+          ${nixpkgs.legacyPackages."x86_64-linux".gitleaks}/bin/gitleaks detect --verbose
+        '';
+      in {
+        type = "app";
+        program = "${script}/bin/secretlint";
+        meta.description = "Run gitleaks to detect secrets in the codebase";
+      };
+
       format = let
         script = nixpkgs.legacyPackages."x86_64-linux".writeShellScriptBin "format" ''
           #!/usr/bin/env sh
@@ -137,6 +148,7 @@
     devShells."x86_64-linux".default = nixpkgs.legacyPackages."x86_64-linux".mkShell {
       packages = with nixpkgs.legacyPackages."x86_64-linux"; [
         sops
+        gitleaks
 
         # Nix
         nixd

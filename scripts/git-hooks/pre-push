@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
 
-# Pre-push hook that runs secretlint to prevent secrets from being pushed
+# Pre-push hook that runs gitleaks to prevent secrets from being pushed
 
 set -e
 
-echo "🔍 Running secretlint to check for secrets..."
+echo "🔍 Running gitleaks to check for secrets..."
 
-# Check if node_modules exists and npm is available
-if [ ! -d "node_modules" ] || ! command -v npm &> /dev/null; then
-    echo "⚠️  Node.js/npm not found or dependencies not installed"
-    echo "   Installing secretlint dependencies..."
-    npm install
+# Check if nix is available
+if ! command -v nix &> /dev/null; then
+    echo "❌ Nix is not available in PATH"
+    echo "   Please ensure Nix is installed and available."
+    exit 1
 fi
 
-# Run secretlint
-if npm run secretlint; then
+# Run gitleaks using Nix
+if nix run .#secretlint; then
     echo "✅ No secrets detected. Push allowed."
     exit 0
 else
     echo "❌ Secrets detected! Push blocked."
     echo "   Please remove the detected secrets and try again."
-    echo "   You can run 'npm run secretlint' to see the issues."
+    echo "   You can run 'nix run .#secretlint' to see the issues."
     exit 1
 fi
