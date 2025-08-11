@@ -11,7 +11,7 @@
 
 ## License
 
-This repository is licensed under the [MIT License](LICENSE). Feel free to fork and adapt, but attribution is appreciated.
+This repository is licensed under the [MIT License](../LICENSE). Feel free to fork and adapt, but attribution is appreciated.
 
 ## References
 
