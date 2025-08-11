@@ -346,8 +346,9 @@ while i < len(lines):
         
         # Only include packages with GitHub sources (exclude artemave)
         if owner and repo and owner != 'artemave' and version and sha256:
-            packages.append(f'{owner}|{repo}|{version}|{rev or \"\"}|{sha256}|{\"interpolated\" if has_interpolated_rev else \"literal\"}')
-        
+            rev_str = rev if rev else ""
+            rev_type = "interpolated" if has_interpolated_rev else "literal"
+            packages.append(f"{owner}|{repo}|{version}|{rev_str}|{sha256}|{rev_type}")
         i = j
     else:
         i += 1
