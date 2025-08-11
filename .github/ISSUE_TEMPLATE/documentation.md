@@ -17,3 +17,9 @@ Provide a detailed description of the changes.
 
 ### Additional Context
 Include any related resources.
+
+---
+
+Add a :+1: [reaction] to issue you find important.
+
+[reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
