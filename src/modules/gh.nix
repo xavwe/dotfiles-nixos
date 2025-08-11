@@ -22,8 +22,9 @@
             git_protocol = "ssh";
             pager = "less";
           };
-          extensions = [
-            pkgs.gh-poi
+          extensions = with pkgs; [
+            gh-poi
+            gh-dash
           ];
         };
       };
