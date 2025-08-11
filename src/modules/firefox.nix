@@ -88,12 +88,14 @@
               "extensions.htmlaboutaddons.recommendations.enabled" = false;
               "browser.discovery.enabled" = false;
               "browser.shopping.experience2023.enabled" = false;
-              "extensions.enabledScopes" = 5;
+              "extensions.enabledScopes" = 15; # Allow all extension install locations (1+2+4+8)
               "extensions.postDownloadThirdPartyPrompt" = false;
               "extensions.blocklist.enabled" = true;
               "extensions.webcompat.enable_shims" = true;
               "extensions.webcompat-reporter.enabled" = false;
               "extensions.quarantinedDomains.enabled" = true;
+              # Allow unsigned extensions (needed for custom addons)
+              "xpinstall.signatures.required" = false;
 
               # =========================
               # TELEMETRY & DATA COLLECTION
@@ -686,6 +688,12 @@
                 # skip-redirect
                 wayback-machine
               ];
+              # Custom addons available in overlay if needed:
+              # ] ++ (with pkgs.firefox-addons-custom; [
+              #   tech-stack
+              #   github-lines-of-code
+              #   conventional-comments
+              # ]);
             };
           };
         };
