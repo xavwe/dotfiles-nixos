@@ -34,7 +34,7 @@
         // meta;
     };
 in {
-  btop-gpu = prev.stdenv.mkDerivation rec {
+  btop-gpu = prev.stdenv.mkDerivation rec { # auto-update
     pname = "btop";
     version = "1.4.4";
 
@@ -343,7 +343,7 @@ in {
     };
   };
 
-  rofi-nerdy = final.rustPlatform.buildRustPackage rec {
+  rofi-nerdy = final.rustPlatform.buildRustPackage rec { # auto-update
     pname = "rofi-nerdy";
     version = "0.0.7";
 

@@ -175,8 +175,8 @@ i = 0
 while i < len(lines):
     line = lines[i].strip()
     
-    # Look for package definitions
-    if '=' in line and 'mkDerivation rec' in line:
+    # Look for package definitions with auto-update comment
+    if '=' in line and 'mkDerivation rec' in line and '# auto-update' in line:
         package_name = line.split('=')[0].strip()
         
         # Look for version in this package block
