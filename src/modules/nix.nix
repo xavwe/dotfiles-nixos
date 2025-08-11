@@ -42,9 +42,13 @@
       overlays.packages
       overlays.unfree-packages
       overlays.fix-packages
+      overlays.firefox-addons
     ];
     config = {
       allowUnfree = false;
+      allowUnfreePredicate = pkg: builtins.elem (pkg.pname or (pkg.name or "")) [
+        "tech-stack"
+      ];
       system = "x86_64-linux";
     };
   };
