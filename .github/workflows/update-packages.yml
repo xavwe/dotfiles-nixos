@@ -1,0 +1,402 @@
+name: update-packages
+
+on:
+  schedule:
+    - cron: '0 4 * * *'  # Run daily at 4 AM
+  workflow_dispatch:
+
+jobs:
+  update-packages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v25
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.18.1/install
+
+      - name: Install jq
+        run: nix profile install nixpkgs#jq
+
+      - name: Update package versions
+        run: |
+          # Function to get latest GitHub release
+          get_latest_release() {
+            local owner="$1"
+            local repo="$2"
+            curl -s "https://api.github.com/repos/$owner/$repo/releases/latest" | jq -r '.tag_name // empty'
+          }
+
+          # Function to get latest commit
+          get_latest_commit() {
+            local owner="$1"
+            local repo="$2"
+            curl -s "https://api.github.com/repos/$owner/$repo/commits/HEAD" | jq -r '.sha // empty'
+          }
+
+          # Function to update Calibre plugins
+          update_calibre_plugin() {
+            local package_name="$1"
+            local current_version="$2"
+            local current_url="$3"
+            local current_sha="$4"
+
+            # Extract owner and repo from GitHub URL
+            if [[ "$current_url" =~ github\.com/([^/]+)/([^/]+)/releases/download/ ]]; then
+              local owner="${BASH_REMATCH[1]}"
+              local repo="${BASH_REMATCH[2]}"
+
+              echo "  Checking for updates..."
+
+              # Get latest release
+              latest_release=$(get_latest_release "$owner" "$repo")
+
+              if [ -n "$latest_release" ] && [ "$latest_release" != "null" ]; then
+                new_version=$(echo "$latest_release" | sed 's/^v//')
+
+                if [ "$current_version" = "$new_version" ]; then
+                  echo "  ✓ Already up to date (v$current_version)"
+                  return 0
+                fi
+
+                echo "  → Found new release: $latest_release (current: v$current_version)"
+
+                # Construct new URL by replacing version in the original URL
+                new_url=$(echo "$current_url" | sed "s|/v$current_version/|/$latest_release/|" | sed "s|/$current_version/|/$latest_release/|")
+
+                # Get new hash
+                new_hash=$(nix-prefetch-url "$new_url")
+
+                if [ -n "$new_hash" ]; then
+                  # Convert to SRI format
+                  new_sha256="sha256-$(nix hash to-sri --type sha256 "$new_hash")"
+
+                  echo "  → Updating version: $current_version → $new_version"
+                  sed -i "s|version = \"$current_version\";|version = \"$new_version\";|" src/overlays/packages.nix
+
+                  echo "  → Updating URL"
+                  sed -i "s|url = \"$current_url\";|url = \"$new_url\";|" src/overlays/packages.nix
+
+                  echo "  → Updating hash"
+                  sed -i "s|sha256 = \"$current_sha\";|sha256 = \"$new_sha256\";|" src/overlays/packages.nix
+
+                  echo "  ✓ Updated successfully"
+                  return 0
+                else
+                  echo "  ✗ Failed to get hash"
+                  return 1
+                fi
+              else
+                echo "  ✗ Failed to get latest release"
+                return 1
+              fi
+            else
+              echo "  ✗ URL doesn't match GitHub releases pattern"
+              return 1
+            fi
+          }
+
+          # Enhanced function to handle both interpolated and literal rev patterns
+          update_package_enhanced() {
+            local owner="$1"
+            local repo="$2"
+            local current_version="$3"
+            local current_rev="$4"
+            local current_sha="$5"
+            local rev_type="$6"
+
+            echo "  Checking for updates..."
+
+            # Try to get latest release first, fall back to latest commit
+            latest_release=$(get_latest_release "$owner" "$repo")
+
+            if [ -n "$latest_release" ] && [ "$latest_release" != "null" ]; then
+              # Use release
+              if [ "$rev_type" = "interpolated" ]; then
+                # For interpolated rev (like v${version}), compare with version
+                new_version=$(echo "$latest_release" | sed 's/^v//')
+                if [ "$current_version" = "$new_version" ]; then
+                  echo "  ✓ Already up to date (v$current_version)"
+                  return 0
+                fi
+                echo "  → Found new release: $latest_release (current: v$current_version)"
+                target_rev="$latest_release"
+              else
+                # For literal rev, compare with rev directly
+                if [ "$current_rev" = "$latest_release" ]; then
+                  echo "  ✓ Already up to date ($current_rev)"
+                  return 0
+                fi
+                echo "  → Found new release: $latest_release (current: $current_rev)"
+                new_version=$(echo "$latest_release" | sed 's/^v//')
+                target_rev="$latest_release"
+              fi
+            else
+              # Use latest commit
+              latest_commit=$(get_latest_commit "$owner" "$repo")
+              if [ -n "$latest_commit" ] && [ "$latest_commit" != "null" ]; then
+                if [ "$current_rev" = "$latest_commit" ] || [ "v$current_version" = "$latest_commit" ]; then
+                  echo "  ✓ Already up to date"
+                  return 0
+                fi
+                echo "  → Found new commit: $latest_commit"
+                new_version="$current_version"  # Keep current version for commit-based updates
+                target_rev="$latest_commit"
+              else
+                echo "  ✗ Failed to get updates"
+                return 1
+              fi
+            fi
+
+            # Get new hash
+            new_hash=$(nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$target_rev.tar.gz")
+
+            if [ -n "$new_hash" ]; then
+              # Convert to SRI format
+              new_sha256="sha256-$(nix hash to-sri --type sha256 "$new_hash")"
+
+              # Update based on rev type
+              if [ "$rev_type" = "interpolated" ]; then
+                # For interpolated rev: update version, keep rev as-is, update sha256
+                echo "  → Updating version: $current_version → $new_version"
+                sed -i "s|version = \"$current_version\";|version = \"$new_version\";|" src/overlays/packages.nix
+                # Don't update rev since it's interpolated (v${version})
+              else
+                # For literal rev: update rev directly, may update version
+                echo "  → Updating rev: $current_rev → $target_rev"
+                sed -i "s|rev = \"$current_rev\";|rev = \"$target_rev\";|" src/overlays/packages.nix
+                if [ "$new_version" != "$current_version" ]; then
+                  echo "  → Updating version: $current_version → $new_version"
+                  sed -i "s|version = \"$current_version\";|version = \"$new_version\";|" src/overlays/packages.nix
+                fi
+              fi
+
+              # Always update sha256
+              echo "  → Updating hash"
+              sed -i "s|sha256 = \"$current_sha\";|sha256 = \"$new_sha256\";|" src/overlays/packages.nix
+
+              echo "  ✓ Updated successfully"
+              return 0
+            else
+              echo "  ✗ Failed to get hash"
+              return 1
+            fi
+          }
+
+          # Parse packages more carefully to handle edge cases
+          echo "Discovering GitHub packages..."
+
+          # Create a more sophisticated parser that handles both fetchFromGitHub and mkCalibrePlugin
+          python3 << 'EOF' > /tmp/github_packages.txt
+import re
+import sys
+
+content = open("src/overlays/packages.nix").read()
+
+# Find all package definitions with fetchFromGitHub and mkCalibrePlugin
+packages = []
+calibre_plugins = []
+lines = content.split("\n")
+
+i = 0
+while i < len(lines):
+    line = lines[i].strip()
+
+    # Look for mkCalibrePlugin definitions with auto-update comment
+    if "=" in line and "mkCalibrePlugin {" in line and "# auto-update" in line:
+        package_name = line.split("=")[0].strip()
+
+        # Look for version, url, and sha256 in this package block
+        version = None
+        url = None
+        sha256 = None
+
+        # Scan ahead for the package block
+        j = i + 1
+        brace_count = 1  # We already have one opening brace
+
+        while j < len(lines) and brace_count > 0:
+            block_line = lines[j].strip()
+
+            # Track braces to know when we are done with this package
+            brace_count += block_line.count("{") - block_line.count("}")
+
+            if "version =" in block_line:
+                version_match = re.search(r'version\s*=\s*"([^"]+)"', block_line)
+                if version_match:
+                    version = version_match.group(1)
+            elif "url =" in block_line:
+                url_match = re.search(r'url\s*=\s*"([^"]+)"', block_line)
+                if url_match:
+                    url = url_match.group(1)
+            elif "sha256 =" in block_line:
+                sha256_match = re.search(r'sha256\s*=\s*"([^"]+)"', block_line)
+                if sha256_match:
+                    sha256 = sha256_match.group(1)
+
+            j += 1
+
+        # Only include packages with GitHub URLs
+        if version and url and sha256 and "github.com" in url and "/releases/download/" in url:
+            calibre_plugins.append(f"CALIBRE|{package_name}|{version}|{url}|{sha256}")
+
+        i = j
+    # Look for mkDerivation package definitions with auto-update comment
+    elif "=" in line and ("mkDerivation rec" in line or "stdenv.mkDerivation rec" in line) and "# auto-update" in line:
+        package_name = line.split("=")[0].strip()
+
+        # Look for version in this package block
+        version = None
+        owner = None
+        repo = None
+        rev = None
+        sha256 = None
+        has_interpolated_rev = False
+
+        # Scan ahead for the package block
+        j = i + 1
+        brace_count = 0
+        in_fetchFromGitHub = False
+
+        while j < len(lines):
+            block_line = lines[j].strip()
+
+            # Track braces to know when we are done with this package
+            brace_count += block_line.count("{") - block_line.count("}")
+
+            # Look for version in package block (before fetchFromGitHub)
+            if "version =" in block_line and not in_fetchFromGitHub:
+                version_match = re.search(r'version\s*=\s*"([^"]+)"', block_line)
+                if version_match:
+                    version = version_match.group(1)
+
+            # Detect fetchFromGitHub block
+            if "fetchFromGitHub" in block_line:
+                in_fetchFromGitHub = True
+            elif in_fetchFromGitHub:
+                # Parse fetchFromGitHub fields
+                if "owner =" in block_line:
+                    owner_match = re.search(r'owner\s*=\s*"([^"]+)"', block_line)
+                    if owner_match:
+                        owner = owner_match.group(1)
+                elif "repo =" in block_line:
+                    repo_match = re.search(r'repo\s*=\s*"([^"]+)"', block_line)
+                    if repo_match:
+                        repo = repo_match.group(1)
+                elif "rev =" in block_line:
+                    if "version}" in block_line:
+                        # Handle interpolated rev like v${version}
+                        has_interpolated_rev = True
+                        interpolated_match = re.search(r'rev\s*=\s*"([^"]*\$\{version\}[^"]*)"', block_line)
+                        if interpolated_match:
+                            rev = interpolated_match.group(1)
+                    else:
+                        # Handle literal rev
+                        rev_match = re.search(r'rev\s*=\s*"([^"]+)"', block_line)
+                        if rev_match:
+                            rev = rev_match.group(1)
+                elif "sha256 =" in block_line:
+                    sha256_match = re.search(r'sha256\s*=\s*"([^"]+)"', block_line)
+                    if sha256_match:
+                        sha256 = sha256_match.group(1)
+                elif "};" in block_line:
+                    in_fetchFromGitHub = False
+
+            # Check if we are done with this package
+            if brace_count <= 0:
+                break
+
+            j += 1
+
+        # Only include packages with GitHub sources (exclude artemave)
+        if owner and repo and owner != "artemave" and version and sha256:
+            rev_str = rev if rev else ""
+            rev_type = "interpolated" if has_interpolated_rev else "literal"
+            packages.append(f"{owner}|{repo}|{version}|{rev_str}|{sha256}|{rev_type}")
+        i = j
+    else:
+        i += 1
+
+# Output both regular packages and calibre plugins
+for pkg in packages:
+    print(pkg)
+for plugin in calibre_plugins:
+    print(plugin)
+EOF
+
+          changed=false
+
+          # Process each package with enhanced logic
+          while IFS='|' read -r type_or_owner repo_or_name version_or_version rev_or_url sha256_or_sha rev_type; do
+            if [ "$type_or_owner" = "CALIBRE" ]; then
+              # Handle Calibre plugin
+              package_name="$repo_or_name"
+              version="$version_or_version"
+              url="$rev_or_url"
+              sha256="$sha256_or_sha"
+              echo "Processing Calibre plugin $package_name..."
+              if update_calibre_plugin "$package_name" "$version" "$url" "$sha256"; then
+                changed=true
+              fi
+            elif [ -n "$type_or_owner" ] && [ -n "$repo_or_name" ]; then
+              # Handle regular GitHub package
+              owner="$type_or_owner"
+              repo="$repo_or_name"
+              version="$version_or_version"
+              rev="$rev_or_url"
+              sha256="$sha256_or_sha"
+              echo "Processing $owner/$repo (rev_type: $rev_type)..."
+              if update_package_enhanced "$owner" "$repo" "$version" "$rev" "$sha256" "$rev_type"; then
+                changed=true
+              fi
+            fi
+          done < /tmp/github_packages.txt
+
+          # Set output for next step
+          echo "changed=$changed" >> $GITHUB_OUTPUT
+        id: update
+
+      - name: Create Pull Request
+        if: steps.update.outputs.changed == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          if ! git diff --quiet src/overlays/packages.nix; then
+            # Create a new branch for the PR
+            branch_name="update-packages-$(date +%Y%m%d-%H%M%S)"
+            git checkout -b "$branch_name"
+
+            git add src/overlays/packages.nix
+            git commit -m "chore(packages): update GitHub-sourced package versions
+
+            Automated update of package versions and hashes for GitHub-sourced packages."
+
+            git push origin "$branch_name"
+
+            # Try to create PR using GitHub CLI, fallback to manual link if it fails
+            if gh pr create \
+              --title "chore(packages): update GitHub-sourced package versions" \
+              --body "Automated update of package versions and hashes for GitHub-sourced packages.
+
+            This PR was automatically created by the update-packages workflow." \
+              --assignee "xavwe" \
+              --base main \
+              --head "$branch_name"; then
+              echo "✓ Created PR with package updates"
+            else
+              echo "⚠️ Failed to create PR via GitHub CLI, but branch '$branch_name' was pushed successfully"
+              echo "Create PR manually at: https://github.com/xavwe/dotfiles-nixos/pull/new/$branch_name"
+              # Exit with success since the main work (updating packages and pushing branch) succeeded
+              exit 0
+            fi
+          else
+            echo "No changes to commit"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
