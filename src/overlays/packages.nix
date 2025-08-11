@@ -343,70 +343,42 @@ in {
     };
   };
 
-  rofi-nerdy = let
-    lockFile = final.stdenv.mkDerivation {
-      pname = "rofi-nerdy-lock";
-      version = "0.0.7";
+  rofi-nerdy = final.rustPlatform.buildRustPackage rec {
+    pname = "rofi-nerdy";
+    version = "0.0.7";
 
-      src = final.fetchFromGitHub {
-        owner = "rolv-apneseth";
-        repo = "rofi-nerdy";
-        rev = "v0.0.7";
-        sha256 = "sha256-Sfo9p/4aqR6DRo7mXihQpn0MvVCFPh/izNQiVEzk/LM=";
-      };
-
-      nativeBuildInputs = [final.cargo final.cacert];
-
-      installPhase = ''
-        cargo generate-lockfile
-        cp Cargo.lock $out
-      '';
-
-      outputHashAlgo = "sha256";
-      outputHash = "sha256-bNp5URqHJBzSJ7NmYu7KA3AlseYE6RLhTauqbUJNkQM=";
-      outputHashMode = "flat";
+    src = final.fetchFromGitHub {
+      owner = "xavwe";
+      repo = "rofi-nerdy";
+      rev = "77d6b5fa757c6325f858051ddac302742201fe73";
+      sha256 = "sha256-CEv8xgV7fLzg2HlecmEzoaE3GW8M0FBehkApEhMPZHc=";
     };
-  in
-    final.rustPlatform.buildRustPackage rec {
-      pname = "rofi-nerdy";
-      version = "0.0.7";
 
-      src = final.fetchFromGitHub {
-        owner = "rolv-apneseth";
-        repo = "rofi-nerdy";
-        rev = "v${version}";
-        sha256 = "sha256-Sfo9p/4aqR6DRo7mXihQpn0MvVCFPh/izNQiVEzk/LM=";
-      };
+    cargoLock.lockFile = "${src}/Cargo.lock";
 
-      cargoLock.lockFile = lockFile;
+    nativeBuildInputs = with final; [
+      pkg-config
+      just
+      rofi-wayland
+    ];
 
-      postPatch = ''
-        cp ${lockFile} Cargo.lock
-      '';
+    buildInputs = with final; [
+      glib
+      cairo
+      pango
+    ];
 
-      nativeBuildInputs = with final; [
-        pkg-config
-        just
-        rofi-wayland
-      ];
+    installPhase = ''
+      runHook preInstall
+      just --set PKGDIR "$out" install
+      runHook postInstall
+    '';
 
-      buildInputs = with final; [
-        glib
-        cairo
-        pango
-      ];
-
-      installPhase = ''
-        runHook preInstall
-        just --set PKGDIR "$out" install
-        runHook postInstall
-      '';
-
-      meta = with final.lib; {
-        description = "Nerd font icon selector plugin for rofi";
-        homepage = "https://github.com/Rolv-Apneseth/rofi-nerdy";
-        license = licenses.agpl3Plus;
-        platforms = platforms.linux;
-      };
+    meta = with final.lib; {
+      description = "Nerd font icon selector plugin for rofi";
+      homepage = "https://github.com/Rolv-Apneseth/rofi-nerdy";
+      license = licenses.agpl3Plus;
+      platforms = platforms.linux;
     };
+  };
 }
