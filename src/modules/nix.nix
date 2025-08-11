@@ -42,6 +42,7 @@
       overlays.packages
       overlays.unfree-packages
       overlays.fix-packages
+      overlays.firefox-addons
     ];
     config = {
       allowUnfree = false;
