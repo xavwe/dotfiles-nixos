@@ -8,9 +8,7 @@ on:
 
 jobs:
   nix-format:
-    name: Auto format Nix files with alejandra
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
