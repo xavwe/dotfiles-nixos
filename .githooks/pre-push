@@ -4,21 +4,21 @@
 
 set -e
 
-echo "🔍 Running gitleaks to check for secrets..."
+echo "Running gitleaks to check for secrets..."
 
 # Check if nix is available
 if ! command -v nix &> /dev/null; then
-    echo "❌ Nix is not available in PATH"
+    echo "ERROR: Nix is not available in PATH"
     echo "   Please ensure Nix is installed and available."
     exit 1
 fi
 
 # Run gitleaks using Nix
 if nix run .#secretlint; then
-    echo "✅ No secrets detected. Push allowed."
+    echo "No secrets detected. Push allowed."
     exit 0
 else
-    echo "❌ Secrets detected! Push blocked."
+    echo "ERROR: Secrets detected! Push blocked."
     echo "   Please remove the detected secrets and try again."
     echo "   You can run 'nix run .#secretlint' to see the issues."
     exit 1
