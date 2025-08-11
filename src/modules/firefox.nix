@@ -688,7 +688,6 @@
                 # skip-redirect
                 wayback-machine
               ] ++ (with pkgs.firefox-addons-custom; [
-                tech-stack
                 github-lines-of-code
                 conventional-comments
               ]);
