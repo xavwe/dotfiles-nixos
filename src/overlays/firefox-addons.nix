@@ -1,29 +1,36 @@
-{inputs}: final: prev: 
-let
+{inputs}: final: prev: let
   # Create firefox addons that can be used just like the ones from firefox-addons input
-  buildFirefoxXpiAddon = { pname, version, addonId, url, sha256, meta ? {} }:
+  buildFirefoxXpiAddon = {
+    pname,
+    version,
+    addonId,
+    url,
+    sha256,
+    meta ? {},
+  }:
     final.stdenv.mkDerivation {
       inherit pname version;
-      
+
       src = final.fetchurl {
         inherit url sha256;
       };
-      
+
       preferLocalBuild = true;
       allowSubstitutes = true;
-      
+
       buildCommand = ''
         dst="$out/share/mozilla/extensions/{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
         mkdir -p "$dst"
         install -v -m644 "$src" "$dst/${addonId}.xpi"
       '';
-      
-      meta = with final.lib; {
-        platforms = platforms.all;
-      } // meta;
+
+      meta = with final.lib;
+        {
+          platforms = platforms.all;
+        }
+        // meta;
     };
-in 
-{
+in {
   firefox-addons-custom = {
     # TechStack - Shows tech stack of GitHub repositories
     tech-stack = buildFirefoxXpiAddon {
