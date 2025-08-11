@@ -24,7 +24,18 @@
       {
         "theme": "GitHub",
         "selectedAuthType": "gemini-api-key",
-        "usageStatisticsEnabled": false
+        "usageStatisticsEnabled": false,
+        "checkpointing": {
+          "enabled": true
+        },
+        "fileFiltering": {
+          "enableRecursiveFileSearch": true,
+          "respectGitIgnore": false
+        },
+        "hideBanner": true,
+        "hideTips": true,
+        "preferredEditor": "nvim",
+        "showLineNumbers": true
       }
     '';
   };
