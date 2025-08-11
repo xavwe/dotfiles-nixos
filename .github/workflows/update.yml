@@ -105,8 +105,8 @@ jobs:
               # Update rev
               sed -i "s/rev = \"[^\"]*\";.*# $package_name$/rev = \"$new_rev\"; # $package_name/" src/overlays/packages.nix
 
-              # Update sha256
-              sed -i "s/sha256 = \"[^\"]*\";.*# $package_name$/sha256 = \"$new_sha256\"; # $package_name/" src/overlays/packages.nix
+              # Update sha256 (use | as delimiter to avoid conflicts with / in hash)
+              sed -i "s|sha256 = \"[^\"]*\";.*# $package_name\$|sha256 = \"$new_sha256\"; # $package_name|" src/overlays/packages.nix
 
               echo "✓ Updated $package_name successfully"
             else
@@ -119,19 +119,19 @@ jobs:
           if ! grep -q "# btop-gpu$" src/overlays/packages.nix; then
             sed -i 's/version = "1\.4\.4";$/version = "1.4.4"; # btop-gpu/' src/overlays/packages.nix
             sed -i 's/rev = "v\${version}";.*owner = "aristocratos".*repo = "btop"/rev = "v${version}"; # btop-gpu/' src/overlays/packages.nix
-            sed -i 's/sha256 = "sha256-4H9UjewJ7UFQtTQYwvHZL3ecPiChpfT6LEZwbdBCIa0=";.*aristocratos.*btop/sha256 = "sha256-4H9UjewJ7UFQtTQYwvHZL3ecPiChpfT6LEZwbdBCIa0="; # btop-gpu/' src/overlays/packages.nix
+            sed -i 's|sha256 = "sha256-4H9UjewJ7UFQtTQYwvHZL3ecPiChpfT6LEZwbdBCIa0=";.*aristocratos.*btop|sha256 = "sha256-4H9UjewJ7UFQtTQYwvHZL3ecPiChpfT6LEZwbdBCIa0="; # btop-gpu|' src/overlays/packages.nix
           fi
 
           if ! grep -q "# rofi-nerdy$" src/overlays/packages.nix; then
             sed -i 's/version = "0\.0\.7";.*rofi-nerdy/version = "0.0.7"; # rofi-nerdy/' src/overlays/packages.nix
             sed -i 's/rev = "77d6b5fa757c6325f858051ddac302742201fe73";.*rofi-nerdy/rev = "77d6b5fa757c6325f858051ddac302742201fe73"; # rofi-nerdy/' src/overlays/packages.nix
-            sed -i 's/sha256 = "sha256-CEv8xgV7fLzg2HlecmEzoaE3GW8M0FBehkApEhMPZHc=";.*rofi-nerdy/sha256 = "sha256-CEv8xgV7fLzg2HlecmEzoaE3GW8M0FBehkApEhMPZHc="; # rofi-nerdy/' src/overlays/packages.nix
+            sed -i 's|sha256 = "sha256-CEv8xgV7fLzg2HlecmEzoaE3GW8M0FBehkApEhMPZHc=";.*rofi-nerdy|sha256 = "sha256-CEv8xgV7fLzg2HlecmEzoaE3GW8M0FBehkApEhMPZHc="; # rofi-nerdy|' src/overlays/packages.nix
           fi
 
           if ! grep -q "# workspace-diagnostics-nvim$" src/overlays/packages.nix; then
             sed -i 's/version = "unstable-2025-01-08";.*workspace-diagnostics/version = "unstable-2025-01-08"; # workspace-diagnostics-nvim/' src/overlays/packages.nix
             sed -i 's/rev = "60f9175b2501ae3f8b1aba9719c0df8827610c8e";.*workspace-diagnostics/rev = "60f9175b2501ae3f8b1aba9719c0df8827610c8e"; # workspace-diagnostics-nvim/' src/overlays/packages.nix
-            sed -i 's/sha256 = "sha256-jSpKaKnGyip\/nzqU52ypWLgoCtvccYN\+qb5jzlwAnd4=";.*workspace-diagnostics/sha256 = "sha256-jSpKaKnGyip\/nzqU52ypWLgoCtvccYN+qb5jzlwAnd4="; # workspace-diagnostics-nvim/' src/overlays/packages.nix
+            sed -i 's|sha256 = "sha256-jSpKaKnGyip/nzqU52ypWLgoCtvccYN\+qb5jzlwAnd4=";.*workspace-diagnostics|sha256 = "sha256-jSpKaKnGyip/nzqU52ypWLgoCtvccYN+qb5jzlwAnd4="; # workspace-diagnostics-nvim|' src/overlays/packages.nix
           fi
 
           # Check for updates
