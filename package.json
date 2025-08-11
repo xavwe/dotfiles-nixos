@@ -1,0 +1,13 @@
+{
+  "name": "dotfiles-nixos-secretlint",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "secretlint": "^8.2.4",
+    "@secretlint/secretlint-rule-preset-recommend": "^8.2.4"
+  },
+  "scripts": {
+    "secretlint": "secretlint \"**/*\"",
+    "secretlint:fix": "secretlint \"**/*\" --fix"
+  }
+}

@@ -29,7 +29,7 @@ branches:
           - "nix-flake-check"
           - "shellcheck"
           - "conventional-commits"
-          - "gitleaks"
+          - "secretlint"
       required_linear_history: true
       required_signatures: null
       restrictions: null

@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Pre-push hook that runs secretlint to prevent secrets from being pushed
+
+set -e
+
+echo "🔍 Running secretlint to check for secrets..."
+
+# Check if node_modules exists and npm is available
+if [ ! -d "node_modules" ] || ! command -v npm &> /dev/null; then
+    echo "⚠️  Node.js/npm not found or dependencies not installed"
+    echo "   Installing secretlint dependencies..."
+    npm install
+fi
+
+# Run secretlint
+if npm run secretlint; then
+    echo "✅ No secrets detected. Push allowed."
+    exit 0
+else
+    echo "❌ Secrets detected! Push blocked."
+    echo "   Please remove the detected secrets and try again."
+    echo "   You can run 'npm run secretlint' to see the issues."
+    exit 1
+fi
