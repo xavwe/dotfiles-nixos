@@ -17,3 +17,9 @@ Describe how this feature could be implemented.
 
 ### Additional Context
 Add any relevant screenshots, links, or resources.
+
+---
+
+Add a :+1: [reaction] to issue you find important.
+
+[reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
