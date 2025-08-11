@@ -36,7 +36,7 @@
 - [Claude Code](https://www.anthropic.com/claude-code) - AI-assisted development
 
 ### Miscellaneous
-- [GitHub Repository Settings](https://github.com/repository-settings/app)
+- [GitHub Repository Settings](https://github.com/repository-settings/app) - Repository settings in a file
 
 ## License
 
