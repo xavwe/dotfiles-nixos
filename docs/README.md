@@ -12,3 +12,8 @@
 ## License
 
 This repository is licensed under the [MIT License](LICENSE). Feel free to fork and adapt, but attribution is appreciated.
+
+## References
+
+- github issue templates
+    - [Devam Chaudhari - Streamline Your GitHub Issues](https://dev.to/chaudharidevam/streamline-your-github-issues-custom-issue-templates-made-easy-4mge)
