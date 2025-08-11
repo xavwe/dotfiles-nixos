@@ -1,4 +1,4 @@
-name: update-packages
+name: update
 
 on:
   schedule:
@@ -6,6 +6,36 @@ on:
   workflow_dispatch:
 
 jobs:
+  update-flake:
+    name: Update flake.lock
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ secrets.PAT }}
+
+      - name: Set up Nix
+        uses: cachix/install-nix-action@v25
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.18.1/install
+
+      - name: Update flake.lock
+        run: nix flake update
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            git add flake.lock
+            git commit -m "chore(flake.lock): update"
+            git push origin HEAD:${{ github.head_ref || github.ref_name }}
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
   update-packages:
     name: Update GitHub-sourced packages
     runs-on: ubuntu-latest
@@ -163,14 +193,14 @@ jobs:
             # Create a new branch for the PR
             branch_name="update-packages-$(date +%Y%m%d-%H%M%S)"
             git checkout -b "$branch_name"
-            
+
             git add src/overlays/packages.nix
             git commit -m "chore(packages): update GitHub-sourced package versions
 
             Automated update of package versions and hashes for GitHub-sourced packages."
-            
+
             git push origin "$branch_name"
-            
+
             # Create PR using GitHub CLI
             gh pr create \
               --title "chore(packages): update GitHub-sourced package versions" \
@@ -180,7 +210,7 @@ jobs:
               --assignee "xavwe" \
               --base main \
               --head "$branch_name"
-            
+
             echo "✓ Created PR with package updates"
           else
             echo "No changes to commit"
