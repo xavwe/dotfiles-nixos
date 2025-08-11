@@ -26,3 +26,5 @@ This repository is licensed under the [MIT License](../LICENSE). Feel free to fo
     - [Devam Chaudhari - Streamline Your GitHub Issues](https://dev.to/chaudharidevam/streamline-your-github-issues-custom-issue-templates-made-easy-4mge)
 - github actions
     - [asaaki/gha-delete-unmerged-branches](https://github.com/asaaki/gha-delete-unmerged-branches/blob/main/.github/workflows/delete-unmerged-branch.yaml)
+- git hooks with direnv
+    - [Using direnv to Automatically Manage Git Hooks](https://dev.to/knpwrs/using-direnv-to-automatically-manage-git-hooks-3mb8)
