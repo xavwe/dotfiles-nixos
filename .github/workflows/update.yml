@@ -232,7 +232,7 @@ content = open('src/overlays/packages.nix').read()
 # Find all package definitions with fetchFromGitHub and mkCalibrePlugin
 packages = []
 calibre_plugins = []
-lines = content.split('\n')
+lines = content.split('\\n')
 
 i = 0
 while i < len(lines):
