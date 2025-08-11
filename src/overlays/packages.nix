@@ -236,7 +236,7 @@ in {
     };
   };
 
-  calibre-plugin-worddumb = mkCalibrePlugin {
+  calibre-plugin-worddumb = mkCalibrePlugin { # auto-update
     pname = "WordDumb";
     version = "3.33.3";
     url = "https://github.com/xxyzz/WordDumb/releases/download/v3.33.3/worddumb-v3.33.3.zip";
@@ -249,7 +249,7 @@ in {
     };
   };
 
-  calibre-plugin-epubsplit = mkCalibrePlugin {
+  calibre-plugin-epubsplit = mkCalibrePlugin { # auto-update
     pname = "EpubSplit";
     version = "3.12.0";
     url = "https://github.com/JimmXinu/EpubSplit/releases/download/v3.12.0/EpubSplit.zip";
@@ -301,7 +301,7 @@ in {
     };
   };
 
-  calibre-plugin-epubmerge = mkCalibrePlugin {
+  calibre-plugin-epubmerge = mkCalibrePlugin { # auto-update
     pname = "EpubMerge";
     version = "3.2.0";
     url = "https://github.com/JimmXinu/EpubMerge/releases/download/v3.2.0/EpubMerge.zip";

@@ -70,6 +70,68 @@ jobs:
             curl -s "https://api.github.com/repos/$owner/$repo/commits/HEAD" | jq -r '.sha // empty'
           }
 
+          # Function to update Calibre plugins
+          update_calibre_plugin() {
+            local package_name="$1"
+            local current_version="$2"
+            local current_url="$3"
+            local current_sha="$4"
+            
+            # Extract owner and repo from GitHub URL
+            if [[ "$current_url" =~ github\.com/([^/]+)/([^/]+)/releases/download/ ]]; then
+              local owner="${BASH_REMATCH[1]}"
+              local repo="${BASH_REMATCH[2]}"
+              
+              echo "  Checking for updates..."
+              
+              # Get latest release
+              latest_release=$(get_latest_release "$owner" "$repo")
+              
+              if [ -n "$latest_release" ] && [ "$latest_release" != "null" ]; then
+                new_version=$(echo "$latest_release" | sed 's/^v//')
+                
+                if [ "$current_version" = "$new_version" ]; then
+                  echo "  ✓ Already up to date (v$current_version)"
+                  return 0
+                fi
+                
+                echo "  → Found new release: $latest_release (current: v$current_version)"
+                
+                # Construct new URL by replacing version in the original URL
+                new_url=$(echo "$current_url" | sed "s|/v$current_version/|/$latest_release/|" | sed "s|/$current_version/|/$latest_release/|")
+                
+                # Get new hash
+                new_hash=$(nix-prefetch-url "$new_url")
+                
+                if [ -n "$new_hash" ]; then
+                  # Convert to SRI format
+                  new_sha256="sha256-$(nix hash to-sri --type sha256 "$new_hash")"
+                  
+                  echo "  → Updating version: $current_version → $new_version"
+                  sed -i "s|version = \"$current_version\";|version = \"$new_version\";|" src/overlays/packages.nix
+                  
+                  echo "  → Updating URL"
+                  sed -i "s|url = \"$current_url\";|url = \"$new_url\";|" src/overlays/packages.nix
+                  
+                  echo "  → Updating hash"
+                  sed -i "s|sha256 = \"$current_sha\";|sha256 = \"$new_sha256\";|" src/overlays/packages.nix
+                  
+                  echo "  ✓ Updated successfully"
+                  return 0
+                else
+                  echo "  ✗ Failed to get hash"
+                  return 1
+                fi
+              else
+                echo "  ✗ Failed to get latest release"
+                return 1
+              fi
+            else
+              echo "  ✗ URL doesn't match GitHub releases pattern"
+              return 1
+            fi
+          }
+
           # Enhanced function to handle both interpolated and literal rev patterns
           update_package_enhanced() {
             local owner="$1"
@@ -160,23 +222,63 @@ jobs:
           # Parse packages more carefully to handle edge cases
           echo "Discovering GitHub packages..."
           
-          # Create a more sophisticated parser that handles variable interpolation
+          # Create a more sophisticated parser that handles both fetchFromGitHub and mkCalibrePlugin
           python3 -c "
 import re
 import sys
 
 content = open('src/overlays/packages.nix').read()
 
-# Find all package definitions with fetchFromGitHub
+# Find all package definitions with fetchFromGitHub and mkCalibrePlugin
 packages = []
+calibre_plugins = []
 lines = content.split('\n')
 
 i = 0
 while i < len(lines):
     line = lines[i].strip()
     
-    # Look for package definitions with auto-update comment
-    if '=' in line and 'mkDerivation rec' in line and '# auto-update' in line:
+    # Look for mkCalibrePlugin definitions with auto-update comment
+    if '=' in line and 'mkCalibrePlugin {' in line and '# auto-update' in line:
+        package_name = line.split('=')[0].strip()
+        
+        # Look for version, url, and sha256 in this package block
+        version = None
+        url = None
+        sha256 = None
+        
+        # Scan ahead for the package block
+        j = i + 1
+        brace_count = 1  # We already have one opening brace
+        
+        while j < len(lines) and brace_count > 0:
+            block_line = lines[j].strip()
+            
+            # Track braces to know when we're done with this package
+            brace_count += block_line.count('{') - block_line.count('}')
+            
+            if 'version =' in block_line:
+                version_match = re.search(r'version\s*=\s*\"([^\"]+)\"', block_line)
+                if version_match:
+                    version = version_match.group(1)
+            elif 'url =' in block_line:
+                url_match = re.search(r'url\s*=\s*\"([^\"]+)\"', block_line)
+                if url_match:
+                    url = url_match.group(1)
+            elif 'sha256 =' in block_line:
+                sha256_match = re.search(r'sha256\s*=\s*\"([^\"]+)\"', block_line)
+                if sha256_match:
+                    sha256 = sha256_match.group(1)
+            
+            j += 1
+        
+        # Only include packages with GitHub URLs
+        if version and url and sha256 and 'github.com' in url and '/releases/download/' in url:
+            calibre_plugins.append(f'CALIBRE|{package_name}|{version}|{url}|{sha256}')
+        
+        i = j
+    # Look for mkDerivation package definitions with auto-update comment
+    elif '=' in line and 'mkDerivation rec' in line and '# auto-update' in line:
         package_name = line.split('=')[0].strip()
         
         # Look for version in this package block
@@ -250,15 +352,34 @@ while i < len(lines):
     else:
         i += 1
 
+# Output both regular packages and calibre plugins
 for pkg in packages:
     print(pkg)
+for plugin in calibre_plugins:
+    print(plugin)
 " > /tmp/github_packages.txt
 
           changed=false
 
           # Process each package with enhanced logic
-          while IFS='|' read -r owner repo version rev sha256 rev_type; do
-            if [ -n "$owner" ] && [ -n "$repo" ]; then
+          while IFS='|' read -r type_or_owner repo_or_name version_or_version rev_or_url sha256_or_sha rev_type; do
+            if [ "$type_or_owner" = "CALIBRE" ]; then
+              # Handle Calibre plugin
+              package_name="$repo_or_name"
+              version="$version_or_version"
+              url="$rev_or_url"
+              sha256="$sha256_or_sha"
+              echo "Processing Calibre plugin $package_name..."
+              if update_calibre_plugin "$package_name" "$version" "$url" "$sha256"; then
+                changed=true
+              fi
+            elif [ -n "$type_or_owner" ] && [ -n "$repo_or_name" ]; then
+              # Handle regular GitHub package
+              owner="$type_or_owner"
+              repo="$repo_or_name"
+              version="$version_or_version"
+              rev="$rev_or_url"
+              sha256="$sha256_or_sha"
               echo "Processing $owner/$repo (rev_type: $rev_type)..."
               if update_package_enhanced "$owner" "$repo" "$version" "$rev" "$sha256" "$rev_type"; then
                 changed=true
