@@ -6,10 +6,3 @@ result
 
 # claude
 .claude-trace
-
-# npm
-node_modules/
-.npm
-npm-debug.log*
-.nyc_output
-coverage/
