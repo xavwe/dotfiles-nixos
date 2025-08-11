@@ -321,7 +321,7 @@ while i < len(lines):
                     if 'version}' in block_line:
                         # Handle interpolated rev like 'v\${version}'
                         has_interpolated_rev = True
-                        interpolated_match = re.search(r'rev\s*=\s*\"([^\"]*\\\$\{version\}[^\"]*)\"', block_line)
+                        interpolated_match = re.search(r'rev\s*=\s*\"([^\"]*\$\{version\}[^\"]*)\"', block_line)
                         if interpolated_match:
                             rev = interpolated_match.group(1)
                     else:
