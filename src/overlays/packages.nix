@@ -36,7 +36,7 @@
 in {
   btop-gpu = prev.stdenv.mkDerivation rec {
     pname = "btop";
-    version = "1.4.4";
+    version = "1.4.4"; # btop-gpu
 
     src = final.fetchFromGitHub {
       owner = "aristocratos";
@@ -227,7 +227,7 @@ in {
 
   workspace-diagnostics-nvim = final.vimUtils.buildVimPlugin {
     pname = "workspace-diagnostics-nvim";
-    version = "unstable-2025-01-08";
+    version = "unstable-2025-08-11";
     src = final.fetchFromGitHub {
       owner = "artemave";
       repo = "workspace-diagnostics.nvim";
