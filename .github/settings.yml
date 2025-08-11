@@ -28,6 +28,8 @@ branches:
           - "Auto format Nix files with alejandra"
           - "nix-flake-check"
           - "shellcheck"
+          - "conventional-commits"
+          - "gitleaks"
       required_linear_history: true
       required_signatures: null
       restrictions: null
