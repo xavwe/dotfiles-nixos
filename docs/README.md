@@ -9,51 +9,6 @@
 
 > Personal, modular, and reproducible NixOS configuration, built using Nix flakes.
 
-## Roadmap
-- [ ] newsboat
-- [ ] neovim
-- [ ] disko
-- [ ] bash
-- [ ] mutt
-- [ ] nixos-hardware
-- [ ] styling
-- [ ] erase your darlings
-- [ ] homelab
-- [ ] gpg
-
-<!--
-## Features
-
-- 🧩 Modular configuration with Flakes
-- 💻 Declarative desktop environments
-
-
-
-## Getting Started
-
-### Prerequisites
-
-* NixOS >= 25.05 recommended
-
-### Setup Instructions
-
-TODO
-
-## Development
-
-TODO
-
-## 🛠Customisation
-
-- Add or modify modules under `src/modules/`
-
-TODO
-
-## Inspiration
-
-TODO
--->
-
 ## License
 
 This repository is licensed under the [MIT License](LICENSE). Feel free to fork and adapt, but attribution is appreciated.
