@@ -19,3 +19,9 @@ Explain what you expected to happen.
 
 ### Additional Context
 Add any other context about the problem here.
+
+---
+
+Add a :+1: [reaction] to issue you find important.
+
+[reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
