@@ -153,20 +153,35 @@ jobs:
           echo "changed=$changed" >> $GITHUB_OUTPUT
         id: update
 
-      - name: Commit and push changes
+      - name: Create Pull Request
         if: steps.update.outputs.changed == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           if ! git diff --quiet src/overlays/packages.nix; then
+            # Create a new branch for the PR
+            branch_name="update-packages-$(date +%Y%m%d-%H%M%S)"
+            git checkout -b "$branch_name"
+            
             git add src/overlays/packages.nix
             git commit -m "chore(packages): update GitHub-sourced package versions
 
-            Automated update of package versions and hashes for:
-            $(git diff HEAD~1 --name-only | grep packages.nix && echo "- packages.nix updated")"
-            git push origin HEAD:${{ github.head_ref || github.ref_name }}
-            echo "✓ Pushed package updates"
+            Automated update of package versions and hashes for GitHub-sourced packages."
+            
+            git push origin "$branch_name"
+            
+            # Create PR using GitHub CLI
+            gh pr create \
+              --title "chore(packages): update GitHub-sourced package versions" \
+              --body "Automated update of package versions and hashes for GitHub-sourced packages.
+
+            This PR was automatically created by the update-packages workflow." \
+              --assignee "xavwe" \
+              --base main \
+              --head "$branch_name"
+            
+            echo "✓ Created PR with package updates"
           else
             echo "No changes to commit"
           fi
