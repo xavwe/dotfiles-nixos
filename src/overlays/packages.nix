@@ -61,27 +61,27 @@ in {
 
   ccusage = final.buildNpmPackage rec {
     pname = "ccusage";
-    version = "15.3.1";
+    version = "15.9.2";
 
     src = final.fetchzip {
       url = "https://registry.npmjs.org/ccusage/-/ccusage-${version}.tgz";
-      hash = "sha256-y3Vg8BIeBYUrGCijs9MZe5mDrhuTzmlUOju8HZct/FU=";
+      hash = "sha256-6MwvGPiYQlmhVt7xplo4d+4S6+JjWoer1jP2EK4eGb4=";
     };
 
-    npmDepsHash = "sha256-3n0JlwuPlp7NKRbTvvxdzbS5u/R/07XatIEKr7S9Y64=";
+    npmDepsHash = "sha256-bMJdbOSBUAEzx+xUczx+mfg3LRz3kiqmWEJs4pRor2k=";
     forceEmptyCache = true;
 
     postPatch = ''
             cat > package-lock.json << 'EOF'
       {
         "name": "ccusage",
-        "version": "15.3.1",
+        "version": "15.9.2",
         "lockfileVersion": 3,
         "requires": true,
         "packages": {
           "": {
             "name": "ccusage",
-            "version": "15.3.1"
+            "version": "15.9.2"
           }
         }
       }
