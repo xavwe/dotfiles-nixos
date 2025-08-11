@@ -29,6 +29,7 @@
           aliases = lib.mkIf config.modules.git.aliases.yolo {
             yolo = "!git commit -m \"$(curl -s https://whatthecommit.com/index.txt)\"";
             sync = ''!f() {
+              git fetch --prune
               git remote prune origin
               to_delete=()
               for branch in $(git branch --format='%(refname:short)' | grep -v '^main$'); do
