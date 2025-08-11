@@ -28,6 +28,7 @@
           userEmail = "xaver.wenhart@proton.me";
           aliases = lib.mkIf config.modules.git.aliases.yolo {
             yolo = "!git commit -m \"$(curl -s https://whatthecommit.com/index.txt)\"";
+            sync = "!git remote prune origin && git branch -vv | awk '/: gone]/{print $1}' | xargs -r git branch -D";
           };
           difftastic.color = "auto";
           extraConfig = {
