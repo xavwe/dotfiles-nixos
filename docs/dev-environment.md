@@ -17,10 +17,12 @@ This project uses [gitleaks](https://github.com/gitleaks/gitleaks) to prevent ac
    nix develop
    ```
 
-2. Install git hooks (including pre-push hook):
+2. Allow direnv to configure git hooks automatically:
    ```bash
-   ./scripts/install-git-hooks.sh
+   direnv allow
    ```
+   
+   This configures git to use hooks from `.githooks/` directory via the `.envrc` file.
 
 ### Usage
 
