@@ -23,8 +23,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0  # Fetch all branches
           token: ${{ secrets.PAT }}
+
+      - name: Check for existing Claude branch
+        id: check_branch
+        run: |
+          if [ "${{ github.event_name }}" = "issues" ] || [ "${{ github.event_name }}" = "issue_comment" ]; then
+            ISSUE_NUMBER=${{ github.event.issue.number }}
+            BRANCH_NAME="claude/${ISSUE_NUMBER}"
+            
+            # Check if branch exists remotely
+            if git ls-remote --heads origin "$BRANCH_NAME" | grep -q "$BRANCH_NAME"; then
+              echo "branch_exists=true" >> $GITHUB_OUTPUT
+              echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+              echo "Found existing branch: $BRANCH_NAME"
+            else
+              echo "branch_exists=false" >> $GITHUB_OUTPUT
+              echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+              echo "No existing branch found, will create: $BRANCH_NAME"
+            fi
+          else
+            echo "branch_exists=false" >> $GITHUB_OUTPUT
+            echo "Not an issue event, using default behavior"
+          fi
 
       - name: Run Claude Code
         id: claude
@@ -52,6 +74,17 @@ jobs:
           # Optional: Add custom instructions for Claude to customize its behavior for your project
           custom_instructions: |
             Follow the conventions and workflows defined in docs directory
+            
+            BRANCH NAMING STRATEGY:
+            - For issue-related work, ALWAYS use branch name format: claude/{issue_number}
+            - Check if branch claude/{issue_number} already exists before creating a new one
+            - If the branch exists, switch to it and continue work there
+            - If the branch doesn't exist, create it with the name claude/{issue_number}
+            - Example: for issue #74, use branch name "claude/74"
+            - This ensures all Claude interactions within the same issue use the same branch
+
+          # Set base branch for issue-specific branches
+          base_branch: ${{ steps.check_branch.outputs.branch_exists == 'true' && steps.check_branch.outputs.branch_name || '' }}
 
           # Optional: Custom environment variables for Claude
           # claude_env: |
