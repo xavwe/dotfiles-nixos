@@ -1,13 +1,11 @@
-name: update-flake
-
+name: update
 on:
   schedule:
     - cron: '0 3 * * *'
   workflow_dispatch:
 
 jobs:
-  nix-format:
-    name: Auto format Nix files with alejandra
+  flake:
     runs-on: ubuntu-latest
 
     steps:
