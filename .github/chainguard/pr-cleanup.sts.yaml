@@ -3,5 +3,5 @@ subject: repo:xavwe/dotfiles-nixos:ref:refs/heads/main
 
 permissions:
   contents: read
-  pull-requests: read
+  pull_requests: read
   metadata: read

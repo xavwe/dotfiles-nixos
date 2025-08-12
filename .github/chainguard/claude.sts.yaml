@@ -3,7 +3,7 @@ subject: repo:xavwe/dotfiles-nixos:ref:refs/heads/main
 
 permissions:
   contents: write
-  pull-requests: write
+  pull_requests: write
   issues: write
   actions: read
   metadata: read
