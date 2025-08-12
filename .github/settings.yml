@@ -25,7 +25,7 @@ branches:
       required_status_checks:
         strict: false
         contexts:
-          - "Auto format Nix files with alejandra"
+          - "nix-format"
           - "nix-flake-check"
           - "shellcheck"
           - "conventional-commits"
