@@ -105,7 +105,7 @@
       secretlint = let
         script = nixpkgs.legacyPackages."x86_64-linux".writeShellScriptBin "secretlint" ''
           #!/usr/bin/env sh
-          ${nixpkgs.legacyPackages."x86_64-linux".gitleaks}/bin/gitleaks detect --verbose
+          ${nixpkgs.legacyPackages."x86_64-linux".gitleaks}/bin/gitleaks detect --source . --verbose
         '';
       in {
         type = "app";

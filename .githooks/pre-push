@@ -12,12 +12,13 @@ if ! command -v nix &> /dev/null; then
     exit 1
 fi
 
-# Run gitleaks using Nix
+# Run gitleaks using Nix (detects secrets in git repository)
 if nix run .#secretlint; then
     echo "No secrets detected. Push allowed."
     exit 0
 else
     echo "ERROR: Secrets detected! Push blocked."
-    echo "       You can run 'nix run .#secretlint' to see the issues."
+    echo "   Please remove the detected secrets and try again."
+    echo "   You can run 'nix run .#secretlint' to see the issues."
     exit 1
 fi
