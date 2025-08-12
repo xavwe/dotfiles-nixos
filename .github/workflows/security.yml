@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  scan:
+  gitleaks:
     name: gitleaks
     runs-on: ubuntu-latest
     steps:
