@@ -344,6 +344,7 @@ in {
   };
 
   rofi-nerdy = final.rustPlatform.buildRustPackage rec {
+    # auto-update
     pname = "rofi-nerdy";
     version = "0.0.7";
 
