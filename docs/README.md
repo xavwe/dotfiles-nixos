@@ -8,11 +8,3 @@
 
 
 > Personal, modular, and reproducible NixOS configuration, built using Nix flakes.
-
-## Table of contents
-
-- [License](#license)
-
-## License
-
-This repository is licensed under the [MIT License](../LICENSE). Feel free to fork and adapt, but attribution is appreciated.
