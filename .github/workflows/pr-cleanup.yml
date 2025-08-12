@@ -1,0 +1,38 @@
+name: pr-cleanup
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [ closed ]
+
+jobs:
+  delete-unmerged-branch:
+    if: ${{ github.event.pull_request.merged_at == '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Get octo-sts token
+        uses: octo-sts/action@main
+        id: octo-sts
+        with:
+          scope: xavwe/dotfiles-nixos
+          identity: pr-cleanup
+
+      - name: delete-unmerged-branch
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.octo-sts.outputs.token }}
+          script: |
+            const { repo, owner } = context.repo;
+            const ref = `heads/${context.payload.pull_request.head.ref}`;
+            const deleteParams = { owner, repo, ref };
+
+            console.log(`Deleting branch: "${ref}"`);
+            try {
+              github.rest.git.deleteRef(deleteParams);
+            } catch(e) {
+              console.log("Cannot delete branch; error:", e);
+            }
