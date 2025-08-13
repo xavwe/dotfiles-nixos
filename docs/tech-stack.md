@@ -18,7 +18,7 @@
 
 ## Development & CI/CD
 - [GitHub Actions](https://github.com/features/actions) - CI/CD
-- [Claude Code Action](https://github.com/anthropics/claude-code-action) - Claude Code Github Actions
+- [octohelper](https://github.com/apps/octohelper) - GitHub App for granting fine-grained permissions to CI/CD workflows
 - [Cachix](https://cachix.org/) - Nix binary cache
 - [alejandra](https://github.com/kamadorueda/alejandra) - Nix code formatter
 - [nixd](https://github.com/nix-community/nixd) - Nix language server

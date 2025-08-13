@@ -30,8 +30,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
           token: ${{ steps.github-app-token.outputs.token }}
+
+      - name: Configure Git user
+        run: |
+          git config user.name "octohelper[bot]"
+          git config user.email "151943256+octohelper[bot]@users.noreply.github.com"
 
       - name: Run Claude Code
         id: claude

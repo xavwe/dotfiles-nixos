@@ -14,11 +14,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.CLAUDE_APP_ID }}
+          private_key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref || github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - name: Configure Git user
+        run: |
+          git config user.name "octohelper[bot]"
+          git config user.email "151943256+octohelper[bot]@users.noreply.github.com"
 
       - name: Set up Nix
         uses: cachix/install-nix-action@v25
@@ -30,12 +42,10 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if ! git diff --quiet; then
             git add .
             git commit -m "style(*.nix): format with alejandra"
             git push origin HEAD:${{ github.head_ref || github.ref_name }}
           fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}

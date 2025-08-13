@@ -10,7 +10,17 @@ jobs:
   nix-flake-check:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.CLAUDE_APP_ID }}
+          private_key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+
       - uses: cachix/install-nix-action@v25
 
       - name: Run `nix flake check`
