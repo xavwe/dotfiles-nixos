@@ -20,25 +20,25 @@ jobs:
       id-token: write
       actions: read # Required for Claude to read CI results on PRs
     steps:
-      - name: Generate GitHub App Token
-        id: github-app-token
-        uses: actions/create-github-app-token@v1
+      - name: Get octo-sts token
+        uses: octo-sts/action@main
+        id: octo-sts
         with:
-          app-id: ${{ secrets.CLAUDE_APP_ID }}
-          private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
+          scope: xavwe/dotfiles-nixos
+          identity: claude
 
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-          token: ${{ steps.github-app-token.outputs.token }}
+          token: ${{ steps.octo-sts.outputs.token }}
 
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@beta
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          github_token: ${{ steps.github-app-token.outputs.token }}
+          github_token: ${{ steps.octo-sts.outputs.token }}
 
           # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |

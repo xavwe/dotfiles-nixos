@@ -1,0 +1,9 @@
+issuer: https://token.actions.githubusercontent.com
+subject: repo:xavwe/dotfiles-nixos:ref:refs/heads/main
+
+permissions:
+  contents: write
+  pull_requests: write
+  issues: write
+  actions: read
+  metadata: read

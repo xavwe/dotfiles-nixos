@@ -9,13 +9,23 @@ on:
 jobs:
   nix-format:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
 
     steps:
+      - name: Get octo-sts token
+        uses: octo-sts/action@main
+        id: octo-sts
+        with:
+          scope: xavwe/dotfiles-nixos
+          identity: format
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref || github.ref_name }}
-          token: ${{ secrets.PAT }}
+          token: ${{ steps.octo-sts.outputs.token }}
 
       - name: Set up Nix
         uses: cachix/install-nix-action@v25
@@ -35,4 +45,4 @@ jobs:
             git push origin HEAD:${{ github.head_ref || github.ref_name }}
           fi
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
+          GITHUB_TOKEN: ${{ steps.octo-sts.outputs.token }}
