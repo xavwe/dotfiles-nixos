@@ -32,7 +32,7 @@ branches:
           - "shellcheck"
           - "conventional-commits"
           - "gitleaks"
-          - "validate-tile"
+          - "validate-title"
       required_linear_history: true
       required_signatures: null
       restrictions: null
