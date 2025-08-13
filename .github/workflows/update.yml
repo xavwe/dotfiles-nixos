@@ -23,6 +23,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref || github.ref_name }}
           token: ${{ steps.generate-token.outputs.token }}
 
       - name: Configure Git user
@@ -47,7 +48,7 @@ jobs:
           title: "chore(flake.lock): update"
           body: |
             Automated update of flake.lock file.
-            
+
             This PR will auto-merge if CI passes and there are no conflicts.
           branch: update/flake-lock
           delete-branch: true
