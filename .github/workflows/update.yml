@@ -59,3 +59,25 @@ jobs:
         run: gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --auto --squash
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.CLAUDE_APP_ID }}
+          private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - name: Run Renovate
+        uses: renovatebot/github-action@v41.0.21
+        with:
+          configurationFile: .renovate.json
+          token: ${{ steps.generate-token.outputs.token }}
+        env:
+          LOG_LEVEL: info
