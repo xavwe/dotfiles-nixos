@@ -23,14 +23,22 @@ jobs:
       - name: Update flake.lock
         run: nix flake update
 
-      - name: Commit and push changes
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.PAT }}
+          commit-message: "chore(flake.lock): update"
+          title: "chore(flake.lock): update"
+          body: |
+            Automated update of flake.lock file.
+            
+            This PR will auto-merge if CI passes and there are no conflicts.
+          branch: update/flake-lock
+          delete-branch: true
+          
+      - name: Enable auto-merge
+        if: steps.create-pull-request.outputs.pull-request-number
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          if ! git diff --quiet; then
-            git add flake.lock
-            git commit -m "chore(flake.lock): update"
-            git push origin HEAD:${{ github.head_ref || github.ref_name }}
-          fi
+          gh pr merge ${{ steps.create-pull-request.outputs.pull-request-number }} --auto --squash
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
