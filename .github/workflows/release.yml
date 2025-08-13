@@ -24,7 +24,18 @@ jobs:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
           private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
 
-      - uses: googleapis/release-please-action@v4
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - id: release-please
+        uses: googleapis/release-please-action@v4
         with:
           release-type: simple
           token: ${{ steps.generate-token.outputs.token }}
+
+      - name: Enable auto-merge
+        if: ${{ steps.release-please.outputs.pr }}
+        run: gh pr merge ${{ fromJson(steps.release-please.outputs.pr).number }} --auto --squash
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
