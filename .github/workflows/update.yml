@@ -23,7 +23,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.BRANCH_NAME }}
           token: ${{ steps.generate_token.outputs.token }}
 
       - name: Configure Git user
