@@ -1,16 +1,17 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended",
+    "config:best-practices",
     "helpers:pinGitHubActionDigests"
   ],
   "timezone": "UTC",
-  "schedule": ["at any time"],
+  "schedule": ["after 2am and before 4am"],
+  "minimumReleaseAge": "3 days",
   "labels": ["dependencies", "renovate"],
   "assigneesFromCodeOwners": true,
   "reviewersFromCodeOwners": true,
   "platformAutomerge": true,
-  "branchPrefix": "renovate/",
+  "branchPrefix": "deps/renovate/",
   "gitAuthor": "Renovate Bot <bot@renovateapp.com>",
   "commitMessagePrefix": "chore(deps): ",
   "commitMessageAction": "update",
@@ -70,6 +71,13 @@
       ],
       "automerge": true,
       "matchUpdateTypes": ["minor", "patch", "digest"]
+    },
+    {
+      "description": "Nix flake updates - Manual review",
+      "matchManagers": ["nix"],
+      "automerge": false,
+      "addLabels": ["nix-update"],
+      "commitMessageTopic": "{{depName}}"
     }
   ],
 
