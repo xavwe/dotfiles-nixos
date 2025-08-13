@@ -31,8 +31,8 @@ jobs:
       - id: release-please
         uses: googleapis/release-please-action@v4
         with:
-          release-type: simple
           token: ${{ steps.generate-token.outputs.token }}
+          config-file: .release.json
           skip-labeling: true
 
       - name: Enable auto-merge
