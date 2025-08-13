@@ -5,7 +5,6 @@
     "helpers:pinGitHubActionDigests"
   ],
   "timezone": "UTC",
-  "schedule": ["after 2am and before 4am"],
   "minimumReleaseAge": "3 days",
   "labels": ["dependencies", "renovate"],
   "assigneesFromCodeOwners": true,
