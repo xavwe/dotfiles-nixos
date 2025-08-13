@@ -13,11 +13,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Generate token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.CLAUDE_APP_ID }}
+          private_key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref || github.ref_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - name: Configure Git user
+        run: |
+          git config user.name "octohelper[bot]"
+          git config user.email "151943256+octohelper[bot]@users.noreply.github.com"
 
       - name: Set up Nix
         uses: cachix/install-nix-action@v25
@@ -31,14 +43,12 @@ jobs:
         id: create-pr
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
           commit-message: "chore(flake.lock): update"
-          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           title: "chore(flake.lock): update"
           body: |
             Automated update of flake.lock file.
-            
+
             This PR will auto-merge if CI passes and there are no conflicts.
           branch: update/flake-lock
           delete-branch: true
@@ -48,4 +58,4 @@ jobs:
         if: steps.create-pr.outputs.pull-request-number
         run: gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --auto --squash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
