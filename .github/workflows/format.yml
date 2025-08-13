@@ -16,13 +16,13 @@ jobs:
     steps:
       - name: Generate token
         id: generate-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
-          private_key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
+          private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ github.head_ref || github.ref_name }}
           token: ${{ steps.generate-token.outputs.token }}
@@ -33,7 +33,7 @@ jobs:
           git config user.email "151943256+octohelper[bot]@users.noreply.github.com"
 
       - name: Set up Nix
-        uses: cachix/install-nix-action@v25
+        uses: cachix/install-nix-action@v31
         with:
           install_url: https://releases.nixos.org/nix/nix-2.18.1/install
 
