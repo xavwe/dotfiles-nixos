@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Generate token
         id: generate-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@a8d616148505b5069dccd32f177bb87d7f39123b
         with:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
           private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
@@ -29,7 +29,7 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
 
       - id: release-please
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@a02a34c4d625f9be7cb89156071d8567266a2445
         with:
           release-type: simple
           token: ${{ steps.generate-token.outputs.token }}
