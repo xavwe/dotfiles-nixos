@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate token
-        id: generate_token
+        id: generate-token
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
@@ -20,7 +20,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ steps.generate_token.outputs.token }}
+          token: ${{ steps.generate-token.outputs.token }}
 
       - name: Run Shellcheck
         uses: azohra/shell-linter@latest
@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate token
-        id: generate_token
+        id: generate-token
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
@@ -37,7 +37,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v4
         with:
-          token: ${{ steps.generate_token.outputs.token }}
+          token: ${{ steps.generate-token.outputs.token }}
           
       - name: Conventional Commits
         uses: wagoid/commitlint-github-action@v6

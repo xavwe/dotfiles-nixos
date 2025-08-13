@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate token
-        id: generate_token
+        id: generate-token
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
@@ -23,7 +23,7 @@ jobs:
       - name: delete-unmerged-branch
         uses: actions/github-script@v7
         with:
-          github-token: ${{ steps.generate_token.outputs.token }}
+          github-token: ${{ steps.generate-token.outputs.token }}
           script: |
             const { repo, owner } = context.repo;
             const ref = `heads/${context.payload.pull_request.head.ref}`;

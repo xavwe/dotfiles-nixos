@@ -15,7 +15,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'chore(main): release')"
     steps:
       - name: Generate token
-        id: generate_token
+        id: generate-token
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
@@ -24,4 +24,4 @@ jobs:
       - uses: googleapis/release-please-action@v4
         with:
           release-type: simple
-          token: ${{ steps.generate_token.outputs.token }}
+          token: ${{ steps.generate-token.outputs.token }}

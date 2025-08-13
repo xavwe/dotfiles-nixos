@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Generate token
-        id: generate_token
+        id: generate-token
         uses: actions/create-github-app-token@v1
         with:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          token: ${{ steps.generate_token.outputs.token }}
+          token: ${{ steps.generate-token.outputs.token }}
 
       - uses: cachix/install-nix-action@v25
 
