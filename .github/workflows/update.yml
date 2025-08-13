@@ -28,6 +28,8 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           commit-message: "chore(flake.lock): update"
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           title: "chore(flake.lock): update"
           body: |
             Automated update of flake.lock file.
