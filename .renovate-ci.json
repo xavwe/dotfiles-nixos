@@ -13,7 +13,6 @@
   "commitMessageAction": "update",
   "commitMessageTopic": "{{depName}}",
   "commitMessageExtra": "to {{newVersion}}",
-  "prTitle": "{{commitMessagePrefix}}{{commitMessageAction}} {{commitMessageTopic}}{{commitMessageExtra}}",
   "prConcurrentLimit": 5,
   "prHourlyLimit": 2,
 
@@ -31,7 +30,6 @@
       "automergeType": "pr",
       "automergeStrategy": "squash",
       "groupName": "GitHub Actions",
-      "rangeStrategy": "pin",
       "semanticCommits": "enabled",
       "semanticCommitType": "chore",
       "semanticCommitScope": "deps"
@@ -51,7 +49,6 @@
         "step-security/harden-runner",
         "ossf/scorecard-action"
       ],
-      "priority": 10,
       "automerge": false,
       "addLabels": ["security"]
     },
