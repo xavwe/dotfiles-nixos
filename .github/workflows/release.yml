@@ -33,6 +33,7 @@ jobs:
         with:
           release-type: simple
           token: ${{ steps.generate-token.outputs.token }}
+          skip-labeling: true
 
       - name: Enable auto-merge
         if: ${{ steps.release-please.outputs.pr }}
