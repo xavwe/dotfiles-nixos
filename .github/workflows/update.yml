@@ -20,16 +20,16 @@ jobs:
           app_id: ${{ secrets.CLAUDE_APP_ID }}
           private_key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH_NAME }}
+          token: ${{ steps.generate_token.outputs.token }}
+
       - name: Configure Git user
         run: |
           git config user.name "octohelper[bot]"
           git config user.email "151943256+octohelper[bot]@users.noreply.github.com"
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
-          token: ${{ steps.generate_token.outputs.token }}
 
       - name: Set up Nix
         uses: cachix/install-nix-action@v25
