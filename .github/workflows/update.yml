@@ -59,7 +59,7 @@ jobs:
         run: gh pr merge ${{ steps.create-pr.outputs.pull-request-number }} --auto --squash
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-  renovate:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Generate token
@@ -77,7 +77,7 @@ jobs:
       - name: Run Renovate
         uses: renovatebot/github-action@v43.0.6
         with:
-          configurationFile: .renovate.json
+          configurationFile: .renovate-ci.json
           token: ${{ steps.generate-token.outputs.token }}
         env:
           LOG_LEVEL: info

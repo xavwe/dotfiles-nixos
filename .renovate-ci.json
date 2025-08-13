@@ -6,13 +6,10 @@
   ],
   "timezone": "UTC",
   "minimumReleaseAge": "3 days",
-  "labels": ["dependencies", "renovate"],
-  "assigneesFromCodeOwners": true,
-  "reviewersFromCodeOwners": true,
   "platformAutomerge": true,
-  "branchPrefix": "deps/renovate/",
-  "gitAuthor": "Renovate Bot <bot@renovateapp.com>",
-  "commitMessagePrefix": "chore(deps): ",
+  "branchPrefix": "renovate/",
+  "gitAuthor": "octohelper[bot] <151943256+octohelper[bot]@users.noreply.github.com>",
+  "commitMessagePrefix": "chore(ci): ",
   "commitMessageAction": "update",
   "commitMessageTopic": "{{depName}}",
   "commitMessageExtra": "to {{newVersion}}",
@@ -70,13 +67,6 @@
       ],
       "automerge": true,
       "matchUpdateTypes": ["minor", "patch", "digest"]
-    },
-    {
-      "description": "Nix flake updates - Manual review",
-      "matchManagers": ["nix"],
-      "automerge": false,
-      "addLabels": ["nix-update"],
-      "commitMessageTopic": "{{depName}}"
     }
   ],
 
@@ -86,17 +76,9 @@
     "enabled": true
   },
   "osvVulnerabilityAlerts": true,
-  "dependencyDashboard": true,
-  "dependencyDashboardTitle": "🔄 Dependency Dashboard",
-  "dependencyDashboardApproval": false,
-  "dependencyDashboardAutoclose": true,
+  "dependencyDashboard": false,
 
   "enabledManagers": [
-    "github-actions",
-    "nix"
-  ],
-  "ignorePaths": [
-    "**/node_modules/**",
-    "**/vendor/**"
+    "github-actions"
   ]
 }
