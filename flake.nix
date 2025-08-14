@@ -83,12 +83,15 @@
       test = let
         script = nixpkgs.legacyPackages."x86_64-linux".writeShellScriptBin "test" ''
           #!/usr/bin/env sh
+          echo "Validating Renovate configuration..."
+          ${nixpkgs.legacyPackages."x86_64-linux".renovate}/bin/renovate-config-validator .renovate-ci.json
+          echo "Running nix flake check..."
           nix flake check .
         '';
       in {
         type = "app";
         program = "${script}/bin/test";
-        meta.description = "A test app to run nix flake check";
+        meta.description = "A test app to run nix flake check and validate Renovate config";
       };
 
       secret = let
@@ -137,6 +140,7 @@
     devShells."x86_64-linux".default = nixpkgs.legacyPackages."x86_64-linux".mkShell {
       packages = with nixpkgs.legacyPackages."x86_64-linux"; [
         sops
+        renovate
 
         # Nix
         nixd
