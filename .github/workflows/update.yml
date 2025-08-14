@@ -32,7 +32,7 @@ jobs:
           git config user.email "151943256+octohelper[bot]@users.noreply.github.com"
 
       - name: Set up Nix
-        uses: cachix/install-nix-action@c134e4c9e34bac6cab09cf239815f9339aaaf84e
+        uses: cachix/install-nix-action@96bd9f39e448e7b2e500161263429f67e3064111
         with:
           install_url: https://releases.nixos.org/nix/nix-2.18.1/install
 
