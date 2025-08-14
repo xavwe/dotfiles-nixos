@@ -21,7 +21,7 @@ jobs:
         with:
           token: ${{ steps.generate-token.outputs.token }}
 
-      - uses: cachix/install-nix-action@c134e4c9e34bac6cab09cf239815f9339aaaf84e
+      - uses: cachix/install-nix-action@6004951b182f8860210c8d6f0d808ec5b1a33d28
 
       - name: Run `nix flake check`
         run: nix flake check --all-systems
