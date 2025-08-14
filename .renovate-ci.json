@@ -1,0 +1,16 @@
+{
+  "extends": ["helpers:pinGitHubActionDigests"],
+  "branchPrefix": "renovate/",
+  "gitAuthor": "octohelper[bot] <151943256+octohelper[bot]@users.noreply.github.com>",
+  "commitMessagePrefix": "chore(ci): ",
+  "commitMessageAction": "update",
+  "minimumReleaseAge": "3 days",
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "osvVulnerabilityAlerts": true,
+  "platformAutomerge": true,
+  "enabledManagers": ["github-actions"],
+  "automerge": true,
+  "automergeType": "pr"
+}
