@@ -21,7 +21,7 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
 
       - name: Run Shellcheck
-        uses: azohra/shell-linter@6bbeaa868df09c34ddc008e6030cfe89c03394a1
+        uses: azohra/shell-linter@1e31b7f51d4b172285ff6b0933199f93779c4811
   conventional-commits:
     runs-on: ubuntu-latest
     steps:
