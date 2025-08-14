@@ -13,5 +13,6 @@
   "platformAutomerge": true,
   "enabledManagers": ["github-actions"],
   "automerge": true,
-  "automergeType": "pr"
+  "automergeType": "pr",
+  "prHourlyLimit": 0
 }
