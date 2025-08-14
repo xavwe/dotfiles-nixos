@@ -1,4 +1,5 @@
 {
+  "repositories": ["xavwe/dotfiles-nixos"],
   "extends": ["helpers:pinGitHubActionDigests"],
   "branchPrefix": "renovate/",
   "gitAuthor": "octohelper[bot] <151943256+octohelper[bot]@users.noreply.github.com>",
