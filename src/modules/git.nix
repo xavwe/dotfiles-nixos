@@ -25,7 +25,7 @@
         programs.git = {
           enable = true;
           userName = "xavwe";
-          userEmail = "125409009+xavwe@users.noreply.github.com";
+          userEmail = "xaver.wenhart@proton.me";
           aliases = lib.mkIf config.modules.git.aliases.yolo {
             yolo = "!git commit -m \"$(curl -s https://whatthecommit.com/index.txt)\"";
           };
