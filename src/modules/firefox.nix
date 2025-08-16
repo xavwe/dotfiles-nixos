@@ -686,6 +686,7 @@
                 dearrow
                 return-youtube-dislikes
                 # skip-redirect
+                darkreader
                 wayback-machine
               ];
               # Custom addons available in overlay if needed:
