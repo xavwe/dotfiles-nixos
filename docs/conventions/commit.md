@@ -2,7 +2,7 @@
 
 ## Commit Types:
 - feat: New features
-- fix: Bug fixes
+- fix: Bug fixes (only "user facing" fix; no fix related to ci, docs, etc.)
 - docs: Documentation changes
 - refactor: Code restructuring without changing functionality
 - style: Code formatting, missing semicolons, etc.
