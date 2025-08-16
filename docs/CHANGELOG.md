@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/xavwe/dotfiles-nixos/compare/v1.0.0...v1.0.1) (2025-08-16)
+
+
+### Bug Fixes
+
+* **git:** correct mail ([#134](https://github.com/xavwe/dotfiles-nixos/issues/134)) ([45e7483](https://github.com/xavwe/dotfiles-nixos/commit/45e7483cbd011b8ecc25f8d70d4ac4149ab88295))
+
 ## 1.0.0 (2025-08-13)
 
 
