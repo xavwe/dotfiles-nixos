@@ -20,7 +20,6 @@
       "matchManagers": ["github-actions"],
       "major": {
         "automerge": false,
-        "ignoreDeps": true,
         "prBody": "This is a major update to a GitHub Action. Please review the changelog before merging. All future updates to this dependency will be ignored until this PR is merged."
       }
     }
