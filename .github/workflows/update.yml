@@ -29,7 +29,7 @@ jobs:
       - name: Configure Git user
         run: |
           git config user.name "octohelper[bot]"
-          git config user.email "151943256+octohelper[bot]@users.noreply.github.com"
+          git config user.email "226188449+octohelper[bot]@users.noreply.github.com"
 
       - name: Set up Nix
         uses: cachix/install-nix-action@f02d3656786a1d5b584cac86f86bd863e4222e3d
@@ -44,8 +44,8 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ steps.generate-token.outputs.token }}
-          author: octohelper[bot] <151943256+octohelper[bot]@users.noreply.github.com>
-          committer: octohelper[bot] <151943256+octohelper[bot]@users.noreply.github.com>
+          author: octohelper[bot] <226188449+octohelper[bot]@users.noreply.github.com>
+          committer: octohelper[bot] <226188449+octohelper[bot]@users.noreply.github.com>
           commit-message: "chore(flake.lock): update"
           title: "chore(flake.lock): update"
           body: |
