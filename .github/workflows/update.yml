@@ -66,18 +66,18 @@ jobs:
     steps:
       - name: Generate token
         id: generate-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@8ab05a8a84060745bdc8f0b4f6d8f403c29e06b8
         with:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
           private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
 
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
         with:
           token: ${{ steps.generate-token.outputs.token }}
 
       - name: Run Renovate
-        uses: renovatebot/github-action@v43.0.6
+        uses: renovatebot/github-action@e3c9b63dabe11d616d9a5e9c19064ec6560369c0
         with:
           configurationFile: .renovate-ci.json
           token: ${{ steps.generate-token.outputs.token }}
