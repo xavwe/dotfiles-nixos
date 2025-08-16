@@ -14,5 +14,15 @@
   "enabledManagers": ["github-actions"],
   "automerge": true,
   "automergeType": "pr",
-  "prHourlyLimit": 0
+  "prHourlyLimit": 0,
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "major": {
+        "automerge": false,
+        "ignoreDeps": true,
+        "prBody": "This is a major update to a GitHub Action. Please review the changelog before merging. All future updates to this dependency will be ignored until this PR is merged."
+      }
+    }
+  ]
 }
