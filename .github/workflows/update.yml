@@ -44,6 +44,8 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ steps.generate-token.outputs.token }}
+          author: octohelper[bot] <151943256+octohelper[bot]@users.noreply.github.com>
+          committer: octohelper[bot] <151943256+octohelper[bot]@users.noreply.github.com>
           commit-message: "chore(flake.lock): update"
           title: "chore(flake.lock): update"
           body: |
