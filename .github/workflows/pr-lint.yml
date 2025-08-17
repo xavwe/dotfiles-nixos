@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate-title:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     permissions:
       pull-requests: read
     steps:

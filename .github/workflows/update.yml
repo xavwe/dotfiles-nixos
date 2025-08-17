@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   flake:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Generate token
@@ -62,7 +62,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
   ci:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Generate token
         id: generate-token

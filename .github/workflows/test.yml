@@ -8,7 +8,7 @@ on:
 
 jobs:
   nix-flake-check:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Generate token
         id: generate-token
@@ -27,7 +27,7 @@ jobs:
         run: nix flake check --all-systems
 
   renovate-config-validation:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Generate token
         id: generate-token

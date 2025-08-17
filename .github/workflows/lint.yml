@@ -6,7 +6,7 @@ on:
 
 jobs:
   shellcheck:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Generate token
         id: generate-token
@@ -23,7 +23,7 @@ jobs:
       - name: Run Shellcheck
         uses: azohra/shell-linter@1e31b7f51d4b172285ff6b0933199f93779c4811
   conventional-commits:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Generate token
         id: generate-token
@@ -41,7 +41,7 @@ jobs:
         uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed
   gitleaks:
     name: gitleaks
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Generate token
         id: generate-token
