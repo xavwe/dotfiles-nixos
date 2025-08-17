@@ -9,7 +9,9 @@
   sops-nix,
   ...
 }: {
-  environment.systemPackages = with pkgs; [
-    helvum
-  ];
+  home-manager.users.nu = {...}: {
+    home.packages = with pkgs; [
+      helvum
+    ];
+  };
 }

@@ -16,9 +16,11 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.nvd.enable {
-      environment.systemPackages = with pkgs; [
-        nvd
-      ];
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          nvd
+        ];
+      };
     })
   ];
 }

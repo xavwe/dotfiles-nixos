@@ -9,15 +9,6 @@
   sops-nix,
   ...
 }: {
-  # applications
-  environment.systemPackages = with pkgs; [
-    util-linux
-    vim
-    wget
-    curl
-    gcc
-  ];
-
   # temporary hosts entries for testing xavwe.dev locally
   networking.hosts = {
     "127.0.0.1" = ["test.xavwe.dev" "traefik.xavwe.dev" "rss.xavwe.dev"];
@@ -26,6 +17,19 @@
   # shell aliases
   home-manager.users.nu = {
     home = {
+      # default applications
+      packages = with pkgs; [
+        util-linux
+        vim
+        wget
+        curl
+        gcc
+        jq
+        yq
+        xq
+        fd
+        ripgrep
+      ];
       shellAliases =
         lib.optionalAttrs config.modules.foot.enable {
           ssh = "TERM=xterm-256color ssh";

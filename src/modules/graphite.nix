@@ -16,9 +16,11 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.graphite.enable {
-      environment.systemPackages = with pkgs; [
-        unfree.graphite-cli
-      ];
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          unfree.graphite-cli
+        ];
+      };
     })
   ];
 }

@@ -11,7 +11,9 @@
   sops-nix,
   ...
 }: {
-  environment.systemPackages = with pkgs; [
-    perl540Packages.vidir
-  ];
+  home-manager.users.nu = {...}: {
+    home.packages = with pkgs; [
+      perl540Packages.vidir
+    ];
+  };
 }

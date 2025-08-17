@@ -9,7 +9,9 @@
   sops-nix,
   ...
 }: {
-  environment.systemPackages = with pkgs; [
-    tor-browser
-  ];
+  home-manager.users.nu = {...}: {
+    home.packages = with pkgs; [
+      tor-browser
+    ];
+  };
 }

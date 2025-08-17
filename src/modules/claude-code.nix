@@ -13,13 +13,13 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      unfree.claude-code
-      ccusage
-      claude-trace
-    ];
-
     home-manager.users.nu = {...}: {
+      home.packages = with pkgs; [
+        unfree.claude-code
+        ccusage
+        claude-trace
+      ];
+
       # programs.bash.shellAliases.commit = "claude --dangerously-skip-permissions -p \"/commit\"";
       # programs.zsh.shellAliases.commit = "claude --dangerously-skip-permissions -p \"/commit\"";
 

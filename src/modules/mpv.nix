@@ -21,8 +21,10 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.mpv.enable {
-      environment.systemPackages = with pkgs; [mpv];
       home-manager.users.nu = {
+        home.packages = with pkgs; [
+          mpv
+        ];
         xdg.desktopEntries.mpv = {
           name = "mpv";
           exec = "${pkgs.mpv}/bin/mpv";

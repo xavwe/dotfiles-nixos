@@ -33,9 +33,11 @@
         };
       };
 
-      environment.systemPackages = with pkgs; [
-        doas-sudo-shim
-      ];
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          doas-sudo-shim
+        ];
+      };
     })
   ];
 }

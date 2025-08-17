@@ -15,11 +15,6 @@
   };
 
   config = lib.mkIf config.modules.scrcpy.enable {
-    environment.systemPackages = with pkgs; [
-      scrcpy
-      android-tools # for adb
-    ];
-
     # Enable udev rules for Android devices
     services.udev.packages = with pkgs; [
       android-udev-rules
@@ -29,6 +24,11 @@
     users.users.nu.extraGroups = ["adbusers"];
 
     home-manager.users.nu = {
+      home.packages = with pkgs; [
+        scrcpy
+        android-tools # for adb
+      ];
+
       xdg.desktopEntries.scrcpy = {
         name = "scrcpy";
         exec = "${pkgs.scrcpy}/bin/scrcpy";

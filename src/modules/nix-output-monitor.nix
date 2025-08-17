@@ -16,9 +16,11 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.nix-output-monitor.enable {
-      environment.systemPackages = with pkgs; [
-        nix-output-monitor
-      ];
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          nix-output-monitor
+        ];
+      };
     })
   ];
 }

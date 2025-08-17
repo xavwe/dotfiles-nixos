@@ -27,13 +27,13 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.neovim.enable {
-      environment.systemPackages = with pkgs; [
-        ripgrep
-        fd
-        tree-sitter
-        nodejs
-      ];
       home-manager.users.nu = {
+        home.packages = with pkgs; [
+          ripgrep
+          fd
+          tree-sitter
+          nodejs
+        ];
         programs.nvf = {
           enable = true;
           settings = {

@@ -16,9 +16,11 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.pass.enable {
-      environment.systemPackages = with pkgs; [
-        (pass.withExtensions (exts: [exts.pass-otp]))
-      ];
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          (pass.withExtensions (exts: [exts.pass-otp]))
+        ];
+      };
     })
 
     (lib.mkIf (config.modules.firefox.enable && config.modules.pass.enable) {

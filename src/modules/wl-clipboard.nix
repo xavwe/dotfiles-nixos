@@ -15,9 +15,11 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.wl-clipboard.enable {
-      environment.systemPackages = with pkgs; [
-        wl-clipboard
-      ];
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          wl-clipboard
+        ];
+      };
     })
   ];
 }

@@ -16,9 +16,11 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.just.enable {
-      environment.systemPackages = with pkgs; [
-        just
-      ];
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          just
+        ];
+      };
     })
   ];
 }

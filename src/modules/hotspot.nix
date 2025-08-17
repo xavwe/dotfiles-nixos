@@ -21,21 +21,23 @@
 
   config = lib.mkIf config.modules.hotspot.enable {
     # Install hotspot packages
-    environment.systemPackages = with pkgs;
-      [
-        # Command-line hotspot tools
-        hostapd # IEEE 802.11 AP and IEEE 802.1X/WPA/WPA2/EAP Authenticator
-        dnsmasq # DNS forwarder and DHCP server
-        iw # Wireless tools for Linux
-        iptables # Firewall and NAT rules
+    home-manager.users.nu = {
+      home.packages = with pkgs;
+        [
+          # Command-line hotspot tools
+          hostapd # IEEE 802.11 AP and IEEE 802.1X/WPA/WPA2/EAP Authenticator
+          dnsmasq # DNS forwarder and DHCP server
+          iw # Wireless tools for Linux
+          iptables # Firewall and NAT rules
 
-        # Feature-rich hotspot creator with CLI support
-        linux-wifi-hotspot # Both GUI and CLI interface
-      ]
-      ++ lib.optionals config.modules.hotspot.gui [
-        # GUI-only tools (when gui is enabled)
-        # linux-wifi-hotspot already provides GUI when installed
-      ];
+          # Feature-rich hotspot creator with CLI support
+          linux-wifi-hotspot # Both GUI and CLI interface
+        ]
+        ++ lib.optionals config.modules.hotspot.gui [
+          # GUI-only tools (when gui is enabled)
+          # linux-wifi-hotspot already provides GUI when installed
+        ];
+    };
 
     # Don't enable dnsmasq globally - create_ap will handle it when needed
     # services.dnsmasq.enable = true;

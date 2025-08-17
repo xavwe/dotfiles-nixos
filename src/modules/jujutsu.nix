@@ -16,11 +16,10 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.jujutsu.enable {
-      environment.systemPackages = with pkgs; [
-        jujutsu
-      ];
-
       home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          jujutsu
+        ];
         home.file.".config/jj/config.toml".text = ''
           "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
 

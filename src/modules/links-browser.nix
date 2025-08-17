@@ -9,7 +9,9 @@
   sops-nix,
   ...
 }: {
-  environment.systemPackages = with pkgs; [
-    links2
-  ];
+  home-manager.users.nu = {...}: {
+    home.packages = with pkgs; [
+      links2
+    ];
+  };
 }

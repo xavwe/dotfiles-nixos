@@ -20,9 +20,11 @@
       programs.nh = {
         enable = true;
       };
-      environment.systemPackages = lib.mkIf (config.modules.sudo.enable == false) [
-        (pkgs.writeShellScriptBin "sudo" "doas $@")
-      ];
+      home-manager.users.nu = {...}: {
+        home.packages = lib.mkIf (config.modules.sudo.enable == false) [
+          (pkgs.writeShellScriptBin "sudo" "doas $@")
+        ];
+      };
       environment.sessionVariables = {
         FLAKE = "/home/nu/.dotfiles/src";
       };

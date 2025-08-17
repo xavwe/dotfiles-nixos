@@ -10,7 +10,9 @@
   sops-nix,
   ...
 }: {
-  environment.systemPackages = with pkgs; [
-    ripgrep
-  ];
+  home-manager.users.nu = {...}: {
+    home.packages = with pkgs; [
+      ripgrep
+    ];
+  };
 }

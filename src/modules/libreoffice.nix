@@ -21,12 +21,14 @@
 
   config = lib.mkMerge [
     (lib.mkIf config.modules.zsh.enable {
-      environment.systemPackages = with pkgs; [
-        libreoffice-fresh
-        hunspell
-        hunspellDicts.de_DE
-        hunspellDicts.en_GB-ise
-      ];
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          libreoffice-fresh
+          hunspell
+          hunspellDicts.de_DE
+          hunspellDicts.en_GB-ise
+        ];
+      };
     })
 
     (lib.mkIf config.modules.zsh.default {

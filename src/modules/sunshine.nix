@@ -15,10 +15,6 @@
   };
 
   config = lib.mkIf config.modules.sunshine.enable {
-    environment.systemPackages = with pkgs; [
-      sunshine
-    ];
-
     # Enable the Sunshine service
     services.sunshine = {
       enable = true;
@@ -44,6 +40,10 @@
     users.users.nu.extraGroups = ["input"];
 
     home-manager.users.nu = {
+      home.packages = with pkgs; [
+        sunshine
+      ];
+
       xdg.desktopEntries.sunshine = {
         name = "Sunshine";
         exec = "${pkgs.sunshine}/bin/sunshine";
