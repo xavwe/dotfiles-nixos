@@ -8,3 +8,5 @@
 - [asaaki/gha-delete-unmerged-branches](https://github.com/asaaki/gha-delete-unmerged-branches/blob/main/.github/workflows/delete-unmerged-branch.yaml)
 ## zsh config
 - [new line after each command](https://www.reddit.com/r/commandline/comments/13r2ou3/comment/mo1p4ox/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button)
+## starship
+- [indicate shell in shell](https://github.com/NixOS/nix/issues/6677)

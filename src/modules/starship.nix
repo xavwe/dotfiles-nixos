@@ -22,7 +22,7 @@
             add_newline = false;
             #command_timeout = 1300;
             #scan_timeout = 50;
-            format = "$directory$custom$git_branch$direnv\n$character";
+            format = "$directory$custom$git_branch$direnv$shell_in_shell\n$character";
             character = {
               success_symbol = "[❯](bold fg:#9ECE6A)";
               error_symbol = "[❯](bold fg:#F5758D)";
@@ -65,6 +65,12 @@
               symbol = " ";
               format = "[$symbol]($style)";
               style = "fg:#A8E4A0";
+            };
+            custom.shell_in_shell = {
+              when = ''[[ $SHLVL -gt 2 ]]''; # +1 because of starship
+              symbol = " ";
+              format = "[$symbol]($style)";
+              style = "fg:#7dcfff";
             };
           };
         };
