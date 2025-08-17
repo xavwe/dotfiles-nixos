@@ -41,6 +41,7 @@
             '')
             ''
               zstyle ':completion:*' completer _expand_alias _complete _ignored
+
               precmd() {
                 print -Pn "\e]0;$(fc -ln -1)\a"
 
@@ -51,7 +52,17 @@
                     echo "Info: Consider using 'git clone --recursive --bare'"
                   fi
                 fi
+
+                [[ "$PROMPT_NEEDS_NEWLINE" == true ]] && [[ "$LAST_COMMAND_RAN" == true ]] && echo
+
+                PROMPT_NEEDS_NEWLINE=true
+                LAST_COMMAND_RAN=false
               }
+
+              preexec() {
+                LAST_COMMAND_RAN=true
+              }
+
               screenshot() {
                 IMG=~/screenshot/$(date +%Y-%m-%d_%H-%m-%s).png && grim -g "$(slurp)" $IMG && wl-copy < $IMG
               }
@@ -67,6 +78,15 @@
                 (( ZSH_SUBSHELL )) || osc7-pwd
               }
               add-zsh-hook -Uz chpwd chpwd-osc7-pwd
+
+              # newline after each command
+              # see precmd, preexec
+              PROMPT_NEEDS_NEWLINE=false
+              LAST_COMMAND_RAN=false
+              clear() {
+                PROMPT_NEEDS_NEWLINE=false
+                command clear
+              }
             ''
           ];
           profileExtra = lib.mkIf config.modules.hyprland.enable ''
