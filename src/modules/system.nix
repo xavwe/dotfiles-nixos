@@ -19,18 +19,48 @@
     nixos.enable = true;
   };
 
+  environment.corePackages = with pkgs; [
+    acl
+    attr
+    bashInteractive # bash with ncurses support
+    bzip2
+    coreutils-full
+    cpio
+    curl
+    diffutils
+    findutils
+    gawk
+    getent
+    getconf
+    gnugrep
+    gnupatch
+    gnused
+    gnutar
+    gzip
+    xz
+    less
+    libcap
+    ncurses
+    netcat
+    mkpasswd
+    procps
+    su
+    time
+    util-linux
+    which
+    zstd
+
+    gcc
+  ];
+
   # shell aliases
   home-manager.users.nu = {
     home = {
       # default applications
       packages = with pkgs; [
-        util-linux
-        vim
-        wget
-        curl
-        gcc
         jq
         yq
+
         fd
         ripgrep
       ];
