@@ -14,9 +14,9 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    if: >
-      github.event.workflow_run.conclusion == 'success' &&
-      !contains(github.event.workflow_run.head_commit.message, 'chore(main): release')
+    #if: >
+    #  github.event.workflow_run.conclusion == 'success' &&
+    #  !contains(github.event.workflow_run.head_commit.message, 'chore(main): release')
 
     steps:
       - name: Generate token
@@ -37,7 +37,7 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
           config-file: .release.json
           manifest-file: .manifest.json
-          #skip-labeling: true
+          skip-labeling: true
 
       - name: Enable auto-merge for PR
         if: ${{ steps.release-please.outputs.pr }}
