@@ -1,5 +1,4 @@
 name: release
-
 on:
   workflow_run:
     workflows: ["test"]
@@ -15,7 +14,10 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'chore(main): release')"
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      !contains(github.event.workflow_run.head_commit.message, 'chore(main): release')
+
     steps:
       - name: Generate token
         id: generate-token
@@ -27,6 +29,7 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           token: ${{ steps.generate-token.outputs.token }}
+          fetch-depth: 0
 
       - id: release-please
         uses: googleapis/release-please-action@1155c2c8dcbd6b15e85bae6bc6d1fed9552663cb
@@ -34,10 +37,17 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
           config-file: .release.json
           manifest-file: .manifest.json
-          skip-labeling: true
+          #skip-labeling: true
 
-      - name: Enable auto-merge
+      - name: Enable auto-merge for PR
         if: ${{ steps.release-please.outputs.pr }}
         run: gh pr merge ${{ fromJson(steps.release-please.outputs.pr).number }} --auto --squash
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+      # Optional: Add a step to handle successful releases
+      - name: Output release info
+        if: ${{ steps.release-please.outputs.release_created }}
+        run: |
+          echo "Release created: ${{ steps.release-please.outputs.tag_name }}"
+          echo "Release upload URL: ${{ steps.release-please.outputs.upload_url }}"
