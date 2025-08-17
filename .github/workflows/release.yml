@@ -36,6 +36,8 @@ jobs:
           config-file: .release.json
           manifest-file: .manifest.json
           skip-labeling: true
+        env:
+          ACTIONS_STEP_DEBUG: true
 
       - name: Enable auto-merge
         if: ${{ steps.release-please.outputs.pr }}
