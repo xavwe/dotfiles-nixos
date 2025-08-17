@@ -26,7 +26,6 @@
         gcc
         jq
         yq
-        xq
         fd
         ripgrep
       ];
