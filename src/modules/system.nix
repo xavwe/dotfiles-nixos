@@ -14,6 +14,11 @@
     "127.0.0.1" = ["test.xavwe.dev" "traefik.xavwe.dev" "rss.xavwe.dev"];
   };
 
+  documentation = {
+    enable = true;
+    nixos.enable = true;
+  };
+
   # shell aliases
   home-manager.users.nu = {
     home = {
