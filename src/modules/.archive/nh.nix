@@ -25,9 +25,6 @@
           (pkgs.writeShellScriptBin "sudo" "doas $@")
         ];
       };
-      environment.sessionVariables = {
-        FLAKE = "/home/nu/.dotfiles/src";
-      };
     })
   ];
 }
