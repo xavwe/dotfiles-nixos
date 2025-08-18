@@ -6,18 +6,13 @@ on:
       - completed
     branches:
       - main
-
 permissions:
   contents: write
   pull-requests: write
-
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    #if: >
-    #  github.event.workflow_run.conclusion == 'success' &&
-    #  !contains(github.event.workflow_run.head_commit.message, 'chore(main): release')
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Generate token
         id: generate-token
@@ -31,23 +26,56 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
           fetch-depth: 0
 
-      - id: release-please
-        uses: googleapis/release-please-action@1155c2c8dcbd6b15e85bae6bc6d1fed9552663cb
-        with:
-          token: ${{ steps.generate-token.outputs.token }}
-          config-file: .release.json
-          manifest-file: .manifest.json
-          skip-labeling: true
+      - name: Install Nix
+        uses: cachix/install-nix-action@v24
 
-      - name: Enable auto-merge for PR
-        if: ${{ steps.release-please.outputs.pr }}
-        run: gh pr merge ${{ fromJson(steps.release-please.outputs.pr).number }} --auto --squash
+      - name: Install git-cliff
+        run: |
+          nix profile install nixpkgs#git-cliff
+
+      - name: Check for new version
+        id: version
+        run: |
+          # Get the current version from the latest tag
+          CURRENT_VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "0.0.0")
+
+          # Use git-cliff to determine if we need a release and what version
+          # Only consider feat and fix commits
+          if git-cliff --bump --unreleased --include-path "feat*,fix*" > /dev/null 2>&1; then
+            NEW_VERSION=$(git-cliff --bump --unreleased --include-path "feat*,fix*" | head -n1 | grep -o 'v[0-9]*\.[0-9]*\.[0-9]*' | sed 's/^v//')
+            if [ "$NEW_VERSION" != "$CURRENT_VERSION" ]; then
+              echo "should_release=true" >> $GITHUB_OUTPUT
+              echo "new_version=v$NEW_VERSION" >> $GITHUB_OUTPUT
+              echo "New version will be: v$NEW_VERSION"
+            else
+              echo "should_release=false" >> $GITHUB_OUTPUT
+              echo "No version bump needed"
+            fi
+          else
+            echo "should_release=false" >> $GITHUB_OUTPUT
+            echo "No feat or fix commits found"
+          fi
+
+      - name: Build project
+        if: steps.version.outputs.should_release == 'true'
+        run: |
+          nix build .#default
+
+      - name: Generate changelog
+        id: generate-changelog
+        if: steps.version.outputs.should_release == 'true'
+        run: |
+          CHANGELOG_FILE="RELEASE_NOTES.md"
+          # Only include feat and fix commits in changelog
+          git-cliff --latest --strip header --include-path "feat*,fix*" > "$CHANGELOG_FILE"
+          echo "changelog=$CHANGELOG_FILE" >> $GITHUB_OUTPUT
+
+      - name: Create release
+        if: steps.version.outputs.should_release == 'true'
+        run: |
+          gh release create ${{ steps.version.outputs.new_version }} \
+            --title "Release ${{ steps.version.outputs.new_version }}" \
+            --notes-file ${{ steps.generate-changelog.outputs.changelog }} \
+            result/bin/* || true
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-
-      # Optional: Add a step to handle successful releases
-      - name: Output release info
-        if: ${{ steps.release-please.outputs.release_created }}
-        run: |
-          echo "Release created: ${{ steps.release-please.outputs.tag_name }}"
-          echo "Release upload URL: ${{ steps.release-please.outputs.upload_url }}"
