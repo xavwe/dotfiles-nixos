@@ -70,7 +70,6 @@ jobs:
         run: |
           gh release create ${{ steps.version.outputs.new_version }} \
             --title "Release ${{ steps.version.outputs.new_version }}" \
-            --notes-file ${{ steps.generate-changelog.outputs.changelog }} \
-            result/bin/* || true
+            --notes-file ${{ steps.generate-changelog.outputs.changelog }}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
