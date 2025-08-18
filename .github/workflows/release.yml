@@ -38,23 +38,57 @@ jobs:
         run: |
           # Get the current version from the latest tag
           CURRENT_VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "0.0.0")
+          echo "Current version: $CURRENT_VERSION"
 
-          # Use git-cliff to determine if we need a release and what version
-          # Only consider feat and fix commits
-          if git-cliff --bump --unreleased --include-path "feat*,fix*" > /dev/null 2>&1; then
-            NEW_VERSION=$(git-cliff --bump --unreleased --include-path "feat*,fix*" | head -n1 | grep -o 'v[0-9]*\.[0-9]*\.[0-9]*' | sed 's/^v//')
-            if [ "$NEW_VERSION" != "$CURRENT_VERSION" ]; then
-              echo "should_release=true" >> $GITHUB_OUTPUT
-              echo "new_version=v$NEW_VERSION" >> $GITHUB_OUTPUT
-              echo "New version will be: v$NEW_VERSION"
+          # Count feat and fix commits since last tag (or all commits if no tags)
+          if [ "$CURRENT_VERSION" = "0.0.0" ]; then
+            # No tags exist, check all commits
+            FEAT_COUNT=$(git log --oneline --grep="^feat" | wc -l)
+            FIX_COUNT=$(git log --oneline --grep="^fix" | wc -l)
+            BREAKING_COUNT=$(git log --oneline --grep="BREAKING CHANGE\|!" | wc -l)
+          else
+            # Check commits since last tag
+            LAST_TAG="v$CURRENT_VERSION"
+            FEAT_COUNT=$(git log $LAST_TAG..HEAD --oneline --grep="^feat" | wc -l)
+            FIX_COUNT=$(git log $LAST_TAG..HEAD --oneline --grep="^fix" | wc -l)
+            BREAKING_COUNT=$(git log $LAST_TAG..HEAD --oneline --grep="BREAKING CHANGE\|!" | wc -l)
+          fi
+
+          echo "Found $FEAT_COUNT features, $FIX_COUNT fixes, $BREAKING_COUNT breaking changes"
+
+          # Determine version bump
+          if [ "$BREAKING_COUNT" -gt 0 ]; then
+            if [ "$CURRENT_VERSION" = "0.0.0" ]; then
+              NEW_VERSION="1.0.0"
             else
-              echo "should_release=false" >> $GITHUB_OUTPUT
-              echo "No version bump needed"
+              IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+              NEW_VERSION="$((VERSION_PARTS[0] + 1)).0.0"
+            fi
+          elif [ "$FEAT_COUNT" -gt 0 ]; then
+            if [ "$CURRENT_VERSION" = "0.0.0" ]; then
+              NEW_VERSION="0.1.0"
+            else
+              IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+              NEW_VERSION="${VERSION_PARTS[0]}.$((VERSION_PARTS[1] + 1)).0"
+            fi
+          elif [ "$FIX_COUNT" -gt 0 ]; then
+            if [ "$CURRENT_VERSION" = "0.0.0" ]; then
+              NEW_VERSION="0.0.1"
+            else
+              IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+              NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$((VERSION_PARTS[2] + 1))"
             fi
           else
-            echo "should_release=false" >> $GITHUB_OUTPUT
             echo "No feat or fix commits found"
+            echo "should_release=false" >> $GITHUB_OUTPUT
+            exit 0
           fi
+
+          echo "should_release=true" >> $GITHUB_OUTPUT
+          echo "new_version=v$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "New version will be: v$NEW_VERSION"
+
+
 
       - name: Generate changelog
         id: generate-changelog
