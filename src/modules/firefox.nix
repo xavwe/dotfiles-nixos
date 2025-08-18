@@ -601,6 +601,91 @@
                 icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
                 definedAliases = ["@ho"];
               };
+              "npm" = {
+                urls = [
+                  {
+                    template = "https://npmjs.com/search";
+                    params = [
+                      {
+                        name = "q";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+
+                icon = "https://static-production.npmjs.com/c426a1116301d1fd178c51522484127a.png";
+                definedAliases = ["@npm"];
+              };
+              "Docker Hub" = {
+                urls = [
+                  {
+                    template = "https://hub.docker.com/search";
+                    params = [
+                      {
+                        name = "q";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+
+                icon = "https://hub.docker.com/favicon.ico";
+                definedAliases = ["@docker"];
+              };
+              # TODO: do not use google
+              "man7" = {
+                urls = [
+                  {
+                    template = "https://www.google.com/search";
+                    params = [
+                      {
+                        name = "sitesearch";
+                        value = "man7.org/linux/man-pages";
+                      }
+                      {
+                        name = "q";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+
+                icon = "https://www.man7.org/koru-icon.png";
+                definedAliases = ["@man"];
+              };
+              "svgl" = {
+                urls = [
+                  {
+                    template = "https://svgl.app/";
+                    params = [
+                      {
+                        name = "search";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+
+                icon = "https://svgl.app/images/logo.svg";
+                definedAliases = ["@logo"];
+              };
+              "Goodreads" = {
+                urls = [
+                  {
+                    template = "https://www.goodreads.com/search";
+                    params = [
+                      {
+                        name = "q";
+                        value = "{searchTerms}";
+                      }
+                    ];
+                  }
+                ];
+
+                icon = "https://www.goodreads.com/favicon.ico";
+                definedAliases = ["@goodreads"];
+              };
               "youtube" = {
                 name = "YouTube";
                 icon = "https://youtube.com/favicon.ico";

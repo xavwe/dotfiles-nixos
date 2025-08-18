@@ -11,3 +11,5 @@
 ## starship
 - [indicate shell in shell](https://github.com/NixOS/nix/issues/6677)
 - https://github.com/starship/starship/issues/6076
+## misc
+- https://gist.github.com/siboehm/53d2b498e1470d32f0af13b2c39a9520
