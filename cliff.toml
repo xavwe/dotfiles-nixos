@@ -20,6 +20,8 @@ split_commits = false
 commit_parsers = [
     { message = "^feat", group = "Features" },
     { message = "^fix", group = "Bug Fixes" },
+    { body = "BREAKING CHANGE", group = "Breaking Changes" },
+    { message = ".*!", group = "Breaking Changes" },
     # Skip everything else
     { message = ".*", skip = true },
 ]
