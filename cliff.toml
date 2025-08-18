@@ -1,17 +1,23 @@
-
 [changelog]
 header = """
 # Changelog
 
 """
+
 body = """
 {% for group, commits in commits | group_by(attribute="group") %}
 ## {{ group | striptags | trim | upper_first }}
 {% for commit in commits %}
-- {% if commit.scope %}{{ commit.scope }}: {% endif %}
-  {{ commit.message | split(pat=": ", n=2) | last | trim }}
-  ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/{{ env.GITHUB_REPOSITORY }}/commit/{{ commit.id }}))
-  {% if context.get(commit.id) %}(@{{ context.get(commit.id) }}){% endif %}
+- {% if commit.scope %}{{ commit.scope }}: {% endif %}{{ commit.message | split(pat=": ", n=2) | last | trim }} ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/{{ env.GITHUB_REPOSITORY }}/commit/{{ commit.id }}))
+  {% if context.authors.get(commit.id) %}
+    {% for a in context.authors.get(commit.id) %}
+      {% if a.login %}
+        [@{{ a.login }}](https://github.com/{{ a.login }}){% if not loop.last %}, {% endif %}
+      {% else %}
+        {{ a.name }}{% if a.email %} <{{ a.email }}>{% endif %}{% if not loop.last %}, {% endif %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 {% endfor %}
 
 {% endfor %}
