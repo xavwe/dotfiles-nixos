@@ -6,9 +6,11 @@ on:
       - completed
     branches:
       - main
+
 permissions:
   contents: write
   pull-requests: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -33,62 +35,79 @@ jobs:
         run: |
           nix profile install nixpkgs#git-cliff
 
-      - name: Check for new version
+      - name: Determine next version
         id: version
+        shell: bash
         run: |
-          # Get the current version from the latest tag
-          CURRENT_VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "0.0.0")
-          echo "Current version: $CURRENT_VERSION"
+          set -uo pipefail
 
-          # Count feat and fix commits since last tag (or all commits if no tags)
-          if [ "$CURRENT_VERSION" = "0.0.0" ]; then
-            # No tags exist, check all commits
-            FEAT_COUNT=$(git log --oneline --grep="^feat" | wc -l)
-            FIX_COUNT=$(git log --oneline --grep="^fix" | wc -l)
-            BREAKING_COUNT=$(git log --oneline --grep="BREAKING CHANGE\|!" | wc -l)
+          # Find the last semver tag of the form vX.Y.Z
+          LAST_TAG="$(git tag --list 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -n1 || true)"
+          if [ -z "${LAST_TAG:-}" ]; then
+            CURRENT_VERSION="0.0.0"
+            RANGE="HEAD"
           else
-            # Check commits since last tag
-            LAST_TAG="v$CURRENT_VERSION"
-            FEAT_COUNT=$(git log $LAST_TAG..HEAD --oneline --grep="^feat" | wc -l)
-            FIX_COUNT=$(git log $LAST_TAG..HEAD --oneline --grep="^fix" | wc -l)
-            BREAKING_COUNT=$(git log $LAST_TAG..HEAD --oneline --grep="BREAKING CHANGE\|!" | wc -l)
+            CURRENT_VERSION="${LAST_TAG#v}"
+            RANGE="${LAST_TAG}..HEAD"
           fi
+
+          echo "Current version: ${CURRENT_VERSION}"
+          echo "Range to analyze: ${RANGE}"
+
+          # Collect commit subjects in the chosen range (robust even if there are no matches)
+          commit_subjects="$(git log ${RANGE} --format='%s' || true)"
+          commit_bodies="$(git log ${RANGE} --format='%b%n---END---' || true)"
+
+          # Counts using Conventional Commit patterns
+          # feat / fix allow optional scope, and require a colon after the type
+          FEAT_COUNT=$(printf '%s\n' "$commit_subjects" | grep -E '^(feat)(\(.+\))?: ' -c || true)
+          FIX_COUNT=$(printf '%s\n' "$commit_subjects" | grep -E '^(fix)(\(.+\))?: ' -c || true)
+          # Breaking changes: either "!" after type/scope OR "BREAKING CHANGE" in body
+          BANG_COUNT=$(printf '%s\n' "$commit_subjects" | grep -E '^[a-z]+(\(.+\))?!: ' -c || true)
+          BODY_BREAK_COUNT=$(printf '%s\n' "$commit_bodies"   | grep -F 'BREAKING CHANGE' -c || true)
+          BREAKING_COUNT=$(( BANG_COUNT + BODY_BREAK_COUNT ))
 
           echo "Found $FEAT_COUNT features, $FIX_COUNT fixes, $BREAKING_COUNT breaking changes"
 
-          # Determine version bump
+          # Decide new version
+          IFS='.' read -r MA MI PA <<< "$CURRENT_VERSION"
+
           if [ "$BREAKING_COUNT" -gt 0 ]; then
             if [ "$CURRENT_VERSION" = "0.0.0" ]; then
               NEW_VERSION="1.0.0"
             else
-              IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
-              NEW_VERSION="$((VERSION_PARTS[0] + 1)).0.0"
+              NEW_VERSION="$((MA+1)).0.0"
             fi
           elif [ "$FEAT_COUNT" -gt 0 ]; then
             if [ "$CURRENT_VERSION" = "0.0.0" ]; then
               NEW_VERSION="0.1.0"
             else
-              IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
-              NEW_VERSION="${VERSION_PARTS[0]}.$((VERSION_PARTS[1] + 1)).0"
+              NEW_VERSION="$MA.$((MI+1)).0"
             fi
           elif [ "$FIX_COUNT" -gt 0 ]; then
             if [ "$CURRENT_VERSION" = "0.0.0" ]; then
               NEW_VERSION="0.0.1"
             else
-              IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
-              NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$((VERSION_PARTS[2] + 1))"
+              NEW_VERSION="$MA.$MI.$((PA+1))"
             fi
           else
-            echo "No feat or fix commits found"
-            echo "should_release=false" >> $GITHUB_OUTPUT
+            echo "No feat/fix/breaking commits since last release."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          echo "should_release=true" >> $GITHUB_OUTPUT
-          echo "new_version=v$NEW_VERSION" >> $GITHUB_OUTPUT
-          echo "New version will be: v$NEW_VERSION"
+          # Prevent accidental duplicate / nonsense tags
+          if git rev-parse -q --verify "refs/tags/v${NEW_VERSION}" >/dev/null; then
+            echo "Tag v${NEW_VERSION} already exists; skipping."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
 
-
+          echo "should_release=true" >> "$GITHUB_OUTPUT"
+          echo "new_version=v${NEW_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "last_tag=${LAST_TAG}" >> "$GITHUB_OUTPUT"
+          echo "range=${RANGE}" >> "$GITHUB_OUTPUT"
+          echo "New version will be: v${NEW_VERSION}"
 
       - name: Generate changelog
         id: generate-changelog
