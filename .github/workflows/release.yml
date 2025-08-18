@@ -54,17 +54,15 @@ jobs:
           echo "Current version: ${CURRENT_VERSION}"
           echo "Range to analyze: ${RANGE}"
 
-          # Collect commit subjects in the chosen range (robust even if there are no matches)
+          # Collect commit subjects in the chosen range
           commit_subjects="$(git log ${RANGE} --format='%s' || true)"
           commit_bodies="$(git log ${RANGE} --format='%b%n---END---' || true)"
 
           # Counts using Conventional Commit patterns
-          # feat / fix allow optional scope, and require a colon after the type
           FEAT_COUNT=$(printf '%s\n' "$commit_subjects" | grep -E '^(feat)(\(.+\))?: ' -c || true)
           FIX_COUNT=$(printf '%s\n' "$commit_subjects" | grep -E '^(fix)(\(.+\))?: ' -c || true)
-          # Breaking changes: either "!" after type/scope OR "BREAKING CHANGE" in body
           BANG_COUNT=$(printf '%s\n' "$commit_subjects" | grep -E '^[a-z]+(\(.+\))?!: ' -c || true)
-          BODY_BREAK_COUNT=$(printf '%s\n' "$commit_bodies"   | grep -F 'BREAKING CHANGE' -c || true)
+          BODY_BREAK_COUNT=$(printf '%s\n' "$commit_bodies" | grep -F 'BREAKING CHANGE' -c || true)
           BREAKING_COUNT=$(( BANG_COUNT + BODY_BREAK_COUNT ))
 
           echo "Found $FEAT_COUNT features, $FIX_COUNT fixes, $BREAKING_COUNT breaking changes"
@@ -96,7 +94,6 @@ jobs:
             exit 0
           fi
 
-          # Prevent accidental duplicate / nonsense tags
           if git rev-parse -q --verify "refs/tags/v${NEW_VERSION}" >/dev/null; then
             echo "Tag v${NEW_VERSION} already exists; skipping."
             echo "should_release=false" >> "$GITHUB_OUTPUT"
@@ -109,13 +106,30 @@ jobs:
           echo "range=${RANGE}" >> "$GITHUB_OUTPUT"
           echo "New version will be: v${NEW_VERSION}"
 
+      - name: Map commits to GitHub usernames
+        id: map-commits
+        if: steps.version.outputs.should_release == 'true'
+        run: |
+          echo "{}" > authors.json
+          for sha in $(git log ${{ steps.version.outputs.range }} --pretty=format:"%H"); do
+            login=$(gh api repos/${{ github.repository }}/commits/$sha --jq '.author.login' || true)
+            if [ -n "$login" ] && [ "$login" != "null" ]; then
+              tmp=$(mktemp)
+              jq --arg sha "$sha" --arg login "$login" '. + {($sha): $login}' authors.json > "$tmp" && mv "$tmp" authors.json
+            fi
+          done
+          echo "authors_file=authors.json" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+
       - name: Generate changelog
         id: generate-changelog
         if: steps.version.outputs.should_release == 'true'
         run: |
           CHANGELOG_FILE="RELEASE_NOTES.md"
-          # Only include feat and fix commits in changelog
-          git-cliff --latest --config cliff.toml --strip header  > "$CHANGELOG_FILE"
+          git-cliff --latest --config cliff.toml --strip header \
+            --context "$(cat ${{ steps.map-commits.outputs.authors_file }})" \
+            > "$CHANGELOG_FILE"
           echo "changelog=$CHANGELOG_FILE" >> $GITHUB_OUTPUT
 
       - name: Create release

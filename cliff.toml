@@ -1,3 +1,4 @@
+
 [changelog]
 header = """
 # Changelog
@@ -5,12 +6,15 @@ header = """
 """
 body = """
 {% for group, commits in commits | group_by(attribute="group") %}
-    ## {{ group | striptags | trim | upper_first }}
-    {% for commit in commits %}
-          - {% if commit.scope %}{{ commit.scope }}: {% endif %}{{ commit.message | split(pat=": ", n=2) | last | trim }} ([{{ commit.id | truncate(length=7, end="") }}]({{ commit.id }})) {% if authors.get(commit.author.email) %}(@{{ authors.get(commit.author.email) }}){% endif %}
-    {% endfor %}
+## {{ group | striptags | trim | upper_first }}
+{% for commit in commits %}
+- {% if commit.scope %}{{ commit.scope }}: {% endif %}
+  {{ commit.message | split(pat=": ", n=2) | last | trim }}
+  ([{{ commit.id | truncate(length=7, end="") }}](https://github.com/{{ env.GITHUB_REPOSITORY }}/commit/{{ commit.id }}))
+  {% if context.get(commit.id) %}(@{{ context.get(commit.id) }}){% endif %}
 {% endfor %}
 
+{% endfor %}
 """
 
 [git]
@@ -22,7 +26,6 @@ commit_parsers = [
     { message = "^fix", group = "Bug Fixes" },
     { body = "BREAKING CHANGE", group = "Breaking Changes" },
     { message = ".*!", group = "Breaking Changes" },
-    # Skip everything else
     { message = ".*", skip = true },
 ]
 
