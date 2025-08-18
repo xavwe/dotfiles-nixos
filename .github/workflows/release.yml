@@ -115,7 +115,7 @@ jobs:
         run: |
           CHANGELOG_FILE="RELEASE_NOTES.md"
           # Only include feat and fix commits in changelog
-          git-cliff --latest --strip header --include-path "feat*,fix*" > "$CHANGELOG_FILE"
+          git-cliff --latest --config cliff.toml --strip header  > "$CHANGELOG_FILE"
           echo "changelog=$CHANGELOG_FILE" >> $GITHUB_OUTPUT
 
       - name: Create release
@@ -126,3 +126,4 @@ jobs:
             --notes-file ${{ steps.generate-changelog.outputs.changelog }}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
