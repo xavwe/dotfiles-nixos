@@ -24,7 +24,8 @@ jobs:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
           private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
 
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - name: Checkout repository (full history)
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         with:
           token: ${{ steps.generate-token.outputs.token }}
           fetch-depth: 0
@@ -32,9 +33,21 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v24
 
-      - name: Install git-cliff
+      - name: Install git-cliff via Nix
         run: |
           nix profile install nixpkgs#git-cliff
+
+      - name: Ensure cli tools (jq, gh) are installed
+        run: |
+          set -euo pipefail
+          if ! command -v jq >/dev/null 2>&1; then
+            sudo apt-get update -y
+            sudo apt-get install -y jq
+          fi
+          if ! command -v gh >/dev/null 2>&1; then
+            sudo apt-get update -y
+            sudo apt-get install -y gh
+          fi
 
       - name: Determine next version
         id: version
@@ -55,15 +68,16 @@ jobs:
           echo "Current version: ${CURRENT_VERSION}"
           echo "Range to analyze: ${RANGE}"
 
-          # Collect commit subjects in the chosen range
+          # Collect commit subjects & bodies in the chosen range
           commit_subjects="$(git log ${RANGE} --format='%s' || true)"
           commit_bodies="$(git log ${RANGE} --format='%b%n---END---' || true)"
 
           # Counts using Conventional Commit patterns
           FEAT_COUNT=$(printf '%s\n' "$commit_subjects" | grep -E '^(feat)(\(.+\))?: ' -c || true)
           FIX_COUNT=$(printf '%s\n' "$commit_subjects" | grep -E '^(fix)(\(.+\))?: ' -c || true)
+          # Breaking changes: either "!" after type/scope OR "BREAKING CHANGE" in body
           BANG_COUNT=$(printf '%s\n' "$commit_subjects" | grep -E '^[a-z]+(\(.+\))?!: ' -c || true)
-          BODY_BREAK_COUNT=$(printf '%s\n' "$commit_bodies" | grep -F 'BREAKING CHANGE' -c || true)
+          BODY_BREAK_COUNT=$(printf '%s\n' "$commit_bodies"   | grep -F 'BREAKING CHANGE' -c || true)
           BREAKING_COUNT=$(( BANG_COUNT + BODY_BREAK_COUNT ))
 
           echo "Found $FEAT_COUNT features, $FIX_COUNT fixes, $BREAKING_COUNT breaking changes"
@@ -95,6 +109,7 @@ jobs:
             exit 0
           fi
 
+          # Prevent duplicate tags
           if git rev-parse -q --verify "refs/tags/v${NEW_VERSION}" >/dev/null; then
             echo "Tag v${NEW_VERSION} already exists; skipping."
             echo "should_release=false" >> "$GITHUB_OUTPUT"
@@ -107,85 +122,86 @@ jobs:
           echo "range=${RANGE}" >> "$GITHUB_OUTPUT"
           echo "New version will be: v${NEW_VERSION}"
 
-      - name: Map commits to GitHub usernames (primary + co-authors)
+      - name: Map commits to GitHub usernames (primary + co-authors), batched
         id: map-commits
         if: steps.version.outputs.should_release == 'true'
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          # Tunable: increase if your repo needs it (beware GraphQL query length limits)
+          BATCH_SIZE: 50
+        shell: bash
         run: |
           set -euo pipefail
 
           RANGE="${{ steps.version.outputs.range }}"
           OWNER="${GITHUB_REPOSITORY%%/*}"
           REPO="${GITHUB_REPOSITORY##*/}"
+          AUTHORS_FILE="authors.json"
 
-          # Make sure jq exists
-          if ! command -v jq >/dev/null 2>&1; then
-            sudo apt-get update -y
-            sudo apt-get install -y jq
-          fi
+          # initialize authors.json with top-level "authors" key
+          echo '{"authors": {}}' > "$AUTHORS_FILE"
 
-          # authors.json will be { "authors": { "<sha>": [ { "login": "...", "name": "...", "email": "..." }, ... ], ... } }
-          echo '{"authors":{}}' > authors.json
-
-          # Read SHAs in the range
+          # Gather SHAs in range (can be large)
           mapfile -t SHAS < <(git log "${RANGE}" --pretty=format:'%H' || true)
 
           if [ "${#SHAS[@]}" -eq 0 ]; then
             echo "No commits in range ${RANGE}; authors.json left empty."
-            echo "authors_file=authors.json" >> "$GITHUB_OUTPUT"
+            echo "authors_file=$AUTHORS_FILE" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          # Tunable: batch size for GraphQL queries. 50 is a pragmatic default.
-          batch_size=50
+          batch_size=${BATCH_SIZE:-50}
           total=${#SHAS[@]}
           i=0
 
-          while [ $i -lt $total ]; do
+          # Iterate in batches to avoid huge GraphQL queries
+          while [ "$i" -lt "$total" ]; do
             batch_end=$(( i + batch_size ))
-            [ $batch_end -gt $total ] && batch_end=$total
+            [ "$batch_end" -gt "$total" ] && batch_end=$total
 
-            # Build a compact GraphQL query that aliases each object call (c0, c1, ...)
+            # Build GraphQL query with aliases c0, c1, ...
             graphql='query { repository(owner:"'"$OWNER"'", name:"'"$REPO"'") {'
             idx=0
             for ((j=i;j<batch_end;j++)); do
               sha="${SHAS[j]}"
-              # request the commit object and its authors connection (GitHub will include co-authors when present)
-              graphql+="c${idx}: object(expression: \"${sha}\") { ... on Commit { oid authors(first: 10) { edges { node { user { login } name email } } } } } "
+              # request commit oid and the authors connection (GitHub maps co-authors when it can)
+              graphql+="c${idx}: object(expression: \"${sha}\") { ... on Commit { oid authors(first: 100) { edges { node { user { login } name email } } } } } "
               idx=$((idx+1))
             done
             graphql+=' } }'
 
             # Execute GraphQL request (uses GH_TOKEN)
-            resp="$(gh api graphql -f query="$graphql")"
+            # If gh fails, continue — we have fallbacks per-commit
+            resp="$(gh api graphql -f query="$graphql" 2>/dev/null || true)"
 
-            # Iterate responses and write into authors.json
+            # Process responses in this batch
             for ((k=0;k<idx;k++)); do
+              # Extract oid (commit full sha)
               oid=$(echo "$resp" | jq -r ".data.repository.c${k}.oid // empty")
+
               if [ -z "$oid" ]; then
-                # object not found (unlikely) - skip
+                # GraphQL did not return object; skip and fallback to commit parsing below
                 continue
               fi
 
-              # Prefer GitHub user logins when available.
-              # Build array of objects { login, name?, email? } from the authors connection
-              logins_json=$(echo "$resp" | jq -c ".data.repository.c${k}.authors.edges | map(.node | { login: .user.login, name: .name, email: .email }) | map(select(.login != null))")
+              # Build an array of author objects from the authors.edges returned by GraphQL
+              arr=$(echo "$resp" | jq -c ".data.repository.c${k}.authors.edges // [] | map(.node | { login: (.user.login // null), name: (.name // null), email: (.email // null) })")
 
-              if [ "$logins_json" != "[]" ]; then
-                # We have at least one mapped GitHub user -> store them
-                jq --arg oid "$oid" --argjson arr "$logins_json" '.authors[$oid] = $arr' authors.json > authors.tmp && mv authors.tmp authors.json
+              # If GraphQL returned meaningful author info, persist it (prefer entries with at least one field)
+              if [ "$(echo "$arr" | jq 'map(select(.login != null or .name != null or .email != null)) | length')" != "0" ]; then
+                filtered=$(echo "$arr" | jq -c 'map(select(.login != null or .name != null or .email != null))')
+                jq --arg oid "$oid" --argjson arr "$filtered" '.authors[$oid] = $arr' "$AUTHORS_FILE" > "${AUTHORS_FILE}.tmp" && mv "${AUTHORS_FILE}.tmp" "$AUTHORS_FILE"
                 continue
               fi
 
-              # Fallback: parse Co-authored-by trailers from the commit message (name + email)
+              # Fallback 1: parse Co-authored-by trailers from commit message
               trailers=$(git show -s --format=%B "$oid" | grep -i '^Co-authored-by:' || true)
               if [ -n "$trailers" ]; then
                 coarr='[]'
                 while IFS= read -r line; do
-                  # extract "Name <email@example.com>"
                   if [[ "$line" =~ ^[Cc]o-authored-by: ]]; then
+                    # extract "Name <email@example.com>"
                     name=$(echo "$line" | sed -E 's/^[Cc]o-authored-by:[[:space:]]*([^<]+).*/\1/' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
                     email=$(echo "$line" | sed -nE 's/.*<([^>]+)>.*/\1/p' || true)
                     if [ -n "$email" ]; then
@@ -196,37 +212,39 @@ jobs:
                   fi
                 done <<< "$trailers"
 
-                if [ "$coarr" != "[]" ]; then
-                  jq --arg oid "$oid" --argjson arr "$coarr" '.authors[$oid] = $arr' authors.json > authors.tmp && mv authors.tmp authors.json
+                if [ "$(echo "$coarr" | jq 'length')" != "0" ]; then
+                  jq --arg oid "$oid" --argjson arr "$coarr" '.authors[$oid] = $arr' "$AUTHORS_FILE" > "${AUTHORS_FILE}.tmp" && mv "${AUTHORS_FILE}.tmp" "$AUTHORS_FILE"
                   continue
                 fi
               fi
 
-              # No authors from GraphQL and no Co-authored-by trailer -> try to capture the commit author name/email
+              # Fallback 2: include the commit author name+email
               author_name=$(git show -s --format='%aN' "$oid")
               author_email=$(git show -s --format='%aE' "$oid")
               single='[]'
               single=$(jq --arg name "$author_name" --arg email "$author_email" '. + [{"name":$name,"email":$email}]' <<<"$single")
-              jq --arg oid "$oid" --argjson arr "$single" '.authors[$oid] = $arr' authors.json > authors.tmp && mv authors.tmp authors.json
+              jq --arg oid "$oid" --argjson arr "$single" '.authors[$oid] = $arr' "$AUTHORS_FILE" > "${AUTHORS_FILE}.tmp" && mv "${AUTHORS_FILE}.tmp" "$AUTHORS_FILE"
             done
 
             i=$batch_end
           done
 
-          # Return file path for next steps
-          echo "authors_file=authors.json" >> "$GITHUB_OUTPUT"
-        # end run
+          # Export path to next steps
+          echo "authors_file=$AUTHORS_FILE" >> "$GITHUB_OUTPUT"
 
       - name: Generate changelog
         id: generate-changelog
         if: steps.version.outputs.should_release == 'true'
         run: |
+          set -euo pipefail
           CHANGELOG_FILE="RELEASE_NOTES.md"
-          # feed the authors.json as --context; jq -c makes a single-line JSON so the CLI arg is stable
+
+          # Pass authors.json as the template context; jq -c produces compact single-line JSON for CLI safety
           git-cliff --latest --config cliff.toml --strip header \
             --context "$(jq -c '.' ${{ steps.map-commits.outputs.authors_file }})" \
             > "$CHANGELOG_FILE"
-          echo "changelog=$CHANGELOG_FILE" >> $GITHUB_OUTPUT
+
+          echo "changelog=$CHANGELOG_FILE" >> "$GITHUB_OUTPUT"
 
       - name: Create release
         if: steps.version.outputs.should_release == 'true'
