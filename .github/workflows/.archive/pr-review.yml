@@ -6,7 +6,7 @@ on:
 
 jobs:
   claude-review:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     if: github.event.pull_request.user.login != 'octohelper[bot]'
     permissions:
       contents: read

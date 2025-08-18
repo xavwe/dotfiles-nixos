@@ -11,7 +11,7 @@ permissions:
 jobs:
   delete-unmerged-branch:
     if: ${{ github.event.pull_request.merged_at == '' }}
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Generate token
         id: generate-token

@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   nix-format:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Generate token
