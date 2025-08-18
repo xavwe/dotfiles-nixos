@@ -24,7 +24,7 @@
       home-manager.users.nu = {...}: {
         programs.git = {
           enable = true;
-          userName = "xavwe";
+          userName = "Xaver Wenhart";
           userEmail = "xaver.wenhart@proton.me";
           aliases = lib.mkIf config.modules.git.aliases.yolo {
             yolo = "!git commit -m \"$(curl -s https://whatthecommit.com/index.txt)\"";
