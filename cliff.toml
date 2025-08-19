@@ -3,21 +3,14 @@ header = """
 # Changelog
 
 """
-
 body = """
 {% for group, commits in commits | group_by(attribute="group") %}
-  ## {{ group | striptags | trim | upper_first }}
-  {% for commit in commits %}
-    - {% if commit.scope %}{{ commit.scope }}: {% endif %}
-      {{ commit.message | split(pat=": ", n=2) | last | trim }}
-      ([{{ commit.id | truncate(length=7, end="") }}]({{ commit.id }}))
-      {% if context.authors.get(commit.id) %}
-        {% for user in context.authors.get(commit.id) %}
-          (@{{ user }})
-        {% endfor %}
-      {% endif %}
-  {% endfor %}
+    ## {{ group | striptags | trim | upper_first }}
+    {% for commit in commits %}
+          - {% if commit.scope %}{{ commit.scope }}: {% endif %}{{ commit.message | split(pat=": ", n=2) | last | trim }} ([{{ commit.id | truncate(length=7, end="") }}]({{ commit.id }})) (@{{ commit.author.name }})
+    {% endfor %}
 {% endfor %}
+
 """
 
 [git]
@@ -29,6 +22,7 @@ commit_parsers = [
     { message = "^fix", group = "Bug Fixes" },
     { body = "BREAKING CHANGE", group = "Breaking Changes" },
     { message = ".*!", group = "Breaking Changes" },
+    # Skip everything else
     { message = ".*", skip = true },
 ]
 
