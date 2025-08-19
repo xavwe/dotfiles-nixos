@@ -963,7 +963,7 @@
       home-manager.users.nu = {
         home.sessionVariables = {
           VISUAL = "nvim";
-          EDITOR = "$VISUAL";
+          EDITOR = "nvim";
         };
       };
     })

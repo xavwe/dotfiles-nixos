@@ -92,12 +92,9 @@ in {
     (lib.mkIf config.modules.rofi.enable {
       home-manager.users.nu = {...}: {
         home.packages = with pkgs; [
-          rofi-emoji
-          rofi-calc
           jq
           wl-clipboard
           rofiLauncherScript
-          rofi-nerdy
         ];
 
         programs.rofi = {
