@@ -63,6 +63,8 @@
 
         fd
         ripgrep
+
+        parallel-full
       ];
       shellAliases =
         lib.optionalAttrs config.modules.foot.enable {
