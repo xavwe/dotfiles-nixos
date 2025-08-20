@@ -317,6 +317,7 @@
     config.boot.kernelPackages.cpupower
     config.boot.kernelPackages.turbostat
     pkgs.smartmontools
+    pkgs.lm_sensors
     pkgs.ethtool
   ];
 
