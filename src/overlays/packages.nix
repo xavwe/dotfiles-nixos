@@ -377,7 +377,7 @@ in {
     meta = with final.lib; {
       description = "Nerd font icon selector plugin for rofi";
       homepage = "https://github.com/Rolv-Apneseth/rofi-nerdy";
-      license = licenses.agpl3Plus;
+      license = licenses.agpl3Only;
       platforms = platforms.linux;
     };
   };
