@@ -47,7 +47,6 @@
     ./links-browser.nix
     ./gemini-cli.nix
     ./rsync.nix
-    ./vidir.nix
     ./ripgrep.nix
     ./ncmpcpp.nix
     ./mpc.nix
