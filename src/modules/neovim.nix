@@ -18,10 +18,10 @@
       default = false;
       description = "Make neovim default";
     };
-    manpager = lib.mkOption {
+    pager = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Make neovim default manpager";
+      description = "Make neovim default pager";
     };
   };
 
@@ -963,17 +963,23 @@
       home-manager.users.nu = {
         home.sessionVariables = {
           VISUAL = "nvim";
-          EDITOR = "$VISUAL";
+          EDITOR = "nvim";
         };
       };
     })
 
-    (lib.mkIf config.modules.neovim.manpager {
-      environment.sessionVariables = lib.mkMerge [
-        {
-          MANPAGER = "nvim +Man!";
-        }
-      ];
+    (lib.mkIf config.modules.neovim.pager {
+      home-manager.users.nu = {
+        home.sessionVariables = lib.mkMerge [
+          {
+            MANPAGER = "nvim +Man!";
+            PAGER = "nvimpager";
+          }
+        ];
+        home.packages = with pkgs; [
+          nvimpager
+        ];
+      };
     })
   ];
 }

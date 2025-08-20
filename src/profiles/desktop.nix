@@ -30,7 +30,7 @@
       # cli
       neovim.enable = true;
       neovim.default = true;
-      neovim.manpager = true;
+      neovim.pager = true;
       jujutsu.enable = true;
       gh.enable = true;
       fastfetch.enable = true;
