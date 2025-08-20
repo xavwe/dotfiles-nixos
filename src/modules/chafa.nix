@@ -24,6 +24,7 @@
       home-manager.users.nu = {...}: {
         home.packages = with pkgs; [
           chafa
+          librsvg
         ];
         xdg.desktopEntries.chafa = {
           name = "chafa";
