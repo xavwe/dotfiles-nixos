@@ -31,6 +31,7 @@
           KbdInteractiveAuthentication = false;
         };
       };
+      users.users.nu.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFvZXWH/WPQ3mZaxTwvvZTJShW0HBb7MhC/BtsmD5B5d xavwe@xwpc"];
     })
     (lib.mkIf config.modules.fzf.enable {
       home-manager.users.nu = {...}: {
@@ -48,7 +49,7 @@
             };
             vps = {
               hostname = "195.15.206.239";
-              user = "root";
+              user = "nu";
               extraOptions = {
                 AddKeysToAgent = "yes";
                 IdentityFile = "~/.ssh/infomaniak";

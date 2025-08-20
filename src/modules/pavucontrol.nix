@@ -1,17 +1,26 @@
 {
+  inputs,
+  lib,
   config,
   pkgs,
-  inputs,
-  outputs,
-  lib,
   home-manager,
-  overlays,
-  sops-nix,
   ...
 }: {
-  home-manager.users.nu = {...}: {
-    home.packages = with pkgs; [
-      pavucontrol
-    ];
+  options.modules.pavucontrol = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Use pavucontrol";
+    };
   };
+
+  config = lib.mkMerge [
+    (lib.mkIf config.modules.pavucontrol.enable {
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          pavucontrol
+        ];
+      };
+    })
+  ];
 }

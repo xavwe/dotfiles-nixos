@@ -1,17 +1,26 @@
 {
+  inputs,
+  lib,
   config,
   pkgs,
-  inputs,
-  outputs,
-  lib,
   home-manager,
-  overlays,
-  sops-nix,
   ...
 }: {
-  home-manager.users.nu = {...}: {
-    home.packages = with pkgs; [
-      links2
-    ];
+  options.modules.links-browser = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Use links-browser";
+    };
   };
+
+  config = lib.mkMerge [
+    (lib.mkIf config.modules.links-browser.enable {
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          links2
+        ];
+      };
+    })
+  ];
 }

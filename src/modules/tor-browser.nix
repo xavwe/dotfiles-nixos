@@ -1,17 +1,26 @@
 {
+  inputs,
+  lib,
   config,
   pkgs,
-  inputs,
-  outputs,
-  lib,
   home-manager,
-  overlays,
-  sops-nix,
   ...
 }: {
-  home-manager.users.nu = {...}: {
-    home.packages = with pkgs; [
-      tor-browser
-    ];
+  options.modules.tor-browser = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Use tor-browser";
+    };
   };
+
+  config = lib.mkMerge [
+    (lib.mkIf config.modules.tor-browser.enable {
+      home-manager.users.nu = {...}: {
+        home.packages = with pkgs; [
+          tor-browser
+        ];
+      };
+    })
+  ];
 }
