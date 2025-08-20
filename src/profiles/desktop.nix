@@ -61,6 +61,7 @@
 
       # system
       dark-mode.enable = true;
+      printing.enable = true;
       starship.enable = true;
       virt-manager.enable = true;
       wakatime.enable = true;

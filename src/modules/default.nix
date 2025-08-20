@@ -58,6 +58,7 @@
 
     # system
     ./pipewire.nix
+    ./printing.nix
     ./system.nix
     ./kanata.nix
     ./wl-clipboard.nix

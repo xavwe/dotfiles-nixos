@@ -349,4 +349,19 @@
     "d /var/lib/ollama/models 0755 ollama ollama -"
     "Z /var/lib/ollama/models - ollama ollama - -"
   ];
+
+  hardware.printers = {
+    ensurePrinters = [
+      {
+        name = "hp-color-laserjet";
+        location = "Home";
+        deviceUri = "ipp://192.168.178.24";
+        model = "drv:///sample.drv/generic.ppd";
+        ppdOptions = {
+          PageSize = "A4";
+        };
+      }
+    ];
+    ensureDefaultPrinter = "hp-color-laserjet";
+  };
 }
