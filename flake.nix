@@ -158,6 +158,11 @@
         profile = "minimal";
         hardware = "newton";
       };
+
+      infomaniak-minimal = mkSystem {
+        profile = "minimal";
+        hardware = "infomaniak";
+      };
     };
 
     packages.x86_64-linux = {
