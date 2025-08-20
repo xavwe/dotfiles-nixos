@@ -19,6 +19,7 @@
     ];
     fontconfig = {
       defaultFonts = {
+        emoji = ["Noto Color Emoji"];
         serif = ["Literata"];
         #sansSerif = ["Ubuntu" "Vazirmatn"];
         monospace = ["JetBrainsMono Nerd Font"];
