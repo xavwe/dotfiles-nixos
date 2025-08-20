@@ -73,7 +73,7 @@
           zfs_arc_cached = True
           show_swap = True
           swap_disk = True
-          show_disks = False
+          show_disks = True
           only_physical = True
           use_fstab = True
           zfs_hide_datasets = False
