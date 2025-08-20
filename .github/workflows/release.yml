@@ -114,8 +114,14 @@ jobs:
         if: steps.version.outputs.should_release == 'true'
         run: |
           CHANGELOG_FILE="RELEASE_NOTES.md"
-          # Only include feat and fix commits in changelog
-          git-cliff --latest --config cliff.toml --strip header  > "$CHANGELOG_FILE"
+          # Only include feat and fix commits in changelog for the current range
+          if [ "${{ steps.version.outputs.last_tag }}" = "" ]; then
+            # If no previous tag, generate from HEAD
+            git-cliff --unreleased --config cliff.toml --strip header > "$CHANGELOG_FILE"
+          else
+            # Generate changelog only for commits since last tag to HEAD
+            git-cliff --config cliff.toml --strip header "${{ steps.version.outputs.last_tag }}..HEAD" > "$CHANGELOG_FILE"
+          fi
           echo "changelog=$CHANGELOG_FILE" >> $GITHUB_OUTPUT
 
       - name: Create release
