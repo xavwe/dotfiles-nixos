@@ -53,7 +53,6 @@
     gcc
   ];
 
-  # shell aliases
   home-manager.users.nu = {
     home = {
       # default applications
