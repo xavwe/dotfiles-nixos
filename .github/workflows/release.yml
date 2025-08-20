@@ -128,7 +128,7 @@ jobs:
         if: steps.version.outputs.should_release == 'true'
         run: |
           gh release create ${{ steps.version.outputs.new_version }} \
-            --title "Release ${{ steps.version.outputs.new_version }}" \
+            --title "${{ steps.version.outputs.new_version }}" \
             --notes-file ${{ steps.generate-changelog.outputs.changelog }}
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
