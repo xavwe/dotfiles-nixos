@@ -97,7 +97,7 @@ stop_recording_and_transcribe() {
 
             # Read transcript from generated file
             if [ -f "$TXT_FILE" ] && [ -s "$TXT_FILE" ]; then
-                TRANSCRIPT=$(cat "$TXT_FILE" | tr -d '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+                TRANSCRIPT=$(tr -d '\n' < "$TXT_FILE" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
                 rm -f "$TXT_FILE"  # Clean up the txt file
             else
                 TRANSCRIPT=""
