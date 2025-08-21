@@ -443,9 +443,11 @@
               "svg.context-properties.content.enabled" = true;
               "gnomeTheme.hideSingleTab" = true;
               "gnomeTheme.bookmarksToolbarUnderTabs" = true;
+              "gnomeTheme.oledBlack" = true;
               "gnomeTheme.normalWidthTabs" = false;
               "gnomeTheme.tabsAsHeaderbar" = false;
               "browser.fullscreen.autohide" = false;
+              "browser.uiCustomization.state" = "{\"placements\":{\"widget-overflow-fixed-list\":[],\"unified-extensions-area\":[\"harper_writewithharper_com-browser-action\",\"_a4c4eda4-fb84-4a84-b4a1-f7c1cbf2a1ad_-browser-action\",\"wayback_machine_mozilla_org-browser-action\",\"passff_invicem_pro-browser-action\",\"_34daeb50-c2d2-4f14-886a-7160b24d66a4_-browser-action\",\"_762f9885-5a13-4abd-9c77-433dcd38b8fd_-browser-action\"],\"nav-bar\":[\"back-button\",\"forward-button\",\"stop-reload-button\",\"customizableui-special-spring1\",\"vertical-spacer\",\"urlbar-container\",\"customizableui-special-spring2\",\"downloads-button\",\"fxa-toolbar-menu-button\",\"_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action\",\"dearrow_ajay_app-browser-action\",\"ublock0_raymondhill_net-browser-action\",\"sponsorblocker_ajay_app-browser-action\",\"unified-extensions-button\"],\"toolbar-menubar\":[\"menubar-items\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"alltabs-button\"],\"vertical-tabs\":[],\"PersonalToolbar\":[\"personal-bookmarks\"]},\"seen\":[\"harper_writewithharper_com-browser-action\",\"_d7742d87-e61d-4b78-b8a1-b469842139fa_-browser-action\",\"_a4c4eda4-fb84-4a84-b4a1-f7c1cbf2a1ad_-browser-action\",\"wayback_machine_mozilla_org-browser-action\",\"dearrow_ajay_app-browser-action\",\"passff_invicem_pro-browser-action\",\"_34daeb50-c2d2-4f14-886a-7160b24d66a4_-browser-action\",\"_762f9885-5a13-4abd-9c77-433dcd38b8fd_-browser-action\",\"ublock0_raymondhill_net-browser-action\",\"sponsorblocker_ajay_app-browser-action\",\"developer-button\",\"screenshot-button\"],\"dirtyAreaCache\":[\"unified-extensions-area\",\"nav-bar\",\"vertical-tabs\",\"TabsToolbar\",\"toolbar-menubar\",\"PersonalToolbar\"],\"currentVersion\":23,\"newElementCount\":5}";
             };
             search.engines = {
               bing.metaData.hidden = true;
