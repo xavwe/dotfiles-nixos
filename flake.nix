@@ -62,6 +62,17 @@
       url = "github:feel-co/ndg";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    astal = {
+      url = "github:aylur/astal";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    ags = {
+      url = "github:aylur/ags";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.astal.follows = "astal";
+    };
   };
 
   outputs = {
@@ -141,6 +152,7 @@
       packages = with nixpkgs.legacyPackages."x86_64-linux"; [
         sops
         renovate
+        ags
 
         # Nix
         nixd
@@ -202,7 +214,9 @@
               modules.neovim.enable = true;
               users.users.nu.isNormalUser = true;
               home-manager.users.nu = {
-                imports = [inputs.nvf.homeManagerModules.default];
+                imports = [
+                  inputs.nvf.homeManagerModules.default
+                ];
                 home = {
                   stateVersion = "23.11";
                   homeDirectory = "/home/nu";

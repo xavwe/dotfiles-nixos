@@ -1,0 +1,1 @@
+find -type f -name '*' | nix run nixpkgs#entr -- sh -c "ags quit; ags run . &"

@@ -26,7 +26,10 @@
       inputs.home-manager.nixosModules.home-manager
       {
         home-manager.users.nu = {
-          imports = [inputs.nvf.homeManagerModules.default];
+          imports = [
+            inputs.nvf.homeManagerModules.default
+            inputs.ags.homeManagerModules.default
+          ];
         };
       }
     ];

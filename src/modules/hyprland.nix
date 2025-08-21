@@ -66,7 +66,10 @@ in {
           settings = {
             monitor = [",preferred,auto,auto"];
 
-            #exec-once = ''hypridle'';
+            exec-once = [
+              ''hypridle''
+              ''ags run --gtk 3''
+            ];
 
             env = [
               "XCURSOR_SIZE,24"
@@ -171,7 +174,7 @@ in {
                 "${hyprVars.mainMod}, H, togglesplit," # dwindle
                 "${hyprVars.mainMod}, Y, exec, hyprlock"
                 ''${hyprVars.mainMod}, S, exec, IMG=~/screenshot/$(date +%Y-%m-%d_%H-%m-%s).png && grim -g "$(slurp)" $IMG && wl-copy < $IMG''
-                "${hyprVars.mainMod}, U, exec, sh /home/nu/.dotfiles/main/voice-type.sh"
+                "${hyprVars.mainMod}, U, exec, sh /home/nu/.dotfiles/main/src/ressources/voice-type.sh"
 
                 "${hyprVars.mainMod}, left, movefocus, l"
                 "${hyprVars.mainMod}, H, movefocus, l"

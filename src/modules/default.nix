@@ -57,6 +57,7 @@
     ./bash.nix
 
     # system
+    ./ags.nix
     ./pipewire.nix
     ./printing.nix
     ./system.nix
