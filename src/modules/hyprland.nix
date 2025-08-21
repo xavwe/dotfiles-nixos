@@ -66,10 +66,13 @@ in {
           settings = {
             monitor = [",preferred,auto,auto"];
 
-            exec-once = [
-              ''hypridle''
-              ''ags run --gtk 3''
-            ];
+            exec-once =
+              [
+                ''hypridle''
+              ]
+              ++ (lib.lists.optionals config.modules.ags.enable [
+                ''ags run --gtk 3''
+              ]);
 
             env = [
               "XCURSOR_SIZE,24"

@@ -1,18 +1,27 @@
 {
+  inputs,
+  lib,
   config,
   pkgs,
-  inputs,
-  outputs,
-  lib,
   home-manager,
-  overlays,
-  sops-nix,
   ...
 }: {
-  home-manager.users.nu = {
-    programs.ags = {
-      enable = true;
-      configDir = ../ressources/ags;
+  options.modules.ags = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Use ags";
     };
   };
+
+  config = lib.mkMerge [
+    (lib.mkIf config.modules.ags.enable {
+      home-manager.users.nu = {
+        programs.ags = {
+          enable = true;
+          configDir = ../ressources/ags;
+        };
+      };
+    })
+  ];
 }
