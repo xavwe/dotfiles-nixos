@@ -22,9 +22,17 @@
   config = lib.mkMerge [
     (lib.mkIf config.modules.firefox.enable {
       home-manager.users.nu = {...}: {
+        home = {
+          file."firefox-gnome-theme" = {
+            target = ".mozilla/firefox/nu/chrome/firefox-gnome-theme";
+            source = inputs.firefox-gnome-theme;
+          };
+        };
+
         programs.firefox = {
           enable = true;
           profiles.nu = {
+            name = "nu";
             settings = {
               "toolkit.zoomManager.zoomValues" = ".05,.1,.2,.3,.5,.67,.75,.8,.85,.9,.95,1,1.1,1.2,1.33,1.5,1.7,2,2.4,3,4,5";
               "zoom.minPercent" = 5;
@@ -428,6 +436,16 @@
               "layout.css.prefers-color-scheme.content-override" = 0; # Use system preference for websites
               "browser.theme.dark-private-windows" = true; # Dark theme for private windows
               "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org"; # Set dark theme as active
+
+              "browser.tabs.loadInBackground" = true;
+              "widget.gtk.rounded-bottom-corners.enabled" = true;
+              "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+              "svg.context-properties.content.enabled" = true;
+              "gnomeTheme.hideSingleTab" = true;
+              "gnomeTheme.bookmarksToolbarUnderTabs" = true;
+              "gnomeTheme.normalWidthTabs" = false;
+              "gnomeTheme.tabsAsHeaderbar" = false;
+              "browser.fullscreen.autohide" = false;
             };
             search.engines = {
               bing.metaData.hidden = true;
@@ -755,9 +773,14 @@
                 ];
               };
             };
-            search.force = true;
             userChrome = ''
+              @import "firefox-gnome-theme/userChrome.css";
+              @import "firefox-gnome-theme/theme/colors/dark.css";
             '';
+            userContent = ''
+              @import "firefox-gnome-theme/userContent.css";
+            '';
+            search.force = true;
             extensions = {
               packages = with inputs.firefox-addons.packages."x86_64-linux"; [
                 private-grammar-checker-harper
@@ -771,7 +794,6 @@
                 dearrow
                 return-youtube-dislikes
                 # skip-redirect
-                darkreader
                 wayback-machine
               ];
               # Custom addons available in overlay if needed:
@@ -788,6 +810,9 @@
 
     (lib.mkIf config.modules.firefox.default {
       home-manager.users.nu = {...}: {
+        home = {
+          sessionVariables.BROWSER = "firefox";
+        };
         xdg.mimeApps = {
           defaultApplications = {
             "text/html" = "firefox.desktop";
