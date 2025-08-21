@@ -26,7 +26,7 @@
       calibre.enable = true;
       scrcpy.enable = true;
       sunshine.enable = true;
-      ags.enable = true;
+      ags.enable = false;
 
       # cli
       neovim.enable = true;
