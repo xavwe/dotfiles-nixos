@@ -171,6 +171,7 @@ in {
                 "${hyprVars.mainMod}, H, togglesplit," # dwindle
                 "${hyprVars.mainMod}, Y, exec, hyprlock"
                 ''${hyprVars.mainMod}, S, exec, IMG=~/screenshot/$(date +%Y-%m-%d_%H-%m-%s).png && grim -g "$(slurp)" $IMG && wl-copy < $IMG''
+                "${hyprVars.mainMod}, U, exec, sh /home/nu/.dotfiles/main/voice-type.sh"
 
                 "${hyprVars.mainMod}, left, movefocus, l"
                 "${hyprVars.mainMod}, H, movefocus, l"
