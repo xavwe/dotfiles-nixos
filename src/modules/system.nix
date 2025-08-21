@@ -69,6 +69,9 @@
         lib.optionalAttrs config.modules.foot.enable {
           ssh = "TERM=xterm-256color ssh";
         }
+        // lib.optionalAttrs config.modules.tree.enable {
+          tree = "tree -C";
+        }
         // {
           open = "xdg-open";
           ll = "ls -al";

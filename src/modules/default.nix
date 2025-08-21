@@ -21,6 +21,7 @@
 
     # cli
     ./graphite.nix
+    ./tree.nix
     ./neovim.nix
     ./doas.nix
     ./sudo.nix

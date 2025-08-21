@@ -33,6 +33,7 @@
       neovim.pager = true;
       jujutsu.enable = true;
       gh.enable = true;
+      tree.enable = true;
       fastfetch.enable = true;
       just.enable = true;
       fzf.enable = true;
