@@ -45,11 +45,11 @@
     },
     "dev-templates": {
       "locked": {
-        "lastModified": 1750872083,
-        "narHash": "sha256-/31v90MiiXlY0bKS44FxnwlARSZ/7QeF6WT9NUMjKRM=",
+        "lastModified": 1755989956,
+        "narHash": "sha256-/f9scLMDEomrkA8cYlX4VXaWcLF2quep6quw57amcLA=",
         "owner": "xavwe",
         "repo": "dev-templates",
-        "rev": "9191f4313bcd8b21743e8d61e33ab2f6a390ada3",
+        "rev": "b10598070dc9755fdd1a63e8a8e3c0b886b85219",
         "type": "github"
       },
       "original": {
