@@ -20,7 +20,7 @@
   };
 
   config = lib.mkMerge [
-    (lib.mkIf config.modules.zsh.enable {
+    (lib.mkIf config.modules.libreoffice.enable {
       home-manager.users.nu = {...}: {
         home.packages = with pkgs; [
           libreoffice-fresh
@@ -31,7 +31,7 @@
       };
     })
 
-    (lib.mkIf config.modules.zsh.default {
+    (lib.mkIf config.modules.libreoffice.default {
       home-manager.users.nu = {
         xdg.mimeApps = {
           defaultApplications = {
