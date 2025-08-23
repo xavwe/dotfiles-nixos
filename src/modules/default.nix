@@ -18,6 +18,7 @@
     ./helvum.nix
     ./scrcpy.nix
     ./sunshine.nix
+    ./legcord.nix
 
     # cli
     ./graphite.nix

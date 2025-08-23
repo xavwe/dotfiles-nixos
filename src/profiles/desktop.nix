@@ -26,6 +26,7 @@
       calibre.enable = true;
       scrcpy.enable = true;
       sunshine.enable = true;
+      legcord.enable = false;
       ags.enable = false;
 
       # cli
