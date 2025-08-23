@@ -25,6 +25,7 @@
           extensions = with pkgs; [
             gh-poi
             gh-dash
+            gh-markdown-preview
           ];
         };
       };
