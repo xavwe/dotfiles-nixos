@@ -29,6 +29,7 @@
           dotDir = "${hmConfig.xdg.configHome}/zsh";
           autosuggestion.enable = true;
           syntaxHighlighting.enable = true;
+          historySubstringSearch.enable = true;
           initContent = lib.concatLines [
             (lib.optionalString config.modules.just.enable ''
               eval "$(just --completions zsh)"
