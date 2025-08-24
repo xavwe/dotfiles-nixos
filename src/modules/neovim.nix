@@ -523,6 +523,7 @@
                         haskell = ["ormolu"];
                         tex = ["latexindent"];
                         latex = ["latexindent"];
+                        zig = ["zigfmt"];
                       };
                       formatters = {
                         latexindent = {
