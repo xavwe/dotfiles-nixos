@@ -52,6 +52,7 @@ in {
 
       home-manager.users.nu = {...}: {
         home.packages = with pkgs; [
+          hyprpicker
           grim
           slurp
           jq
