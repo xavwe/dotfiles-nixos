@@ -61,6 +61,7 @@
     # system
     ./ags.nix
     ./pipewire.nix
+    ./espanso.nix
     ./printing.nix
     ./system.nix
     ./kanata.nix

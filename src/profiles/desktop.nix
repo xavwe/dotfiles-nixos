@@ -63,6 +63,7 @@
       graphite.enable = false;
 
       # system
+      espanso.enable = true;
       dark-mode.enable = true;
       printing.enable = true;
       starship.enable = true;
