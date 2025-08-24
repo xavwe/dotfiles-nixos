@@ -44,7 +44,7 @@
       chafa.enable = true;
       chafa.default = true;
       zoxide.enable = true;
-      zoxide.default = true;
+      zoxide.default = false;
       mpv.enable = true;
       mpv.default = true;
       yazi.enable = true;
