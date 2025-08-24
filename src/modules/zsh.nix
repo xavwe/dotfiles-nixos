@@ -87,6 +87,10 @@
                 PROMPT_NEEDS_NEWLINE=false
                 command clear
               }
+
+              # vim mode
+              bindkey -v
+              bindkey -M viins '^?' backward-delete-char
             ''
           ];
           profileExtra = lib.mkIf config.modules.hyprland.enable ''
