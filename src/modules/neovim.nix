@@ -707,6 +707,16 @@
                   })
                 end
 
+                -- Zig Language Server
+                if vim.fn.executable("zls") == 1 then
+                  require("lspconfig").zls.setup({
+                    capabilities = capabilities,
+                    on_attach = function(client, bufnr)
+                      require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                  })
+                end
+
                 -- Configure treesitter textobjects for diff mode compatibility
                 -- When in diff mode, we want to use the default
                 -- vim text objects c & C instead of the treesitter ones.
