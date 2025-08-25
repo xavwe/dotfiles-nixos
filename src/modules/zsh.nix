@@ -54,14 +54,15 @@
                   fi
                 fi
 
-                [[ "$PROMPT_NEEDS_NEWLINE" == true ]] && [[ "$LAST_COMMAND_RAN" == true ]] && echo
+                # Add newline if needed (after commands, empty enters, or interrupts)
+                [[ "$PROMPT_NEEDS_NEWLINE" == true ]] && echo
 
                 PROMPT_NEEDS_NEWLINE=true
-                LAST_COMMAND_RAN=false
               }
 
-              preexec() {
-                LAST_COMMAND_RAN=true
+              # Handle Control+C interrupts
+              TRAPINT() {
+                return $(( 128 + $1 ))
               }
 
               screenshot() {
@@ -83,7 +84,6 @@
               # newline after each command
               # see precmd, preexec
               PROMPT_NEEDS_NEWLINE=false
-              LAST_COMMAND_RAN=false
               clear() {
                 PROMPT_NEEDS_NEWLINE=false
                 command clear
