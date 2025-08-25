@@ -67,7 +67,7 @@
               style = "fg:#A8E4A0";
             };
             custom.shell_in_shell = {
-              when = ''[[ $SHLVL -gt 2 ]]''; # +1 because of starship
+              when = ''[[ $SHLVL -gt 2 ]] && ![[ -n "$DISTROBOX_ENTER_PATH" ]]''; # +1 because of starship
               symbol = " ";
               format = "[$symbol]($style)";
               style = "fg:#7dcfff";
