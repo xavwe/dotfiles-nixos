@@ -990,6 +990,82 @@
         home.packages = with pkgs; [
           nvimpager
         ];
+        home.file.".config/nvimpager/init.lua".text = ''
+          -- Clipboard
+          vim.opt.clipboard = "unnamedplus"
+
+          -- Search
+          vim.opt.hlsearch = true
+          vim.opt.incsearch = true
+          vim.opt.inccommand = "split"
+
+          -- Wrapping
+          vim.opt.wrap = false
+
+          -- Visual
+          vim.opt.termguicolors = true
+          vim.opt.background = "dark"
+          vim.opt.scrolloff = 10
+          vim.opt.signcolumn = "yes"
+          vim.opt.cursorline = true
+
+          -- Folding
+          vim.o.foldenable = true
+          vim.o.foldmethod = "manual"
+          vim.o.foldlevel = 99
+          vim.o.foldcolumn = "0"
+
+          -- Misc
+          vim.opt.updatetime = 50
+          vim.opt.mouse = "a"
+          vim.opt.laststatus = 3
+
+          -- Globals
+          vim.g.have_nerd_font = true
+
+          -- Highlight on yank
+          vim.api.nvim_create_autocmd("TextYankPost", {
+            desc = "Highlight when yanking (copying) text",
+            group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+            callback = function()
+              vim.highlight.on_yank()
+            end,
+          })
+
+          -- Custom cursor line highlight
+          vim.api.nvim_set_hl(0, "CursorLine", { bg = "#2C2E34" })
+
+          -- Disable nvimpager's default mappings
+          nvimpager.maps = false
+
+          -- Follow mode implementation
+          local follow_timer = nil
+          local function toggle_follow()
+            if follow_timer ~= nil then
+              vim.fn.timer_pause(follow_timer, nvimpager.follow)
+              nvimpager.follow = not nvimpager.follow
+            else
+              follow_timer = vim.fn.timer_start(
+                nvimpager.follow_interval,
+                function()
+                  vim.api.nvim_command("silent checktime")
+                  vim.api.nvim_command("silent $")
+                end,
+                { ["repeat"] = -1 })
+              nvimpager.follow = true
+            end
+          end
+
+          -- Recreate only the mappings we want to keep
+          vim.api.nvim_create_autocmd("VimEnter", {
+            callback = function()
+              vim.keymap.set('n', 'q', '<CMD>quitall!<CR>', { buffer = true })
+              vim.keymap.set('v', 'q', '<CMD>quitall!<CR>', { buffer = true })
+              vim.keymap.set('n', 'g', 'gg', { buffer = true })
+              vim.keymap.set('n', 'F', toggle_follow, { buffer = true })
+            end,
+          })
+        '';
       };
     })
   ];
