@@ -12,7 +12,6 @@
     private-browser = "tor-browser";
     virt-manager = "virt-manager";
     note = "obsidian";
-    colorpicker = "echo -n hyprpicker | wl-copy";
     mainMod = "SUPER";
   };
 in {
@@ -168,7 +167,7 @@ in {
                 "${hyprVars.mainMod} SHIFT, W, exec, ${hyprVars.private-browser}"
                 "${hyprVars.mainMod}, N, exec, ${hyprVars.note}"
                 "${hyprVars.mainMod}, V, exec, ${hyprVars.virt-manager}"
-                "${hyprVars.mainMod}, A, exec, ${hyprVars.colorpicker}"
+                "${hyprVars.mainMod}, A, exec, hyprpicker | tr -d \'\\n\' | wl-copy"
                 "${hyprVars.mainMod}, C, killactive,"
                 "${hyprVars.mainMod} SHIFT, C, exit,"
                 "${hyprVars.mainMod}, G, togglegroup,"
