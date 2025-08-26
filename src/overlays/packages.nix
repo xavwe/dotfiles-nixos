@@ -342,43 +342,4 @@ in {
       platforms = platforms.all;
     };
   };
-
-  rofi-nerdy = final.rustPlatform.buildRustPackage rec {
-    pname = "rofi-nerdy";
-    version = "0.0.7";
-
-    src = final.fetchFromGitHub {
-      owner = "xavwe";
-      repo = "rofi-nerdy";
-      rev = "77d6b5fa757c6325f858051ddac302742201fe73";
-      sha256 = "sha256-CEv8xgV7fLzg2HlecmEzoaE3GW8M0FBehkApEhMPZHc=";
-    };
-
-    cargoLock.lockFile = "${src}/Cargo.lock";
-
-    nativeBuildInputs = with final; [
-      pkg-config
-      just
-      rofi-wayland
-    ];
-
-    buildInputs = with final; [
-      glib
-      cairo
-      pango
-    ];
-
-    installPhase = ''
-      runHook preInstall
-      just --set PKGDIR "$out" install
-      runHook postInstall
-    '';
-
-    meta = with final.lib; {
-      description = "Nerd font icon selector plugin for rofi";
-      homepage = "https://github.com/Rolv-Apneseth/rofi-nerdy";
-      license = licenses.agpl3Only;
-      platforms = platforms.linux;
-    };
-  };
 }
