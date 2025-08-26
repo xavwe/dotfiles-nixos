@@ -59,6 +59,7 @@
       nvd.enable = true;
       nix-output-monitor.enable = true;
       claude-code.enable = true;
+      opencode.enable = true;
       ollama.enable = true;
       graphite.enable = false;
 

@@ -52,6 +52,7 @@
     ./ncmpcpp.nix
     ./mpc.nix
     ./claude-code.nix
+    ./opencode.nix
     ./ollama.nix
 
     # shell
