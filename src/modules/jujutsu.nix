@@ -25,7 +25,12 @@
 
           [user]
           name = "Xaver Wenhart"
-          email = "xaver.wenhart@proton.me"
+          email = "git@xavwe.dev"
+
+          [signing]
+          behavior = "own"
+          backend = "ssh"
+          key = "~/.ssh/github"
 
           [ui]
           default-command = [ "log" ]
