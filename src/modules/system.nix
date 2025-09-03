@@ -53,6 +53,11 @@
     gcc
   ];
 
+  # Force building and storing these packages without exposing in PATH to make loading direnv enviroments with large packages faster
+  system.extraDependencies = with pkgs; [
+    texlive.combined.scheme-full
+  ];
+
   home-manager.users.nu = {
     home = {
       # default applications
