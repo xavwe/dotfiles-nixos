@@ -55,7 +55,7 @@
       tldr.enable = true;
       pass.enable = true;
       gpg.enable = true;
-      # newsboat.enable = true;
+      newsboat.enable = true;
       nvd.enable = true;
       nix-output-monitor.enable = true;
       claude-code.enable = true;

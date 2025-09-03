@@ -22,11 +22,9 @@
           # Connect to Miniflux via Google Reader API
           urls = [];
           extraConfig = ''
-            # Miniflux API configuration
-            urls-source "miniflux"
-            miniflux-url "https://rss.xavwe.dev/"
-            miniflux-login "nu"
-            miniflux-passwordfile "/tmp/miniflux-password"
+            # Feeds
+            urls-source "opml"
+            opml-url "https://raw.githubusercontent.com/xavwe/rss-aggregator/refs/heads/main/feeds/master.opml"
 
             # Configure reload behavior to handle virtual feeds gracefully
             reload-threads 1
