@@ -22,3 +22,8 @@
 - [starship/starship#6076](https://github.com/starship/starship/issues/6076)
 
 - https://github.com/aylur/dotfiles
+
+- https://blog.gitbutler.com/how-git-core-devs-configure-git
+- https://www.youtube.com/watch?v=Md44rcw13k4
+- https://stackoverflow.com/questions/2927672/how-can-i-get-git-status-to-always-use-short-format
+- https://graphite.dev/guides/git-config-insteadof

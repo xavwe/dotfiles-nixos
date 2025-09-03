@@ -31,11 +31,14 @@
           };
           difftastic.color = "auto";
           extraConfig = {
+            column = {ui = "always";};
             color = {
               ui = "auto";
             };
             core = {
               editor = "nvim";
+              fsmonitor = true;
+              autocrlf = "input";
             };
             commit = {
               gpgsign = true;
@@ -45,6 +48,60 @@
             };
             user = {
               signingkey = "~/.ssh/github";
+            };
+            branch = {
+              sort = "-committerdate";
+            };
+            tag = {
+              sort = "version:refname";
+            };
+            init = {
+              defaultBranch = "main";
+            };
+            diff = {
+              algorithm = "histogram";
+              colorMoved = "plain";
+              mnemonicPrefix = true;
+              renames = true;
+              guitool = "nvimdiff2";
+            };
+            push = {
+              default = "simple";
+              autoSetupRemote = true;
+              followTags = true;
+            };
+            help = {
+              autocorrect = "prompt";
+            };
+            commit = {
+              verbose = true;
+            };
+            pull = {
+              rebase = true;
+            };
+            merge = {
+              conflictstyle = "zdiff3";
+            };
+            status = {
+              short = true;
+              relativePaths = false;
+              branch = true;
+              showStash = true;
+            };
+            url = {
+              "git@github.com:".insteadOf = "gh:";
+            };
+            rerere = {
+              enabled = true;
+              autoupdate = true;
+            };
+            fetch = {
+              all = true;
+              writeCommitGraph = true;
+            };
+            rebase = {
+              updateRefs = true;
+              autosquash = true;
             };
           };
         };
