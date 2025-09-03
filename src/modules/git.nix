@@ -31,7 +31,9 @@
           };
           difftastic.color = "auto";
           extraConfig = {
-            column = {ui = "always";};
+            column = {
+              ui = "always";
+            };
             color = {
               ui = "auto";
             };
