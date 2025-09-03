@@ -49,7 +49,7 @@
             };
             vps = {
               hostname = "195.15.206.239";
-              user = "nu";
+              user = "root";
               extraOptions = {
                 AddKeysToAgent = "yes";
                 IdentityFile = "~/.ssh/infomaniak";
