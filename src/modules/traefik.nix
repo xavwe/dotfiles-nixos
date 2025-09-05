@@ -67,7 +67,7 @@
 
           # API and dashboard
           api = {
-            dashboard = true;
+            dashboard = false;
             insecure = false;
           };
 
@@ -79,35 +79,29 @@
         };
       };
 
-       # Create dynamic configuration file
-       environment.etc."traefik/dynamic/routes.yml" = {
-         text = ''
-           http:
-             routers:
-                plausible:
-                  rule: "Host(`analytics.xavwe.dev`)"
-                  service: "plausible"
-                  entryPoints:
-                    - "websecure"
-                  tls:
-                    certResolver: "cloudflare"
-
-                traefik-dashboard:
-                 rule: "Host(`traefik.xavwe.dev`)"
-                 service: "api@internal"
+      # Create dynamic configuration file
+      environment.etc."traefik/dynamic/routes.yml" = {
+        text = ''
+          http:
+            routers:
+               plausible:
+                 rule: "Host(`analytics.xavwe.dev`)"
+                 service: "plausible"
                  entryPoints:
                    - "websecure"
                  tls:
                    certResolver: "cloudflare"
 
-             services:
-                plausible:
-                  loadBalancer:
-                    servers:
-                      - url: "http://127.0.0.1:8082"
-         '';
-         mode = "0644";
-       };
+
+
+            services:
+               plausible:
+                 loadBalancer:
+                   servers:
+                     - url: "http://127.0.0.1:8082"
+        '';
+        mode = "0644";
+      };
 
       # Ensure traefik data directory exists
       systemd.tmpfiles.rules = [
