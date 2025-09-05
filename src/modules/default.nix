@@ -87,6 +87,7 @@
     ./traefik.nix
     ./nginx.nix
     ./miniflux.nix
+    ./plausible.nix
     ./hotspot.nix
     ./syncthing.nix
   ];

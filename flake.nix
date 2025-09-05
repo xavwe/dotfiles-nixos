@@ -176,8 +176,8 @@
         hardware = "newton";
       };
 
-      infomaniak-minimal = mkSystem {
-        profile = "minimal";
+      infomaniak-server = mkSystem {
+        profile = "server";
         hardware = "infomaniak";
       };
     };
