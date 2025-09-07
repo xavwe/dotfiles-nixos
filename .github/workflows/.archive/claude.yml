@@ -39,7 +39,7 @@ jobs:
 
       - name: Run Claude Code
         id: claude
-        uses: anthropics/claude-code-action@c1ffc8a0e8e8e4e183a0be1d9d94489f30ca9cf7
+        uses: anthropics/claude-code-action@9975f36410aaf8c6ab1a00625a6d473601066909
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ steps.github-app-token.outputs.token }}
