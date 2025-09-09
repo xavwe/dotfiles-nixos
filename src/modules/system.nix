@@ -79,7 +79,7 @@
         }
         // {
           open = "xdg-open";
-          ll = "ls -al";
+          ll = "ls -la --time-style=+%Y-%m-%d";
           doas = "doas --";
 
           diff = "diff --color=auto";
