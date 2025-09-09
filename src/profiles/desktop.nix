@@ -72,7 +72,7 @@
       wakatime.enable = true;
       colors.theme = "darknight";
       hotspot.enable = true;
-      syncthing.enable = true;
+      syncthing.enable = false;
       ssh.daemon.enable = true;
 
       # web services
