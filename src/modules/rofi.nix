@@ -35,7 +35,7 @@
             rofi -modi emoji -show emoji
             ;;
         "calc")
-            rofi -modi calc -show calc -no-show-match -no-sort -calc-command "echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy"
+            rofi -modi calc -show calc -no-show-match -no-sort -no-history -no-persist-history -calc-command "echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy"
             ;;
         "nerd")
             rofi -modi nerdy -show nerdy
