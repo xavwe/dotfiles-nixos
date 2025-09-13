@@ -55,6 +55,7 @@
     ./opencode.nix
     ./ollama.nix
     ./nixos-cli.nix
+    ./navi.nix
 
     # shell
     ./zsh.nix

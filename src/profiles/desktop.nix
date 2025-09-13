@@ -63,6 +63,7 @@
       ollama.enable = true;
       graphite.enable = false;
       nixos-cli.enable = true;
+      navi.enable = true;
 
       # system
       espanso.enable = true;
