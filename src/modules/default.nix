@@ -54,6 +54,7 @@
     ./claude-code.nix
     ./opencode.nix
     ./ollama.nix
+    ./nixos-cli.nix
 
     # shell
     ./zsh.nix

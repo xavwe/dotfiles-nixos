@@ -78,6 +78,8 @@
       url = "github:rafaelmardojai/firefox-gnome-theme";
       flake = false;
     };
+
+    nixos-cli.url = "github:nix-community/nixos-cli";
   };
 
   outputs = {

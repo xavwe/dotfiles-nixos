@@ -24,6 +24,7 @@
       inputs.disko.nixosModules.disko
       inputs.sops-nix.nixosModules.sops
       inputs.home-manager.nixosModules.home-manager
+      inputs.nixos-cli.nixosModules.nixos-cli
       {
         home-manager.users.nu = {
           imports = [

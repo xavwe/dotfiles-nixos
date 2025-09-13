@@ -62,6 +62,7 @@
       opencode.enable = true;
       ollama.enable = true;
       graphite.enable = false;
+      nixos-cli.enable = true;
 
       # system
       espanso.enable = true;
