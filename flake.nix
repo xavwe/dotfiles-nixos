@@ -79,9 +79,14 @@
       flake = false;
     };
 
-    nixos-cli.url = "github:nix-community/nixos-cli";
+    nixos-cli = {
+      url = "github:nix-community/nixos-cli";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    nixpkgs-rofi-nerdy-fix.url = "github:nixos/nixpkgs/pull/442629/head";
+    nixpkgs-rofi-nerdy-fix = {
+      url = "github:nixos/nixpkgs/pull/442629/head";
+    };
   };
 
   outputs = {
