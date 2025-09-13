@@ -166,6 +166,17 @@
         alejandra
         tree-sitter-grammars.tree-sitter-nix
       ];
+      shellHook = ''
+        NAVI_PATH_NEW="$NAVI_PATH:$(navi info cheats-path):$(pwd)"
+        config_path="''${NAVI_CONFIG:-$HOME/.config/navi/config.yaml}"
+        if [ -f "$config_path" ]; then
+          cheats_paths=$(nix run nixpkgs#yq -- -r '.cheats.paths | join(":")' "$config_path" 2>/dev/null || true)
+          if [ -n "$cheats_paths" ]; then
+            NAVI_PATH_NEW="$NAVI_PATH_NEW:$cheats_paths"
+          fi
+        fi
+        export NAVI_PATH=$(echo "$NAVI_PATH_NEW" | tr ':' '\n' | awk '!seen[$0]++' | tr '\n' ':' | sed 's/:$//')
+      '';
     };
 
     nixosConfigurations = {

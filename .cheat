@@ -1,0 +1,16 @@
+% xavwe/dotfiles-nixos
+
+# Run tests
+nix run .#test
+
+# Edit secrets file
+nix run .#secret
+
+# Format code
+nix run .#format
+
+# Deploy NixOS configuration
+nix run .#deploy -- <action> <hostname>
+
+$ action: echo -e "switch\nboot\ntest\nbuild"
+$ hostname: echo -e "newton-desktop\nnewton-minimal\ninfomaniak-server"
