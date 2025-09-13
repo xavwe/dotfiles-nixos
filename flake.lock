@@ -286,8 +286,6 @@
         ]
       },
       "locked": {
-        "lastModified": 1750709531,
-        "narHash": "sha256-yeg41RD/OwGUtcyeGeLxpAQauWQDnVOcsnHua9DZg/0=",
         "lastModified": 1757745802,
         "narHash": "sha256-MIeMiojnjcqrrbpQWU3shLTCvwmyC8ymLJ/x8DMtw74=",
         "owner": "feel-co",
@@ -425,6 +423,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-rofi-nerdy-fix": {
+      "locked": {
+        "lastModified": 1757771116,
+        "narHash": "sha256-VZ7FHg/hVYLoneHCNzWowzmbAIkhdNl5wJH72NHBszw=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "9b4cd2146995462f64241aaad8f59a6c06917f8f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "pull/442629/head",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1735563628,
@@ -532,6 +546,7 @@
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
+        "nixpkgs-rofi-nerdy-fix": "nixpkgs-rofi-nerdy-fix",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixway": "nixway",
         "nvf": "nvf",

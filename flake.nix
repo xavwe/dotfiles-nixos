@@ -80,6 +80,8 @@
     };
 
     nixos-cli.url = "github:nix-community/nixos-cli";
+
+    nixpkgs-rofi-nerdy-fix.url = "github:nixos/nixpkgs/pull/442629/head";
   };
 
   outputs = {

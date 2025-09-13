@@ -103,7 +103,7 @@ in {
           plugins = with pkgs; [
             rofi-emoji
             rofi-calc
-            rofi-nerdy
+            fix.rofi-nerdy
           ];
         };
       };
