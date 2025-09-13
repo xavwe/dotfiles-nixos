@@ -29,7 +29,12 @@
           aliases = lib.mkIf config.modules.git.aliases.yolo {
             yolo = "!git commit -m \"$(curl -s https://whatthecommit.com/index.txt)\"";
           };
-          difftastic.color = "auto";
+          difftastic = {
+            enable = true;
+            color = "always";
+            display = "inline";
+            background = "dark";
+          };
           extraConfig = {
             column = {
               ui = "always";

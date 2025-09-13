@@ -19,6 +19,7 @@
       home-manager.users.nu = {...}: {
         home.packages = with pkgs; [
           jujutsu
+          difftastic
         ];
         home.file.".config/jj/config.toml".text = ''
           "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
@@ -34,6 +35,7 @@
 
           [ui]
           default-command = [ "log" ]
+          diff-formatter = ["difft", "--color=always", "$left", "$right"]
         '';
       };
     })

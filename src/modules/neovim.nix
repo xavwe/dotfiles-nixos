@@ -1038,6 +1038,9 @@
           -- Disable nvimpager's default mappings
           nvimpager.maps = false
 
+          -- Enable color support for difftastic
+          nvimpager.git_colors = true
+
           -- Follow mode implementation
           local follow_timer = nil
           local function toggle_follow()
