@@ -61,6 +61,7 @@
     ./bash.nix
 
     # system
+    ./carapace.nix
     ./ags.nix
     ./pipewire.nix
     ./espanso.nix

@@ -66,6 +66,7 @@
 
       # system
       espanso.enable = true;
+      carapace.enable = true;
       dark-mode.enable = true;
       printing.enable = true;
       starship.enable = true;

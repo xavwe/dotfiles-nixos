@@ -41,8 +41,6 @@
               eval "$(starship init zsh)"
             '')
             ''
-              zstyle ':completion:*' completer _expand_alias _complete _ignored
-
               precmd() {
                 print -Pn "\e]0;$(fc -ln -1)\a"
 
