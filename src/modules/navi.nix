@@ -31,13 +31,19 @@
             paths:
               - /home/nu/.local/share/navi/cheats
         '';
-        home.file.".local/share/navi/cheats/default/default.cheat".text = ''
-          % first cheat
+        home.file.".local/share/navi/cheats/default/misc/default.cheat".text = ''
+          % misc
 
-          # print something
-          echo "My name is <name>!"
+          # project file stats
+          nix run nixpkgs#cloc -- . --exclude-dir=<exclude-dir>
 
-          $ name: whoami
+          $ exclude-dir: --- --header "example: .git,node_modules"
+
+          # weather
+          curl -s wttr.in | $PAGER
+
+          # public ip
+          curl -s ifconfig.co | $PAGER
         '';
       };
     })

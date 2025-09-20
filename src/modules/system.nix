@@ -88,8 +88,6 @@
           dmesg = "dmesg --color=always";
           ls = "ls --color=auto";
           watch = "watch --color";
-
-          weather = "curl -s wttr.in | less";
         };
     };
   };
