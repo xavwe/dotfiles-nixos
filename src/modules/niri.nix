@@ -217,6 +217,8 @@
               Mod+Shift+W hotkey-overlay-title="open private web browser" { spawn "tor-browser"; }
               // TODO: virtmanager, audiomanager, screenshot
 
+              Mod+Space hotkey-overlay-title="show launcher" { spawn-sh "rofi-launcher"; }
+
               // Mod+O hotkey-overlay-title="colorpicker" { spawn-sh "hyprpicker | tr -d \'\\n\' | wl-copy"; }
 
               Mod+Y hotkey-overlay-title="lock screen" { spawn "hyprlock"; }
