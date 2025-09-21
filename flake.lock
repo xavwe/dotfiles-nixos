@@ -410,22 +410,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-calibre-fix": {
-      "locked": {
-        "lastModified": 1758040963,
-        "narHash": "sha256-oHcPtOJI14k2PAmfp5mmnmd+xLzUQy6/WV3yqDUjc5k=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "c7e00447194154630ea33ad4453e5b35c1720eaa",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "pull/442196/head",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1754788789,
@@ -532,7 +516,6 @@
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-calibre-fix": "nixpkgs-calibre-fix",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixway": "nixway",
         "nvf": "nvf",

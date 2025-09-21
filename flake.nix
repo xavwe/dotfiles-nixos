@@ -83,8 +83,6 @@
       url = "github:nix-community/nixos-cli";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    };
   };
 
   outputs = {

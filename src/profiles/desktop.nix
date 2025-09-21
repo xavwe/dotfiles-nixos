@@ -23,7 +23,7 @@
       zathura.default = true;
       libreoffice.enable = true;
       libreoffice.default = true;
-      calibre.enable = true;
+      calibre.enable = false;
       scrcpy.enable = true;
       sunshine.enable = true;
       legcord.enable = false;
