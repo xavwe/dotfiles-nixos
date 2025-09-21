@@ -8,6 +8,7 @@
   imports = [
     # gui
     ./firefox.nix
+    ./zen-browser.nix
     ./niri.nix
     ./rofi.nix
     ./foot.nix

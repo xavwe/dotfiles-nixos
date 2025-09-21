@@ -30,6 +30,7 @@
           imports = [
             inputs.nvf.homeManagerModules.default
             inputs.ags.homeManagerModules.default
+            inputs.zen-browser.homeModules.twilight-official
           ];
         };
       }

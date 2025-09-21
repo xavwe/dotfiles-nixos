@@ -15,6 +15,7 @@
       # gui
       firefox.enable = true;
       firefox.default = true;
+      zen-browser.enable = true;
       rofi.enable = true;
       foot.enable = true;
       zathura.enable = true;
