@@ -15,7 +15,7 @@
       # gui
       firefox.enable = true;
       firefox.default = true;
-      zen-browser.enable = true;
+      zen-browser.enable = false;
       rofi.enable = true;
       foot.enable = true;
       zathura.enable = true;
@@ -23,8 +23,8 @@
       libreoffice.enable = true;
       libreoffice.default = true;
       calibre.enable = false;
-      scrcpy.enable = true;
-      sunshine.enable = true;
+      scrcpy.enable = false;
+      sunshine.enable = false;
       legcord.enable = false;
       ags.enable = false;
 
