@@ -44,6 +44,7 @@
           capitaine-cursors
           mako
           libnotify
+          xwayland-satellite
         ];
         programs.wayprompt.enable = true;
         home.file.".config/mako/config".text = ''
