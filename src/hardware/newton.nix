@@ -49,108 +49,12 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
+      device = "none";
+      fsType = "tmpfs";
       options = [
-        "subvol=@nixos"
-        "compress=zstd"
-        "noatime"
+        "sixe=3G"
+        "mode=755"
       ];
-    };
-
-    "/swap" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
-      options = [
-        "subvol=@swap"
-        "compress=zstd"
-        "noatime"
-      ];
-    };
-
-    "/home/nu/.dotfiles" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
-      options = [
-        "subvol=@dotfiles-nixos"
-        "compress=zstd"
-        "noatime"
-      ];
-    };
-
-    "/home/nu/notes" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
-      options = [
-        "subvol=@notes"
-        "compress=zstd"
-        "noatime"
-      ];
-    };
-
-    "/home/nu/music" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
-      options = [
-        "subvol=@music"
-        "compress=zstd"
-        "noatime"
-      ];
-    };
-
-    "/home/nu/book" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
-      options = [
-        "subvol=@book"
-        "compress=zstd"
-        "noatime"
-      ];
-    };
-
-    "/home/nu/images" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
-      options = [
-        "subvol=@images"
-        "compress=zstd"
-        "noatime"
-      ];
-    };
-
-    "/home/nu/projects" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
-      options = [
-        "subvol=@projects"
-        "compress=zstd"
-        "noatime"
-      ];
-    };
-
-    "/var/lib/ollama/models" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
-      options = [
-        "subvol=@ollama-models"
-        "compress=zstd"
-        "noatime"
-      ];
-    };
-
-    "/home/nu/.ssh" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
-      options = [
-        "subvol=@ssh"
-        "compress=zstd"
-        "noatime"
-      ];
-    };
-
-    "/mnt/btrfs" = {
-      device = "/dev/disk/by-uuid/3a517161-86cc-4d8b-a190-6611f05049d7";
-      fsType = "btrfs";
     };
 
     "/mnt/public" = {
@@ -212,19 +116,63 @@
         "uid=1000"
       ];
     };
-
-    "/boot" = {
-      device = "/dev/disk/by-uuid/3E72-1921";
-      fsType = "vfat";
-    };
   };
 
-  swapDevices = [
-    {
-      device = "/swap/swapfile";
-      size = 16 * 1024; # 16GB
-    }
-  ];
+  disko.devices = {
+    disk = {
+      nvme2n1 = {
+        device = "/dev/nvme2n1";
+        type = "disk";
+        content = {
+          type = "gpt";
+          partitions = {
+            ESP = {
+              label = "boot";
+              name = "ESP";
+              size = "512M";
+              type = "EF00";
+              content = {
+                type = "filesystem";
+                format = "vfat";
+                mountpoint = "/boot";
+              };
+            };
+            root = {
+              label = "root";
+              size = "100%";
+              content = {
+                type = "btrfs";
+                extraArgs = ["-f"];
+                mountpoint = "/mnt/btrfs";
+                subvolumes = {
+                  "@nixos-home" = {
+                    mountpoint = "/home/nu";
+                    mountOptions = ["subvol=@nixos-home" "compress=zstd" "noatime"];
+                  };
+                  "@nixos-nix" = {
+                    mountpoint = "/nix";
+                    mountOptions = ["subvol=@nixos-nix" "compress=zstd" "noatime"];
+                  };
+                  "@nixos-swap" = {
+                    mountpoint = "/swap";
+                    swap.swapfile.size = "32G";
+                  };
+                  "@nixos-log" = {
+                    mountpoint = "/var/log";
+                    mountOptions = ["subvol=@nixos-log" "compress=zstd" "noatime"];
+                  };
+                  "@ollama-models" = {
+                    mountpoint = "/var/lib/ollama/models";
+                    mountOptions = ["subvol=@ollama-models" "compress=zstd" "noatime"];
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+  };
 
   #networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp6s0.wakeOnLan.enable = true;
