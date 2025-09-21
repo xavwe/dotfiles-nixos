@@ -92,10 +92,9 @@
               bindkey -M viins '^?' backward-delete-char
             ''
           ];
-          profileExtra = lib.mkIf config.modules.hyprland.enable ''
-            # Auto-start Hyprland if not already running
+          profileExtra = lib.mkIf config.modules.niri.enable ''
             if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
-              exec Hyprland
+              exec niri
             fi
           '';
           history = {

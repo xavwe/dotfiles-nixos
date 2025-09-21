@@ -8,7 +8,7 @@
   imports = [
     # gui
     ./firefox.nix
-    ./hyprland.nix
+    ./niri.nix
     ./rofi.nix
     ./foot.nix
     ./zathura.nix

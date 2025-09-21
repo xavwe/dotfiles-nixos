@@ -22,6 +22,7 @@
         settings = {
           main = {
             font = "monospace:size=13";
+            pad = "5x5";
           };
           colors = with config.colors; {
             foreground = base06;

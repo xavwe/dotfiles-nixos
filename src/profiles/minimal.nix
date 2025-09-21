@@ -15,7 +15,6 @@
       # gui
       firefox.enable = false;
       firefox.default = false;
-      hyprland.enable = false;
       foot.enable = false;
       zathura.enable = false;
       zathura.default = false;

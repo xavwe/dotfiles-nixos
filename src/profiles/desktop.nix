@@ -15,8 +15,6 @@
       # gui
       firefox.enable = true;
       firefox.default = true;
-      hyprland.enable = true;
-      hyprland.xwayland.enable = true;
       rofi.enable = true;
       foot.enable = true;
       zathura.enable = true;
@@ -66,6 +64,7 @@
       navi.enable = true;
 
       # system
+      niri.enable = true;
       espanso.enable = true;
       carapace.enable = true;
       dark-mode.enable = true;
