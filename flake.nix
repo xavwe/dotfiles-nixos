@@ -84,8 +84,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixpkgs-rofi-nerdy-fix = {
-      url = "github:nixos/nixpkgs/pull/442629/head";
     };
   };
 

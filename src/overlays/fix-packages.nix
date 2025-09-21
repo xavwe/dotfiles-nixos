@@ -37,6 +37,5 @@
       };
     });
 
-    rofi-nerdy = inputs.nixpkgs-rofi-nerdy-fix.legacyPackages.${prev.stdenv.hostPlatform.system}.rofi-nerdy;
   };
 }
