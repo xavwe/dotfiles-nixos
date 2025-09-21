@@ -36,6 +36,5 @@
         fetchSubmodules = true;
       };
     });
-
   };
 }
