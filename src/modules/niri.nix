@@ -42,8 +42,29 @@
           hyprpicker
           xdg-utils
           capitaine-cursors
+          mako
+          libnotify
         ];
         programs.wayprompt.enable = true;
+        home.file.".config/mako/config".text = ''
+          font= monospace 10
+          background-color=#000000FF
+          padding=10
+          border-size=2
+          border-color=#9F9F9FFF
+          margin=18
+          border-radius=10
+          max-icon-size=52
+          sort=-time
+          layer=overlay
+          default-timeout=5000
+          ignore-timeout=1
+          format=<b>%s</b>\n%b1
+
+          [urgency=high]
+          border-color=#bf616a
+          default-timeout=0
+        '';
         home.file.".config/hypr/hyprlock.conf".text = ''
           $font = Monospace
 
@@ -137,6 +158,8 @@
           }
 
           prefer-no-csd
+
+          spawn-at-startup "mako"
 
           layout {
               gaps 20
