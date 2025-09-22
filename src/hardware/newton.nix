@@ -52,7 +52,7 @@
       device = "none";
       fsType = "tmpfs";
       options = [
-        "sixe=3G"
+        "size=3G"
         "mode=755"
       ];
     };
