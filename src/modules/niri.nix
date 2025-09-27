@@ -147,7 +147,7 @@
                   numlock
               }
               warp-mouse-to-focus
-              focus-follows-mouse max-scroll-amount="10%"
+              focus-follows-mouse
           }
 
           cursor {
