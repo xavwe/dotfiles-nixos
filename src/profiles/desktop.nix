@@ -71,7 +71,7 @@
       dark-mode.enable = true;
       printing.enable = true;
       starship.enable = true;
-      virt-manager.enable = true;
+      virt-manager.enable = false;
       wakatime.enable = true;
       colors.theme = "darknight";
       hotspot.enable = true;
