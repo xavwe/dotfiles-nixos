@@ -90,6 +90,9 @@
               # vim mode
               bindkey -v
               bindkey -M viins '^?' backward-delete-char
+
+              # enable matching hidden files/folders e.g. using *
+              setopt globdots
             ''
           ];
           profileExtra = lib.mkIf config.modules.niri.enable ''
