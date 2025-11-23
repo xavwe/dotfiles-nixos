@@ -49,6 +49,7 @@
             };
             vps = {
               hostname = "195.15.206.239";
+              port = 2222;
               user = "root";
               extraOptions = {
                 AddKeysToAgent = "yes";
