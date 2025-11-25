@@ -33,7 +33,10 @@
       };
       users.users.nu.openssh.authorizedKeys.keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFvZXWH/WPQ3mZaxTwvvZTJShW0HBb7MhC/BtsmD5B5d xavwe@xwpc"];
     })
-    (lib.mkIf config.modules.fzf.enable {
+    (lib.mkIf config.modules.ssh.enable {
+      home.packages = with pkgs; [
+        sshfs
+      ];
       home-manager.users.nu = {...}: {
         services.ssh-agent.enable = true;
         programs.ssh = {
