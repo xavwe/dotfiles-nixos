@@ -16,7 +16,7 @@ jobs:
           private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
 
       - name: Checkout code
-        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+        uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
         with:
           token: ${{ steps.generate-token.outputs.token }}
 
@@ -33,7 +33,7 @@ jobs:
           private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
 
       - name: Check out code into the Go module directory
-        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+        uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
         with:
           token: ${{ steps.generate-token.outputs.token }}
 
@@ -50,7 +50,7 @@ jobs:
           app-id: ${{ secrets.CLAUDE_APP_ID }}
           private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
 
-      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+      - uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
         with:
           fetch-depth: 0
           token: ${{ steps.generate-token.outputs.token }}

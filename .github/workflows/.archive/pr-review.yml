@@ -23,7 +23,7 @@ jobs:
           private-key: ${{ secrets.CLAUDE_PRIVATE_KEY }}
 
       - name: Checkout repository
-        uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+        uses: actions/checkout@c2d88d3ecc89a9ef08eebf45d9637801dcee7eb5
         with:
           fetch-depth: 1
           token: ${{ steps.generate-token.outputs.token }}
