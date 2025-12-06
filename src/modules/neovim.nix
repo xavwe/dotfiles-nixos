@@ -601,6 +601,84 @@
                     lazy = false;
                     setupModule = null;
                   };
+
+                  # nvim-dap - Debug Adapter Protocol
+                  "nvim-dap" = {
+                    package = pkgs.vimPlugins.nvim-dap;
+                    lazy = true;
+                    keys = [
+                      {
+                        key = "<F5>";
+                        action = "<cmd>lua require('dap').continue()<CR>";
+                        desc = "Continue";
+                        mode = "n";
+                      }
+                      {
+                        key = "<F10>";
+                        action = "<cmd>lua require('dap').step_over()<CR>";
+                        desc = "Step Over";
+                        mode = "n";
+                      }
+                      {
+                        key = "<F11>";
+                        action = "<cmd>lua require('dap').step_into()<CR>";
+                        desc = "Step Into";
+                        mode = "n";
+                      }
+                      {
+                        key = "<F12>";
+                        action = "<cmd>lua require('dap').step_out()<CR>";
+                        desc = "Step Out";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>db";
+                        action = "<cmd>lua require('dap').toggle_breakpoint()<CR>";
+                        desc = "Toggle Breakpoint";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>dB";
+                        action = "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>";
+                        desc = "Set Conditional Breakpoint";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>dr";
+                        action = "<cmd>lua require('dap').repl.open()<CR>";
+                        desc = "Open REPL";
+                        mode = "n";
+                      }
+                      {
+                        key = "<leader>dl";
+                        action = "<cmd>lua require('dap').run_last()<CR>";
+                        desc = "Run Last";
+                        mode = "n";
+                      }
+                    ];
+                  };
+
+                  # nvim-dap-ui - DAP UI
+                  "nvim-dap-ui" = {
+                    package = pkgs.vimPlugins.nvim-dap-ui;
+                    lazy = true;
+                    keys = [
+                      {
+                        key = "<leader>du";
+                        action = "<cmd>lua require('dapui').toggle()<CR>";
+                        desc = "Toggle DAP UI";
+                        mode = "n";
+                      }
+                    ];
+                    setupModule = "dapui";
+                    setupOpts = {};
+                  };
+
+                  # nvim-nio - Async I/O library for nvim-dap-ui
+                  "nvim-nio" = {
+                    package = pkgs.vimPlugins.nvim-nio;
+                    lazy = true;
+                  };
                 };
               };
 
@@ -715,6 +793,57 @@
                       require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
                     end,
                   })
+                end
+
+                -- DAP Configuration
+                if vim.fn.executable("codelldb") == 1 then
+                  local dap = require("dap")
+                  local dapui = require("dapui")
+
+                  -- CodeLLDB Adapter
+                  dap.adapters.codelldb = {
+                    type = "server",
+                    port = "''${port}",
+                    executable = {
+                      command = "codelldb",
+                      args = { "--port", "''${port}" },
+                    },
+                  }
+
+                  -- Zig Debug Configuration
+                  dap.configurations.zig = {
+                    {
+                      name = "Launch",
+                      type = "codelldb",
+                      request = "launch",
+                      program = function()
+                        return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/zig-out/bin/", "file")
+                      end,
+                      cwd = "''${workspaceFolder}",
+                      stopOnEntry = false,
+                      args = {},
+                    },
+                    {
+                      name = "Attach",
+                      type = "codelldb",
+                      request = "attach",
+                      pid = function()
+                        return require("dap.utils").pick_process()
+                      end,
+                      cwd = "''${workspaceFolder}",
+                    },
+                  }
+
+                  -- Auto-open/close DAP UI
+                  dap.listeners.after.event_initialized["dapui_config"] = function()
+                    dapui.open()
+                  end
+                  dap.listeners.before.event_terminated["dapui_config"] = function()
+                    dapui.close()
+                  end
+                  dap.listeners.before.event_exited["dapui_config"] = function()
+                    dapui.close()
+                  end
                 end
 
                 -- Configure treesitter textobjects for diff mode compatibility
